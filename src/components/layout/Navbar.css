@@ -1,0 +1,177 @@
+/* Tipografía opcional (parecida a la imagen) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');
+
+:root{
+  --nav-bg:#1b2240;          /* Azul oscuro del header */
+  --text:#f2f4ff;            /* Texto claro */
+  --text-dim:#e3e7ffcc;
+  --accent:#e31b23;          /* Rojo pill activo */
+  --cta-bg:#ffffff;          /* Botón blanco */
+  --cta-text:#121a3a;
+  --shadow:0 6px 18px rgba(0,0,0,.18);
+  --radius:10px;
+  --nav-h:64px;
+  --container:1200px;
+}
+
+* { box-sizing: border-box; }
+
+.rc-navbar{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--nav-bg);
+  color: var(--text);
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
+  font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.rc-container{
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rc-left{
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+}
+
+/* ==== LOGO ==== */
+.rc-brand{
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.rc-logo-img{
+  display: block;
+  height: 42px;
+  width: auto;
+}
+/* Placeholder mientras no tengas imagen */
+.rc-logo-placeholder{
+  display: grid;
+  place-items: center;
+  width: 46px; height: 46px;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: var(--shadow);
+}
+.rc-logo-mark{
+  color: #d41318;            /* rojo del texto R•C */
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+/* ==== NAV ==== */
+.rc-nav{ display: contents; } /* desktop */
+
+.rc-menu{
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+}
+
+.rc-link{
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  opacity: .95;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  transition: color .2s ease, opacity .2s ease, background .2s ease;
+  display: inline-block;
+}
+.rc-link:hover{ opacity: 1; }
+.rc-link.is-active{
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 14px;        /* da aspecto de "pill" */
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+/* ==== CTA right ==== */
+.rc-right{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.rc-btn-cta{
+  text-decoration: none;
+  background: var(--cta-bg);
+  color: var(--cta-text);
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .2s;
+  white-space: nowrap;
+}
+.rc-btn-cta:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.22);
+}
+
+/* ==== Burger (solo mobile) ==== */
+.rc-burger{
+  display: none;
+  width: 42px; height: 42px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+.rc-burger span{
+  display: block;
+  height: 2px;
+  background: var(--text);
+  margin: 5px 0;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.rc-burger.is-open span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+.rc-burger.is-open span:nth-child(2){ opacity: 0; }
+.rc-burger.is-open span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+/* ==== Responsive ==== */
+@media (max-width: 960px){
+  .rc-right{ gap: 6px; }
+  .rc-burger{ display: inline-block; }
+
+  .rc-nav{
+    position: fixed;
+    inset: var(--nav-h) 0 auto 0;          /* debajo de la barra */
+    background: var(--nav-bg);
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, transform .2s ease, visibility .2s;
+    box-shadow: 0 10px 20px rgba(0,0,0,.25);
+  }
+  .rc-nav.is-open{
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  .rc-menu{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 20px 20px;
+  }
+  .rc-link{ padding: 10px 12px; }
+  .rc-link.is-active{ padding: 12px 14px; }
+}
