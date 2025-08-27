@@ -1,183 +1,216 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
-
-:root{
-  --blue:#1b2240;           /* igual a navbar/footer */
-  --blue-700:#1f2747;
-  --red:#e31b23;
-  --text:#1e2430;
-  --muted:#7b8397;
-  --container:1200px;
-  --radius:14px;
-  --shadow:0 10px 24px rgba(0,0,0,.18);
+/* =========================================================
+   GLOBAL
+   ======================================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.home{
-  font-family:'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text);
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #fff;
 }
 
-/* ====================== HERO ====================== */
-.home-hero{
+/* Contenedor principal */
+.home {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   HERO CAROUSEL
+   ======================================================= */
+.home-hero {
   position: relative;
-  height: 420px;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
-  background: linear-gradient(90deg,#24304f,#1a2240);
 }
-.hero-slide{
-  position:absolute; inset:0;
-  opacity:0;
-  transition: opacity .6s ease;
-  background-position:center;
-  background-size:cover;
-  will-change: opacity;
-}
-.hero-slide.is-active{ opacity:1; }
 
-.hero-content{
-  position:absolute; inset:0;
-  display:grid; place-items:center;
-  text-align:center;
-  padding: 0 20px;
+.hero-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
-}
-.hero-content h1{
-  margin:0 0 10px;
-  font-size: clamp(26px, 4.2vw, 42px);
-  line-height:1.1;
-  font-weight:700;
-  text-shadow: 0 6px 22px rgba(0,0,0,.45);
-}
-.hero-content p{
-  margin:0;
-  font-size: clamp(14px, 1.8vw, 18px);
-  opacity:.95;
+  text-align: center;
 }
 
-.hero-dots{
-  position:absolute; left:50%; bottom:14px; transform:translateX(-50%);
-  display:flex; gap:8px;
-}
-.hero-dots .dot{
-  width:10px; height:10px; border-radius:50%;
-  background: rgba(255,255,255,.6);
-  border:0; cursor:pointer;
-}
-.hero-dots .dot.is-active{ background:#fff; }
-
-/* ================== FEATURES STRIP ================= */
-.features-strip{
-  background: var(--blue);
-  padding: 26px 0;
-  border-top: 3px solid rgba(0,0,0,.35);
-  border-bottom: 3px solid rgba(0,0,0,.08);
-}
-.container{
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 20px;
-}
-.features-grid{
-  list-style:none; margin:0; padding:0;
-  display:grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-.feature-card{
-  background: var(--red);
-  color:#fff;
-  border-radius: 12px;
-  padding: 16px 10px;
-  display:grid;
-  place-items:center;
-  gap: 10px;
-  text-align:center;
-  box-shadow: var(--shadow);
-  min-height: 88px;
-}
-.feature-icon{ color:#fff; }
-.feature-title{
-  font-size: 12px;
-  letter-spacing: .6px;
-  font-weight: 800;
+.hero-slide.is-active {
+  opacity: 1;
+  z-index: 1;
 }
 
-/* =================== PRODUCTS ====================== */
-.products{
-  padding: 28px 0 16px;
-  background:#fff;
-}
-.products h2{
-  text-align:center;
-  color: var(--red);
-  font-size: 24px;
-  margin: 0 0 22px;
-}
-.products-grid{
-  display:grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-.product-card{
-  display:grid; justify-items:center; text-align:center;
-  gap: 10px; padding: 6px 10px;
-}
-.product-card img{
-  width: 190px; height: 120px; object-fit: contain;
-  background:#fff; border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.06);
-}
-.product-card h3{
-  margin: 6px 0 0;
-  color: var(--red);
-  font-size: 18px;
-  font-weight:700;
+.hero-content h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
 }
 
-/* ==================== LOGOS SLIDER ================= */
-.logos{
-  padding: 8px 0 32px;
-  background:#fff;
+.hero-content p {
+  font-size: 1.25rem;
 }
-.logos h3{
-  text-align:center; margin: 6px 0 14px;
-  color: #29304a; font-size: 20px;
+
+.hero-dots {
+  position: absolute;
+  bottom: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
 }
-.logos-viewport{
-  overflow:hidden;
-  border-top:1px solid rgba(0,0,0,.06);
-  border-bottom:1px solid rgba(0,0,0,.06);
-  padding: 10px 0;
-}
-.logos-track{
-  display:flex; gap: 30px; align-items:center;
-  width:max-content;
-  animation: scrollLeft 22s linear infinite;
-}
-.logo-item{
-  flex:0 0 auto;
-  width: 140px; height: 52px;
-  display:grid; place-items:center;
+
+.hero-dots .dot {
+  all: unset;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #fff;
   background: transparent;
+  cursor: pointer;
+  display: inline-block;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
 }
-.logo-item img{
-  max-width: 100%;
-  max-height: 100%;
+
+.hero-dots .dot.is-active {
+  width: 14px;
+  height: 14px;
+  background: #fff;
+}
+
+/* =========================================================
+   FEATURES STRIP
+   ======================================================= */
+.features-strip {
+  background-color: #1a2240;
+  color: #fff;
+  padding: 2rem 0;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  list-style: none;
+  justify-items: center;
+  align-items: center;
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #e63946;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 200px;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.feature-icon {
+  margin-bottom: 0.5rem;
+}
+
+/* =========================================================
+   PRODUCTS
+   ======================================================= */
+.products {
+  padding: 4rem 0;
+  background: #f9f9f9;
+}
+
+.products h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.product-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+  max-width: 120px;
+  margin-bottom: 1rem;
+}
+
+/* =========================================================
+   LOGOS SLIDER
+   ======================================================= */
+.logos {
+  padding: 3rem 0;
+  background: #fff;
+}
+
+.logos h3 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.logos-viewport {
+  overflow: hidden;
+}
+
+.logos-track {
+  display: flex;
+  gap: 4rem;
+  animation: scroll 20s linear infinite;
+}
+
+.logo-item img {
+  max-height: 80px;
   object-fit: contain;
-  filter: saturate(1.1) contrast(1.02);
 }
 
-@keyframes scrollLeft{
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); } /* track está duplicado en TSX */
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-/* ===================== RESPONSIVE =================== */
-@media (max-width: 1024px){
-  .features-grid{ grid-template-columns: repeat(2, 1fr); }
-  .products-grid{ grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px){
-  .home-hero{ height: 360px; }
-  .features-grid{ grid-template-columns: 1fr; }
-  .products-grid{ grid-template-columns: 1fr; }
+/* =========================================================
+   RESPONSIVE
+   ======================================================= */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .hero-content p {
+    font-size: 1rem;
+  }
+  .feature-card {
+    max-width: 150px;
+  }
 }

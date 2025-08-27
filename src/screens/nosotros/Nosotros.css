@@ -1,0 +1,69 @@
+.nosotros {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 1rem;
+  text-align: center;
+  width: 100%; /* Ocupa todo el ancho */
+  margin: 0;
+  background-color: #f5f5f5; /* Opcional: color de fondo de la sección */
+}
+
+.nosotros-photo img {
+  width: 100%; /* Ocupa todo el ancho disponible */
+  max-width: 100%; /* Sin límite */
+  border-radius: 0; /* Quitar bordes redondeados si quieres que ocupe todo */
+  object-fit: cover;
+  margin-bottom: 2rem;
+}
+
+.nosotros-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #ffffff; /* Letras blancas */
+  background-color: #1a2240; /* Fondo azul oscuro */
+  padding: 1rem 2rem; /* Espaciado interno */
+  width: 100%; /* Ocupa todo el ancho */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.nosotros-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%; /* Ocupa todo el ancho */
+  max-width: 100%; /* Sin límite */
+  padding: 0 1rem;
+}
+
+.nosotros-arrow {
+  font-size: 2rem;
+  color: #e63946; /* color de la flecha */
+  flex-shrink: 0;
+}
+
+.nosotros-content p {
+  font-size: 1.125rem;
+  color: #333;
+  line-height: 1.6;
+  text-align: left;
+  flex: 1; /* Para que ocupe todo el espacio disponible */
+  margin-bottom: 1.5rem; /* Agrega espacio al final del párrafo */
+}
+
+@media (max-width: 768px) {
+  .nosotros-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .nosotros-arrow {
+    display: none;
+  }
+
+  .nosotros-content p {
+    text-align: center;
+  }
+}
