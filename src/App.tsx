@@ -4,7 +4,9 @@ import Layout from './components/layout/Layout';
 import Inicio from './screens/inicio/Inicio';
 import Nosotros from './screens/nosotros/Nosotros';
 import Servicios from './screens/servicios/servicios';
-import Contacto from './screens/contacto/Contacto';
+import Productos from './screens/productos/ProductList'; 
+import Representacion from './screens/representacion/representacion';
+import Contacto from './screens/contacto/contacto';
 import NotFound from './screens/NotFound';
 
 function App() {
@@ -13,8 +15,10 @@ function App() {
       <Route path='/' element={<Layout />}>
         <Route index element={<Inicio />} />
         <Route path='nosotros' element={<Nosotros />} />
+        <Route path='representaciones' element={<Representacion />} />
         <Route path='contacto' element={<Contacto />} />
         <Route path='servicios' element={<Servicios />} />
+        <Route path='productos' element={<Productos />} />
         <Route path='*' element={<NotFound />} />
       </Route>
     </Routes>

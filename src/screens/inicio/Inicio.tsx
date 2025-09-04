@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './inicio.css';
-
 /* =========================================================
    IMPORTAR LOGOS DESDE src/assets
    ======================================================= */
@@ -14,6 +13,7 @@ import cumminsLogo from '../../assets/logos/cummins.png';
 import slide1 from "../../assets/hero/slide1.png";
 import slide2 from "../../assets/hero/slide2.png";
 import slide3 from "../../assets/hero/slide3.png";
+import CategoryGrid from '../../components/layout/CategoryGrid';
 
 const clientLogos = [
   komatsuLogo,
@@ -31,7 +31,7 @@ const clientLogos = [
 const slides = [
   { img: slide1, headline: 'Mantención y reparación\n de equipo electromecánico', sub: 'Servicios Integrales' },
   { img: slide2, headline: 'Soporte técnico especializado', sub: 'Diagnóstico • Mantenimiento • Reparación' },
-  { img: slide3, headline: 'Calidad y rapidez en terreno', sub: 'Cobertura en el norte de Chile' },
+  { img: slide3, headline: 'Somos representantes oficiales de Niehoff en Chile', sub: 'Cobertura en el norte de Chile' },
 ];
 
 /* =========================================================
@@ -148,9 +148,9 @@ const ProductCard: React.FC<Product> = ({ img, title }) => {
 const ProductsShowcase: React.FC = () => (
   <section className="products">
     <div className="container">
-      <h2>Productos</h2>
+      <h2 style={{ color: 'red' }}>Productos</h2>
       <div className="products-grid">
-        {products.map(p => <ProductCard key={p.title} {...p} />)}
+        <CategoryGrid/>
       </div>
     </div>
   </section>

@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.container {
+  display: flex;
+  gap: 2rem;
+  padding: 20px;
+  background-color: #ffffff; 
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* --- Botón hamburguesa (oculto en desktop) --- */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
+  background: #1b2a47;
+  border: none;
+  color: #fff;
+  font-size: 1.8rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.hamburger:hover {
+  background: #243a64;
+}
+
+/* --- Sidebar de categorías y marcas --- */
+.filters {
+  flex: 0 0 220px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  height: fit-content;
+  color: #000000;
+  transition: transform 0.3s ease;
+}
+
+.filters h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 700;
+  color: #000000; 
+}
+
+.filterOption {
+  display: flex;
+  justify-content: space-between; /* texto a la izquierda, checkbox a la derecha */
+  align-items: center;
+  margin-bottom: 0.6rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.filterOption:hover {
+  color: #1b2240;
+}
+
+.filterOption input {
+  margin-left: 1rem; /* espacio entre texto y checkbox */
+  accent-color: #e31b23; 
+}
+
+/* --- Clase para mostrar el menú en mobile --- */
+.filtersOpen {
+  /* se define en el media query */
+}
+
+/* --- Overlay que cubre la página cuando el sidebar está abierto (móvil) --- */
+.overlay {
+  display: none;
+}
+
+.overlayVisible {
+  /* se define en el media query */
+}
+
+/* --- Sección principal --- */
+.products {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.products h1 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* --- Grid de productos --- */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.productCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  color: #000000;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.productCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.productImage {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.category {
+  font-size: 0.95rem;
+  color: #666666;
+  margin-bottom: 10px;
+}
+
+.brand {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.priceWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-weight: bold;
+  color: #D6B469;
+}
+
+.originalPrice {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.discountedPrice {
+  font-weight: bold;
+  color: #D6B469;
+}
+
+/* --- Mensajes de error o vacío --- */
+.errorMsg {
+  color: #c03030;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  background: #ffeaea;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.noProductsMessage {
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin: 50px 0;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1200px) {
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hamburger {
+    display: block;
+    position: fixed;
+    top: 70px;
+    left: 20px;
+    z-index: 1100;
+  }
+
+  .filters {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: calc(100vh - 60px);
+    width: 250px;
+    border-radius: 0;
+    transform: translateX(-100%);
+    z-index: 1000;
+  }
+
+  .filtersOpen {
+    transform: translateX(0);
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 900;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .overlayVisible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .products {
+    margin-top: 80px;
+    width: 100%;
+  }
+
+  .productGrid {
+    grid-template-columns: 1fr;
+  }
+}

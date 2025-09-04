@@ -1,0 +1,214 @@
+/* -----------------------------
+   Reset mínimo para el bloque
+------------------------------ */
+.niehoff-banner * {
+  box-sizing: border-box;
+}
+
+/* -----------------------------
+   Contenedor principal
+------------------------------ */
+.niehoff-banner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #0f172a;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* -----------------------------
+   Topbar
+------------------------------ */
+.nb-topbar {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: #ffffff;
+}
+
+.nb-logo {
+  display: flex;
+  align-items: center;
+}
+
+.nb-logo img {
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+.nb-claim {
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.05rem;
+  color: #334155;
+}
+
+/* -----------------------------
+   Hero inferior (fondo + overlay)
+------------------------------ */
+.nb-hero {
+  position: relative;
+  width: 100%;
+  height: 45vh; /* usa porcentaje de la altura de la ventana */
+  min-height: 300px; /* no demasiado pequeño */
+  max-height: 500px; /* no demasiado grande */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: height 0.3s ease;
+}
+
+.nb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 38, 83, 0.55);
+}
+
+/* -----------------------------
+   Contenido interno del hero
+------------------------------ */
+.nb-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.nb-hero-left {
+  color: #e5e7eb;
+  max-width: 680px;
+}
+
+.nb-hero-title {
+  margin: 0 0 0.9rem 0;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.nb-cta {
+  display: inline-block;
+  background: #e11d48;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  transition: transform 0.08s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.nb-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+  opacity: 0.95;
+  color: #ffffff;
+  background-color: #9f1239; /* rojo oscuro */
+}
+/* -----------------------------
+   Alternadores a la derecha (pegados)
+------------------------------ */
+.nb-hero-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 0.75rem 2rem; /* reduce padding para pantallas pequeñas */
+  border-radius: 12px;
+  min-width: 300px;      
+  max-width: 700px;      
+  min-height: 120px;     
+  margin: 0 auto;         
+  flex-wrap: wrap; /* permite que se acomoden alternadores en móviles */
+}
+
+.nb-hero-right .alt {
+  max-height: 120px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.35));
+  margin-left: -28px;     
+}
+
+/* Superposiciones para 3 alternadores */
+.alt-a { transform: translateY(4px) scale(0.95); }
+.alt-b { transform: translateY(0px) scale(1); }
+.alt-c { transform: translateY(6px) scale(0.96); }
+
+/* -----------------------------
+   Responsivo
+------------------------------ */
+@media (max-width: 1024px) {
+  .nb-hero-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .nb-hero-right {
+    max-width: 440px;
+    padding: 0.5rem 1.5rem;
+  }
+  .nb-hero-right .alt {
+    max-height: 100px;
+    margin-left: -30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nb-topbar {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .nb-claim {
+    font-size: 0.98rem;
+  }
+  .nb-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .nb-hero-right {
+    justify-content: center;
+    max-width: 100%;
+    padding: 0.5rem 1rem;
+  }
+  .nb-hero-right .alt {
+    max-height: 90px;
+    margin-left: -24px;
+  }
+  .nb-hero {
+    height: 35vh; /* hero más pequeño en tablets/móviles */
+  }
+}
+
+@media (max-width: 500px) {
+  .nb-hero {
+    height: 30vh; /* hero compacto en móviles */
+  }
+  .nb-hero-right .alt {
+    max-height: 70px;
+    margin-left: -20px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .nb-hero {
+    min-height: 500px; /* hero grande en pantallas muy grandes */
+  }
+  .nb-hero-right .alt {
+    max-height: 140px;
+  }
+  .nb-hero-title {
+    font-size: 1.35rem;
+  }
+}

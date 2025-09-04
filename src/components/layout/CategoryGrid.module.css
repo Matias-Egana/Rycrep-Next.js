@@ -1,0 +1,81 @@
+/* Fondo general */
+.wrapper {
+  padding: 2rem 0;
+  background-color: #1a2240; /* azul oscuro */
+  text-align: center;
+}
+
+.title {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Carrusel */
+.carouselWrapper {
+  overflow: hidden;
+  position: relative;
+  padding: 1rem 0;
+}
+
+.carousel {
+  display: flex;
+  width: fit-content;
+  animation: scroll 40s linear infinite;
+  transition: transform 0.3s ease;
+}
+
+.carouselWrapper:hover .carousel {
+  animation-play-state: paused;
+  transform: scale(1.05);
+}
+
+/* Cada slide */
+.slide {
+  flex: 0 0 auto;
+  margin: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff; /* blanco */
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  width: 220px;
+}
+
+/* Efecto hover */
+.slide:hover {
+  transform: scale(1.1);
+}
+
+/* Imágenes */
+.slide img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+
+/* Texto */
+.categoryName {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #0d1b2a; /* azul oscuro */
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Animación infinita */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
