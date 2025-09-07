@@ -1,3 +1,21 @@
+/* Carrusel más pequeño y centrado */
+.carousel-container {
+  margin: 40px auto;   /* centra horizontalmente */
+  padding: 20px;
+  max-width: 700px;    /* ancho máximo deseado */
+}
+
+.carousel-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.slick-slide img {
+  width: 100%;         /* se adapta al ancho del contenedor */
+  height: auto;        /* mantiene proporción */
+  border-radius: 12px;
+}
+
 .page {
   font-family: 'Roboto', sans-serif;
   background-color: #1a2240;
@@ -49,6 +67,18 @@
   text-align: right;
 }
 
+.electromecanica {
+  background-image: url('../../assets/servicios/electromecanica.jpeg');
+  align-items: flex-start;   
+  text-align: left;
+}
+
+.otrosServicios {
+  background-image: url('../../assets/servicios/otrosservicios.jpg');
+  align-items: flex-end;     
+  text-align: right;
+}
+
 /* Overlay oscuro */
 .row::before {
   content: '';
@@ -85,24 +115,28 @@
 }
 
 /* Ajuste de alineación del cuadro */
-.electronica .lista-cuadro {
+.electronica .lista-cuadro,
+.electromecanica .lista-cuadro {
   margin-left: 0;
 }
 
-.electrico .lista-cuadro {
+.electrico .lista-cuadro,
+.otrosServicios .lista-cuadro {
   margin-left: auto;
 }
 
 /* --- LISTAS --- */
 
-/* Electrónica: normal, alineada a la izquierda */
-.electronica ul {
+/* Electrónica y Electromecánica: alineadas a la izquierda */
+.electronica ul,
+.electromecanica ul {
   list-style: none;        
   padding-left: 1.5rem;
   text-align: left;
 }
 
-.electronica ul li {
+.electronica ul li,
+.electromecanica ul li {
   position: relative;
   margin-bottom: 0.6rem;
   font-size: 1rem;
@@ -110,7 +144,8 @@
   padding-left: 1.2rem;
 }
 
-.electronica ul li::before {
+.electronica ul li::before,
+.electromecanica ul li::before {
   content: "■";
   position: absolute;
   left: 0;
@@ -119,14 +154,16 @@
   top: 0.2rem;
 }
 
-/* Eléctrico: todo alineado a la derecha */
-.electrico ul {
+/* Eléctrico y Otros Servicios: alineados a la derecha */
+.electrico ul,
+.otrosServicios ul {
   list-style: none;        
   padding-right: 1.5rem;
   text-align: right;
 }
 
-.electrico ul li {
+.electrico ul li,
+.otrosServicios ul li {
   position: relative;
   margin-bottom: 0.6rem;
   font-size: 1rem;
@@ -134,7 +171,8 @@
   padding-right: 1.2rem;
 }
 
-.electrico ul li::before {
+.electrico ul li::before,
+.otrosServicios ul li::before {
   content: "■";
   position: absolute;
   right: 0;

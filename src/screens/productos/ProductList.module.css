@@ -21,18 +21,30 @@
   background: #1b2a47;
   border: none;
   color: #fff;
-  font-size: 1.8rem;
+  font-size: 1.8rem; /* tamaño hamburguesa */
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s;
+  line-height: 1; /* mejor centrado */
 }
 
 .hamburger:hover {
   background: #243a64;
 }
 
+/* --- Ajuste del icono X para que sea más pequeño --- */
+.hamburger.open {
+  font-size: 1.4rem; /* más pequeña que la hamburguesa */
+}
+
 /* --- Sidebar de categorías y marcas --- */
+
+.filterOption input {
+  justify-self: end;                
+  margin-left: 0;                   
+}
+
 .filters {
   flex: 0 0 220px;
   background: #ffffff;
@@ -53,22 +65,22 @@
 }
 
 .filterOption {
-  display: flex;
-  justify-content: space-between; /* texto a la izquierda, checkbox a la derecha */
-  align-items: center;
-  margin-bottom: 0.6rem;
+  display: grid;
+  grid-template-columns: 1fr auto; 
   cursor: pointer;
-  font-size: 0.95rem;
-  transition: color 0.2s ease;
+  align-items: center;              
+  column-gap: 12px;
+  width: 100%;                      
 }
 
 .filterOption:hover {
-  color: #1b2240;
+  color: #e31b23;
 }
 
 .filterOption input {
-  margin-left: 1rem; /* espacio entre texto y checkbox */
-  accent-color: #e31b23; 
+  justify-self: end;                
+  margin-left: 0;   
+  accent-color: #ffffff;                
 }
 
 /* --- Clase para mostrar el menú en mobile --- */
@@ -94,7 +106,7 @@
 }
 
 .products h1 {
-  color: #ffffff;
+  color: #000000;
   font-size: 2.5rem;
   font-weight: 700;
   text-align: center;
@@ -161,7 +173,7 @@ h3 {
 
 .price {
   font-weight: bold;
-  color: #D6B469;
+  color: #1b2a47;
 }
 
 .originalPrice {
@@ -171,7 +183,7 @@ h3 {
 
 .discountedPrice {
   font-weight: bold;
-  color: #D6B469;
+  color: #1b2a47;
 }
 
 /* --- Mensajes de error o vacío --- */

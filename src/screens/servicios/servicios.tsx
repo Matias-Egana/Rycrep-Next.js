@@ -1,5 +1,7 @@
 import React from 'react';
 import './servicios.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Servicios: React.FC = () => {
   const electronica = [
@@ -28,6 +30,44 @@ const Servicios: React.FC = () => {
     "Pantallas HMI"
   ];
 
+  const electromecanica = [
+    "Reparación de Motores Eléctricos",
+    "Motores Monofásicos Trifásicos",
+    "Alternadores: Diferentes Marcas de 6 a 32 Volts",
+    "Motores de Partida Eléctricos desde 6 a 32 Volts",
+    "Motores de Partida Neumáticos (Ingersoll Rand)",
+    "Motores de Partida Turbina (TDI)",
+    "Equipos de Apoyo",
+    "Soldadoras Eléctricas-Autónomas",
+    "Grupos Electrógenos",
+    "Torres de Iluminación",
+    "Compresores Estacionarios - Autónomos",
+    "Herramientas Eléctricas",
+    "Partes y Piezas Automotrices",
+    "Instrumentos eléctricos y electrónicos (tarjetas)",
+    "Overhaul de equipos Diesel (Caterpillar, Cummins, Perkins, Deutz, Kubota, Lamborghini, Iveco)" 
+  ];
+
+  const otrosServicios = [
+    "Puentes Grúas con Control Electrónico",
+    "Plantas Concentradoras",
+    "Plantas SX",
+    "Naves EW",
+    "Salas Eléctricas",
+    "Maquinarias y Equipos para la Minería",
+    "(Palas, Perforadoras, Camiones, Equipos de apoyo en general)"
+  ];
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000
+  };
+
   return (
     <div className="page">
       <h1 className="main-title">Mantenimientos Preventivos - Predictivos - Correctivos</h1>
@@ -51,6 +91,30 @@ const Servicios: React.FC = () => {
         <div className="lista-cuadro">
           <ul>
             {electrico.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Electromecánica */}
+      <div className="row electromecanica">
+        <h2>Electromecánica</h2>
+        <div className="lista-cuadro">
+          <ul>
+            {electromecanica.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Otros Servicios */}
+      <div className="row otrosServicios">
+        <h2>Otros Servicios</h2>
+        <div className="lista-cuadro">
+          <ul>
+            {otrosServicios.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
