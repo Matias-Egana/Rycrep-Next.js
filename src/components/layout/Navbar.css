@@ -20,7 +20,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--nav-bg);
+  background: var(--nav-bg); /* azul de fondo por defecto */
   color: var(--text);
   height: var(--nav-h);
   display: flex;
@@ -51,13 +51,16 @@
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+
+  background: #fff;        /* solo el bloque del logo en blanco */
+  padding: 4px 8px;
+  border-radius: 6px;      /* opcional, para que no sea un rectángulo duro */
 }
 .rc-logo-img{
   display: block;
   height: 42px;
   width: auto;
 }
-/* Placeholder mientras no tengas imagen */
 .rc-logo-placeholder{
   display: grid;
   place-items: center;
@@ -67,7 +70,7 @@
   box-shadow: var(--shadow);
 }
 .rc-logo-mark{
-  color: #d41318;            /* rojo del texto R•C */
+  color: #d41318;
   font-weight: 800;
   letter-spacing: .5px;
 }
@@ -98,7 +101,7 @@
 .rc-link.is-active{
   background: var(--accent);
   color: #fff;
-  padding: 10px 14px;        /* da aspecto de "pill" */
+  padding: 10px 14px;
   font-weight: 600;
   border-radius: 12px;
 }
@@ -151,21 +154,20 @@
   .rc-right{ gap: 6px; }
   .rc-burger{ display: inline-block; }
 
-  /* Menú mobile completo */
   .rc-nav{
-    display: block; /* importante: antes era contents */
+    display: block;
     position: fixed;
     top: var(--nav-h);
     left: 0;
     right: 0;
-    bottom: 0; /* ocupa toda la pantalla */
+    bottom: 0;
     background: var(--nav-bg);
     transform: translateY(-8px);
     opacity: 0;
     visibility: hidden;
     transition: opacity .2s ease, transform .2s ease, visibility .2s;
     box-shadow: 0 10px 20px rgba(0,0,0,.25);
-    overflow-y: auto; /* scroll si hay muchos links */
+    overflow-y: auto;
     z-index: 40;
   }
   .rc-nav.is-open{
@@ -175,7 +177,6 @@
   }
 
   .rc-menu{
-    display: flex; /* necesario para flex-direction */
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;

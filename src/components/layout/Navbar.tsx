@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './navbar.css';
-
+import logo from'../../assets/inicio/ric-logo.svg'
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
 
@@ -15,14 +15,7 @@ const Navbar: React.FC = () => {
       <div className="rc-container">
         <div className="rc-left">
           <Link to="/" className="rc-brand" onClick={closeMenu} aria-label="Ir al inicio">
-            {/* TODO: Reemplaza por tu logo real y elimina el placeholder */}
-            {/* Ejemplo cuando tengas el archivo:
-                import logo from '../../assets/ric-logo.png';
                 <img src={logo} alt="R&C Representaciones" className="rc-logo-img" />
-            */}
-            <div className="rc-logo-placeholder" aria-hidden>
-              <span className="rc-logo-mark">R•C</span>
-            </div>
           </Link>
 
           <nav className={`rc-nav ${open ? 'is-open' : ''}`} aria-label="Principal">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './footer.css';
-
+import seals from'../../assets/Certificaciones/certificaciones.png'
 /**
  * TODO: Si tienes tu imagen de sellos, descomenta e importa:
  * import seals from '../../assets/sellos-certificaciones.png';
@@ -58,8 +58,7 @@ const Footer: React.FC = () => {
       <div className="rc-footer__container">
         {/* Columna izquierda: Sellos */}
         <div className="rc-footer__left">
-          {/* Reemplaza este placeholder por tu <img /> cuando tengas el recurso */}
-          <SealsPlaceholder />
+          <img src={seals} alt="Certificaciones" className="rc-seals-img" />
         </div>
 
         {/* Columna centro: Dirección y teléfono */}
@@ -78,7 +77,7 @@ const Footer: React.FC = () => {
           <div className="rc-social">
             <a
               className="rc-social__item rc-social--in"
-              href="https://www.linkedin.com/"
+              href="https://www.linkedin.com/company/rycrep/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -95,7 +94,7 @@ const Footer: React.FC = () => {
 
             <a
               className="rc-social__item rc-social--ig"
-              href="https://www.instagram.com/"
+              href="https://www.instagram.com/rycrepresentacionesyservicios"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
