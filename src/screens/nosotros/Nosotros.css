@@ -1,69 +1,453 @@
+/* ===== Base de la sección ===== */
 .nosotros {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 1rem;
+  padding: 4rem 1rem 3rem;
   text-align: center;
-  width: 100%; /* Ocupa todo el ancho */
+  width: 100%;
   margin: 0;
-  background-color: #f5f5f5; /* Opcional: color de fondo de la sección */
+  background-color: #f5f5f5;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
+/* ===== Imágenes (NO se tocan) ===== */
 .nosotros-photo img {
-  width: 100%; /* Ocupa todo el ancho disponible */
-  max-width: 100%; /* Sin límite */
-  border-radius: 0; /* Quitar bordes redondeados si quieres que ocupe todo */
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0;
   object-fit: cover;
   margin-bottom: 2rem;
 }
 
+/* ===== Títulos originales ===== */
 .nosotros-title {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #ffffff; /* Letras blancas */
-  background-color: #1a2240; /* Fondo azul oscuro */
-  padding: 1rem 2rem; /* Espaciado interno */
-  width: 100%; /* Ocupa todo el ancho */
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  background-color: #1a2240; /* azul oscuro corporativo del sitio */
+  padding: 1rem 2rem;
+  width: 100%;
   text-align: center;
   box-sizing: border-box;
+  letter-spacing: .2px;
 }
 
+/* ===== Párrafos originales ===== */
 .nosotros-content {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  width: 100%; /* Ocupa todo el ancho */
-  max-width: 100%; /* Sin límite */
+  width: 100%;
+  max-width: 1100px;
   padding: 0 1rem;
+  margin-bottom: 0.6rem;
 }
-
 .nosotros-arrow {
   font-size: 2rem;
-  color: #e63946; /* color de la flecha */
+  color: #e11d48; /* rojo corporativo */
   flex-shrink: 0;
 }
-
 .nosotros-content p {
-  font-size: 1.125rem;
+  font-size: 1.075rem;
   color: #333;
-  line-height: 1.6;
+  line-height: 1.65;
   text-align: left;
-  flex: 1; /* Para que ocupe todo el espacio disponible */
-  margin-bottom: 1.5rem; /* Agrega espacio al final del párrafo */
+  flex: 1;
+  margin: 0 0 1rem 0;
 }
 
 @media (max-width: 768px) {
-  .nosotros-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .nosotros-arrow {
-    display: none;
-  }
+  .nosotros-content { flex-direction: column; align-items: center; text-align: center; }
+  .nosotros-arrow { display: none; }
+  .nosotros-content p { text-align: center; }
+}
 
-  .nosotros-content p {
-    text-align: center;
+/* ===== Banda de estadísticas ===== */
+.ns-band {
+  width: 100%;
+  max-width: 1100px;
+  margin: 1.2rem auto 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .75rem;
+}
+.ns-stat {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: .9rem .8rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,.05);
+}
+.ns-k {
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: #111827;
+}
+.ns-l {
+  font-size: .9rem;
+  color: #6b7280;
+}
+@media (max-width: 900px) {
+  .ns-band { grid-template-columns: 1fr; }
+}
+
+/* ===== Tarjetas de propuesta de valor ===== */
+.ns-grid {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .8rem;
+}
+.ns-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: left;
+  box-shadow: 0 8px 20px rgba(0,0,0,.05);
+}
+.ns-card h3 {
+  margin: 0 0 .35rem 0;
+  font-size: 1.05rem;
+  color: #111827;
+}
+.ns-card p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+}
+@media (max-width: 900px) {
+  .ns-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Secciones nuevas: Seguridad / Medioambiente ===== */
+.ns-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 1.5rem auto 2rem;
+  padding: 0 1rem;
+}
+.ns-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #1a2240;
+  margin: 0 0 1rem 0;
+  text-align: left;
+  position: relative;
+}
+.ns-title::after{
+  content: "";
+  display: block;
+  width: 180px;
+  height: 4px;
+  background: linear-gradient(90deg, #111111, #e11d48, #111111);
+  margin-top: .35rem;
+  border-radius: 999px;
+}
+
+/* Seguridad grid */
+.ns-sec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .8rem;
+}
+.ns-sec-item {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: .9rem .9rem 1rem;
+  text-align: left;
+  box-shadow: 0 8px 20px rgba(0,0,0,.05);
+}
+.ns-sec-ico {
+  font-size: 1.35rem;
+  line-height: 1;
+  margin-bottom: .35rem;
+}
+.ns-sec-item h3 {
+  margin: 0 0 .2rem 0;
+  color: #111827;
+  font-size: 1.02rem;
+}
+.ns-sec-item p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+}
+@media (max-width: 900px) {
+  .ns-sec-grid { grid-template-columns: 1fr; }
+}
+
+/* Medioambiente pills */
+.ns-env {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .6rem;
+}
+.ns-env-block {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  background: #ffffff;
+  border: 1px dashed rgba(225, 29, 72, .35);
+  border-radius: 12px;
+  padding: .8rem .9rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,.04);
+}
+.ns-dot {
+  width: .7rem;
+  height: .7rem;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%, #fecdd3, #e11d48);
+  box-shadow: 0 0 0 2px rgba(225,29,72,.18);
+  margin-top: .35rem;
+}
+.ns-env-block p {
+  margin: 0;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* Hitos (texto) */
+.ns-timeline {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 1rem;
+  padding: 0 1rem;
+}
+.ns-hit {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: .6rem;
+  text-align: left;
+  margin: .3rem 0;
+}
+.ns-year {
+  display: inline-block;
+  background: #111827;
+  color: #fff;
+  font-weight: 800;
+  border-radius: 10px;
+  padding: .35rem .6rem;
+  width: max-content;
+  text-align: center;
+}
+.ns-hit p {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+@media (max-width: 560px) {
+  .ns-hit { grid-template-columns: 1fr; }
+}
+
+/* CTA final */
+.ns-cta{
+  margin-top: 1rem;
+}
+.ns-btn{
+  display: inline-block;
+  background: #e11d48; /* rojo corporativo */
+  color: #fff;
+  text-decoration: none;
+  padding: .7rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 900;
+  box-shadow: 0 8px 20px rgba(225,29,72,.25);
+  transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+}
+.ns-btn:hover{
+  transform: translateY(-1px);
+  background: #9f1239;
+  box-shadow: 0 12px 24px rgba(225,29,72,.28);
+}
+
+/* ====== Título sobre la imagen (arriba) con animación ====== */
+.nosotros-photo.captioned {
+  position: relative; /* permite overlay sin afectar la imagen */
+}
+
+.ns-photo-title {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%, -8px);
+  padding: .55rem .9rem;
+  border-radius: 12px;
+  color: #fff;
+  background: rgba(0, 0, 0, .72);
+  font-weight: 900;
+  letter-spacing: .2px;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(0,0,0,.28);
+  border-bottom: 3px solid #e11d48; /* acento rojo corporativo */
+  animation: nsTitleEnter .45s ease-out .08s both;
+}
+
+/* animación de entrada: leve caída y fade */
+@keyframes nsTitleEnter {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -18px);
+    filter: blur(2px);
   }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -8px);
+    filter: blur(0);
+  }
+}
+
+/* micro-interacción al pasar el mouse (sin mover la imagen) */
+.nosotros-photo.captioned:hover .ns-photo-title {
+  transform: translate(-50%, -8px) scale(1.02);
+  transition: transform .15s ease, box-shadow .2s ease;
+  box-shadow: 0 12px 24px rgba(0,0,0,.32);
+}
+
+/* responsive: si la imagen es estrecha, permitimos salto de línea */
+@media (max-width: 500px) {
+  .ns-photo-title {
+    white-space: normal;
+    text-align: center;
+    max-width: calc(100% - 20px);
+  }
+}
+
+/* ====== Título sobre la imagen 2 (arriba) con animación ====== */
+.nosotros-photo.captioned { position: relative; }
+.ns-photo-title{
+  position: absolute;
+  top: 10px; left: 50%;
+  transform: translate(-50%, -8px);
+  padding: .55rem .9rem;
+  border-radius: 12px;
+  color: #fff;
+  background: rgba(0,0,0,.72);
+  font-weight: 900;
+  letter-spacing: .2px;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(0,0,0,.28);
+  border-bottom: 3px solid #e11d48;
+  animation: nsTitleEnter .45s ease-out .08s both;
+}
+@keyframes nsTitleEnter {
+  from { opacity: 0; transform: translate(-50%, -18px); filter: blur(2px); }
+  to   { opacity: 1; transform: translate(-50%, -8px);  filter: blur(0);  }
+}
+.nosotros-photo.captioned:hover .ns-photo-title{
+  transform: translate(-50%, -8px) scale(1.02);
+  transition: transform .15s ease, box-shadow .2s ease;
+  box-shadow: 0 12px 24px rgba(0,0,0,.32);
+}
+@media (max-width: 500px){
+  .ns-photo-title{ white-space: normal; text-align: center; max-width: calc(100% - 20px); }
+}
+
+/* ====== LÍNEA DE TIEMPO (Historia) ====== */
+.ns-timeline{
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 1.5rem;
+  padding: 0 1rem 1rem;
+  position: relative;
+}
+.ns-timeline::before{
+  content: "";
+  position: absolute;
+  left: 30px; /* línea vertical al comienzo */
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #111111, #e11d48, #111111);
+  opacity: .8;
+}
+
+.ns-tl-item{
+  position: relative;
+  padding-left: 70px;
+  margin: 1rem 0 1.4rem;
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(2px);
+  transition: opacity .5s ease, transform .5s ease, filter .5s ease;
+}
+.ns-tl-item.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+  filter: none;
+}
+
+.ns-tl-dot{
+  position: absolute;
+  left: 22px;
+  top: 8px;
+  width: 16px; height: 16px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, #fecdd3, #e11d48);
+  box-shadow: 0 0 0 3px rgba(225,29,72,.18), 0 6px 16px rgba(225,29,72,.25);
+}
+
+.ns-tl-year{
+  display: inline-block;
+  background: #111827;
+  color: #fff;
+  font-weight: 800;
+  border-radius: 10px;
+  padding: .35rem .6rem;
+  margin-bottom: .45rem;
+}
+
+.ns-tl-card{
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #e11d48; /* acento rojo */
+  border-radius: 10px;
+  padding: .8rem .9rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,.05);
+  text-align: left;
+}
+.ns-tl-card h3{
+  margin: 0 0 .25rem 0;
+  font-size: 1.02rem;
+  color: #111827;
+}
+.ns-tl-card p{
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Proyecto 2009 destacado */
+.ns-tl-item.is-featured .ns-tl-card{
+  border-left-color: #d4af37; /* dorado */
+  box-shadow: 0 10px 26px rgba(0,0,0,.08), 0 0 0 3px rgba(212,175,55,.12);
+}
+.ns-badge{
+  display: inline-block;
+  background: linear-gradient(90deg, #d4af37, #f5d366);
+  color: #1b1b1b;
+  font-weight: 900;
+  font-size: .72rem;
+  letter-spacing: .3px;
+  padding: .22rem .5rem;
+  border-radius: 8px;
+  margin-bottom: .4rem;
+}
+.ns-tl-bullets{
+  margin: .45rem 0 0 0;
+  padding-left: 1.1rem;
+  color: #374151;
+}
+.ns-tl-bullets li{ margin: .15rem 0; }
+
+/* Responsive */
+@media (max-width: 720px){
+  .ns-timeline::before{ left: 18px; }
+  .ns-tl-item{ padding-left: 54px; }
+  .ns-tl-dot{ left: 10px; }
 }

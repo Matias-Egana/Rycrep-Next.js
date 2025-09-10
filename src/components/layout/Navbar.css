@@ -55,12 +55,12 @@
 }
 .rc-logo-img{
   display: block;
-  height: 42px;
+  height: 36px; /* reducido */
   width: auto;
 }
 
 /* ==== NAV ==== */
-.rc-nav{ display: contents; }
+.rc-nav{ display: flex; align-items: center; gap: 28px; }
 
 .rc-menu{
   list-style: none;
@@ -71,21 +71,24 @@
   padding: 0;
 }
 
+/* ==== LINKS ==== */
 .rc-link{
   color: var(--text);
   text-decoration: none;
   font-weight: 500;
+  font-size: 14px; /* achicado */
   opacity: .95;
-  padding: 8px 10px;
+  padding: 6px 8px;
   border-radius: var(--radius);
   transition: color .2s ease, opacity .2s ease, background .2s ease;
   display: inline-block;
 }
 .rc-link:hover{ opacity: 1; }
+
 .rc-link.is-active{
   background: var(--accent);
   color: #fff;
-  padding: 10px 14px;
+  padding: 8px 12px;
   font-weight: 600;
   border-radius: 12px;
 }
@@ -97,7 +100,7 @@
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 0.25s ease, transform 0.25s ease;
-  display: block; /* necesario para la transición */
+  display: block;
   position: absolute;
   top: 100%;
   left: 0;
@@ -115,8 +118,9 @@
 .rc-submenu .rc-link {
   color: #1b2240;
   display: block;
-  padding: 10px 14px;
+  padding: 8px 12px;
   font-weight: 500;
+  font-size: 13px; /* un poco más pequeño que los principales */
   border-radius: 0;
   opacity: 0.9;
 }
@@ -222,8 +226,11 @@
     gap: 10px;
     padding: 14px 20px 20px;
   }
-  .rc-link{ padding: 10px 12px; }
-  .rc-link.is-active{ padding: 12px 14px; }
+  .rc-link{ 
+    padding: 8px 10px; 
+    font-size: 13px; /* más pequeño en mobile */
+  }
+  .rc-link.is-active{ padding: 10px 12px; }
 
   /* Dropdown en mobile */
   .rc-dropdown .rc-submenu {
@@ -235,7 +242,8 @@
 
   .rc-submenu .rc-link {
     color: #ffffff; /* texto blanco en mobile */
-    padding: 8px 12px;
+    font-size: 12px; /* dropdown más pequeño */
+    padding: 6px 10px;
   }
 
   .rc-submenu .rc-link:hover {
