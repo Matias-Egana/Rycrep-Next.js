@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Slider from "react-slick";
 import { mockProducts } from "../../domain/entities/mockProducts";
 import type { Product } from "../../domain/entities/Product";
-import defaultImage from "../../assets/JoyeriaVivianLogo2.jpg";
+import defaultImage from "../../assets/ryc.svg";
 import styles from "./ProductDetail.module.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -68,7 +68,7 @@ const ProductDetail: React.FC = () => {
   const hasMultipleImages = product.images.length > 1;
 
   const handleAddToQuote = () => {
-    alert(`"${product.name}" añadido a cotización ✅`);
+    alert(`"${product.name}" Añadido a cotización ✅`);
   };
 
   return (

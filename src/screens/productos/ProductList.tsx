@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fetchProductsByCategory from "../../presentation/ProductListViewModel";
-import defaultImage from '../../assets/JoyeriaVivianLogo2.jpg';
+import defaultImage from '../../assets/ryc.svg';
 import Spinner from '../../components/layout/Spinner';
 import type { Product } from '../../domain/entities/Product';
 import styles from './ProductList.module.css';

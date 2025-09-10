@@ -1,12 +1,10 @@
-/* Tipografía opcional (parecida a la imagen) */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');
 
 :root{
-  --nav-bg:#1b2240;          /* Azul oscuro del header */
-  --text:#f2f4ff;            /* Texto claro */
-  --text-dim:#e3e7ffcc;
-  --accent:#e31b23;          /* Rojo pill activo */
-  --cta-bg:#ffffff;          /* Botón blanco */
+  --nav-bg:#1b2240;
+  --text:#f2f4ff;
+  --accent:#e31b23;
+  --cta-bg:#ffffff;
   --cta-text:#121a3a;
   --shadow:0 6px 18px rgba(0,0,0,.18);
   --radius:10px;
@@ -20,7 +18,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--nav-bg); /* azul de fondo por defecto */
+  background: var(--nav-bg);
   color: var(--text);
   height: var(--nav-h);
   display: flex;
@@ -51,32 +49,18 @@
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-
-  background: #fff;        /* solo el bloque del logo en blanco */
+  background: #fff;
   padding: 4px 8px;
-  border-radius: 6px;      /* opcional, para que no sea un rectángulo duro */
+  border-radius: 6px;
 }
 .rc-logo-img{
   display: block;
   height: 42px;
   width: auto;
 }
-.rc-logo-placeholder{
-  display: grid;
-  place-items: center;
-  width: 46px; height: 46px;
-  background: #ffffff;
-  border-radius: 2px;
-  box-shadow: var(--shadow);
-}
-.rc-logo-mark{
-  color: #d41318;
-  font-weight: 800;
-  letter-spacing: .5px;
-}
 
 /* ==== NAV ==== */
-.rc-nav{ display: contents; } /* desktop */
+.rc-nav{ display: contents; }
 
 .rc-menu{
   list-style: none;
@@ -104,6 +88,62 @@
   padding: 10px 14px;
   font-weight: 600;
   border-radius: 12px;
+}
+
+/* ==== Dropdown ==== */
+.rc-dropdown { position: relative; cursor: pointer; }
+
+.rc-submenu {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  display: block; /* necesario para la transición */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 6px 0;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.rc-submenu li { list-style: none; }
+
+.rc-submenu .rc-link {
+  color: #1b2240;
+  display: block;
+  padding: 10px 14px;
+  font-weight: 500;
+  border-radius: 0;
+  opacity: 0.9;
+}
+
+.rc-submenu .rc-link:hover {
+  background: #f0f4fa;
+  opacity: 1;
+}
+
+/* Hover en desktop para mostrar dropdown */
+@media (min-width: 961px){
+  .rc-dropdown:hover .rc-submenu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
+/* Flecha ▾ animada */
+.rc-arrow {
+  display: inline-block;
+  margin-left: 6px;
+  transition: transform 0.25s ease;
+}
+
+.rc-dropdown .rc-arrow.is-open {
+  transform: rotate(180deg);
 }
 
 /* ==== CTA right ==== */
@@ -184,4 +224,28 @@
   }
   .rc-link{ padding: 10px 12px; }
   .rc-link.is-active{ padding: 12px 14px; }
+
+  /* Dropdown en mobile */
+  .rc-dropdown .rc-submenu {
+    position: static;
+    background: var(--nav-bg);
+    box-shadow: none;
+    padding-left: 10px;
+  }
+
+  .rc-submenu .rc-link {
+    color: #ffffff; /* texto blanco en mobile */
+    padding: 8px 12px;
+  }
+
+  .rc-submenu .rc-link:hover {
+    background: rgba(255,255,255,0.1);
+    opacity: 1;
+  }
+
+  .rc-dropdown .rc-submenu.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
 }

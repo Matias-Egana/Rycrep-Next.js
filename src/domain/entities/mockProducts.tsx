@@ -11,7 +11,7 @@ export const mockProducts: Product[] = [
     price: 85000,
     stock: 10,
     description: "Alternador de alta calidad para vehículos livianos.",
-    images: ["https://d3m0xk3430j32g.cloudfront.net/images/upload/8250/card/659f48d00ac140.63966912.jpg"],
+    images: [""],
     discountPercentage: 10,
   },
   {
