@@ -10,10 +10,12 @@ import bhpLogo from '../../assets/logos/bhp.png';
 import amLogo from '../../assets/logos/antofagasta-minerals.png';
 import collahuasiLogo from '../../assets/logos/collahuasi.jpg';
 import cumminsLogo from '../../assets/logos/cummins.png';
-import slide1 from "../../assets/hero/slide1.png";
-import slide2 from "../../assets/hero/slide2.png";
-import slide3 from "../../assets/hero/slide3.png";
+import slide1 from "../../assets/hero/Niehoff & Co.png";
+import slide2 from "../../assets/hero/slide1.png";
+import slide3 from "../../assets/hero/slide2.png";
+import slide4 from "../../assets/hero/slide3.png";
 import CategoryGrid from '../../components/layout/CategoryGrid';
+import { useNavigate } from 'react-router-dom';
 
 const clientLogos = [
   komatsuLogo,
@@ -29,9 +31,10 @@ const clientLogos = [
    SLIDES DEL HERO
    ======================================================= */
 const slides = [
-  { img: slide1, headline: 'Mantención y reparación\n de equipo electromecánico', sub: 'Servicios Integrales' },
-  { img: slide2, headline: 'Soporte técnico especializado', sub: 'Diagnóstico • Mantenimiento • Reparación' },
-  { img: slide3, headline: 'Somos representantes oficiales de Niehoff en Chile', sub: 'Cobertura en el norte de Chile' },
+  { img: slide1, headline: 'Cotiza nuestros productos originales\n de Niehoff & Co.', sub: '' },
+  { img: slide2, headline: 'Mantención y reparación\n de equipo electromecánico', sub: 'Servicios Integrales' },
+  { img: slide3, headline: 'Soporte técnico especializado', sub: 'Diagnóstico • Mantenimiento • Reparación' },
+  { img: slide4, headline: 'Somos representantes oficiales de Niehoff en Chile', sub: 'Cobertura en el norte de Chile' },
 ];
 
 /* =========================================================
@@ -111,20 +114,37 @@ const HeroCarousel: React.FC = () => {
 /* =========================================================
    FEATURES STRIP
    ======================================================= */
-const FeaturesStrip: React.FC = () => (
-  <section className="features-strip">
-    <div className="container">
-      <ul className="features-grid">
-        {features.map(f => (
-          <li key={f.title} className="feature-card">
-            <span className="feature-icon"><Icon name={f.icon} /></span>
-            <span className="feature-title">{f.title}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-);
+const FeaturesStrip: React.FC = () => {
+  const navigate = useNavigate(); // ✅ Hook al nivel superior del componente
+
+  const handleClick = (feature: string) => {
+    if (feature === 'SERVICIO OFICIAL') {
+      navigate('/servicios'); // ruta a la que quieres ir
+    }
+    // Puedes agregar más rutas para otros servicios si quieres
+  };
+
+  return (
+    <section className="features-strip">
+      <div className="container">
+        <h2 className="features-title">Nuestros Servicios</h2>
+        <ul className="features-grid">
+          {features.map(f => (
+            <li
+              key={f.title}
+              className="feature-card"
+              onClick={() => handleClick(f.title)}
+              style={{ cursor: 'pointer' }}
+            >
+              <span className="feature-icon"><Icon name={f.icon} /></span>
+              <span className="feature-title">{f.title}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+};
 
 /* =========================================================
    PRODUCTS SHOWCASE
@@ -148,7 +168,6 @@ const ProductCard: React.FC<Product> = ({ img, title }) => {
 const ProductsShowcase: React.FC = () => (
   <section className="products">
     <div className="container">
-      <h2 style={{ color: 'red' }}>Productos</h2>
       <div className="products-grid">
         <CategoryGrid/>
       </div>
@@ -199,8 +218,8 @@ const LogosSlider: React.FC = () => {
 const Inicio: React.FC = () => (
   <div className="home">
     <HeroCarousel />
-    <FeaturesStrip />
     <ProductsShowcase />
+    <FeaturesStrip />
     <LogosSlider />
   </div>
 );

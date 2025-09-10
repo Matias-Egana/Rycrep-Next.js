@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./representaciones.css";
 
 // Importa tus imágenes
@@ -23,6 +24,12 @@ const Representacion: React.FC<NiehoffBannerProps> = ({
   alternator2Src,
   alternator3Src,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/productos"); // Ruta a la que quieres ir
+  };
+
   return (
     <section className="niehoff-banner">
       {/* Barra superior */}
@@ -49,9 +56,9 @@ const Representacion: React.FC<NiehoffBannerProps> = ({
               Consulta por nuestros productos Niehoff.
             </h3>
 
-            <a href="#productos" className="nb-cta">
+            <button className="nb-cta" onClick={handleClick}>
               Ver Productos
-            </a>
+            </button>
           </div>
 
           <div className="nb-hero-right" aria-label="Galería de alternadores">
@@ -66,7 +73,7 @@ const Representacion: React.FC<NiehoffBannerProps> = ({
 };
 
 // Llamada del componente ya con imágenes importadas
-export default function representacion() {
+export default function RepresentacionWrapper() {
   return (
     <Representacion
       logoSrc={logo}

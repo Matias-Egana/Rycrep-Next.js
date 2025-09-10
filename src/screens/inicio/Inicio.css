@@ -107,6 +107,13 @@ html, body, #root {
   align-items: center;
 }
 
+.features-title {
+  text-align: center;
+  font-size: 2rem;
+  color: #fff; /* acorde al fondo oscuro de features-strip */
+  margin-bottom: 2rem;
+}
+
 .feature-card {
   display: flex;
   flex-direction: column;
