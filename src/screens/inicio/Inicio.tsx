@@ -182,8 +182,8 @@ const LogosSlider: React.FC = () => {
   const track = useMemo(() => [...clientLogos, ...clientLogos], []);
   return (
     <section className="logos">
-      <div className="container">
-        <h3>Confían en nosotros</h3>
+      <div className="confian-title-container">
+        <h3 >Confían en nosotros</h3>
       </div>
       <div className="logos-viewport">
         <div className="logos-track">
