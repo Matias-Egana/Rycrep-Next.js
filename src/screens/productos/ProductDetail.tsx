@@ -123,15 +123,6 @@ const ProductDetail: React.FC = () => {
         <p><strong>Categoría:</strong> {product.category}</p>
         <p className={styles.description}>{product.description}</p>
 
-        {product.discountPrice || product.discountPercentage ? (
-          <div>
-            <span className={styles.originalPrice}>${product.price.toLocaleString()}</span>
-            <span className={styles.discountedPrice}>${getFinalPrice(product).toLocaleString()}</span>
-          </div>
-        ) : (
-          <p className={styles.price}>${product.price.toLocaleString()}</p>
-        )}
-
         {isOutOfStock && <p className={styles.outOfStock}>Agotado</p>}
 
         {/* Botón de cotización */}

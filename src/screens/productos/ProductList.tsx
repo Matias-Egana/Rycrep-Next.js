@@ -111,14 +111,6 @@ const ProductListPage: React.FC = () => {
               <h3>{product.name}</h3>
               <p className={styles.category}>{product.category}</p>
               <p className={styles.brand}>{product.brand}</p>
-              {product.discountPrice || product.discountPercentage ? (
-                <div className={styles.priceWrapper}>
-                  <span className={styles.originalPrice}>${product.price.toLocaleString()} CLP</span>
-                  <span className={styles.discountedPrice}>${getFinalPrice(product).toLocaleString()} CLP</span>
-                </div>
-              ) : (
-                <p className={styles.price}>${product.price.toLocaleString()} CLP</p>
-              )}
             </div>
           ))}
         </div>
