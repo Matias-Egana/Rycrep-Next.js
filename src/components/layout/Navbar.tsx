@@ -28,6 +28,8 @@ const Navbar: React.FC = () => {
               <li><NavLink to="/" end className={linkClass} onClick={closeMenu}>Inicio</NavLink></li>
               <li><NavLink to="/nosotros" className={linkClass} onClick={closeMenu}>Nosotros</NavLink></li>
               <li><NavLink to="/representaciones" className={linkClass} onClick={closeMenu}>Representaciones</NavLink></li>
+              <li><NavLink to="/distribuciones" className={linkClass} onClick={closeMenu}>Distribuciones</NavLink></li>
+
               <li><NavLink to="/servicios" className={linkClass} onClick={closeMenu}>Servicios</NavLink></li>
 
               {/* Dropdown Productos */}
