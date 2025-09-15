@@ -261,7 +261,8 @@
 }
 .ns-btn:hover{
   transform: translateY(-1px);
-  background: #9f1239;
+  background: rgb(17, 12, 115);
+  color: white;
   box-shadow: 0 12px 24px rgba(225,29,72,.28);
 }
 
@@ -445,9 +446,63 @@
 }
 .ns-tl-bullets li{ margin: .15rem 0; }
 
+/* ===== Pilar: Transparencia y vinculación ===== */
+.ns-pillar{
+  width: 100%;
+  max-width: 1100px;
+  margin: .5rem auto 1.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-left: 6px solid #e11d48;      /* acento rojo corporativo */
+  border-radius: 12px;
+  padding: .9rem 1rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: flex-start;
+  gap: .75rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,.05);
+}
+
+.ns-pillar-ico{
+  font-size: 1.35rem;
+  line-height: 1;
+  background: #1a2240;  /* azul oscuro del sitio */
+  color: #fff;
+  border-radius: 10px;
+  padding: .35rem .5rem;
+}
+
+.ns-pillar p{
+  margin: 0;
+  text-align: left;
+  color: #374151;
+  line-height: 1.65;
+}
+.ns-pillar p strong{ color: #111827; }
+
+/* micro-animación de entrada */
+.ns-reveal{
+  opacity: 0;
+  transform: translateY(8px);
+  animation: nsFadeUp .5s ease-out .1s forwards;
+}
+@keyframes nsFadeUp{
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Responsive */
 @media (max-width: 720px){
   .ns-timeline::before{ left: 18px; }
   .ns-tl-item{ padding-left: 54px; }
   .ns-tl-dot{ left: 10px; }
+}
+
+@media (max-width: 560px){
+  .ns-pillar{
+    grid-template-columns: 1fr;
+    gap: .6rem;
+  }
+  .ns-pillar-ico{
+    justify-self: start;
+  }
 }

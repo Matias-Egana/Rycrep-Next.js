@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
             <span>El Oro&nbsp;7956 Barrio Industrial,</span>
             <span>Antofagasta</span>
           </p>
-          <a href="tel:+56552563297" className="rc-phone">+56 552 563297</a>
+          <a href="tel:+56951992909" className="rc-phone">+56 9 5199 2909</a>
         </div>
 
         {/* Columna derecha: Redes y CTA contacto */}

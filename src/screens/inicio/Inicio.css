@@ -126,6 +126,7 @@ html, body, #root {
   transition: transform 0.3s, box-shadow 0.3s;
   flex: 0 0 200px; /* Fijo en desktop */
   max-width: 200px;
+  position: relative;
 }
 
 .feature-card:hover {
@@ -145,18 +146,20 @@ html, body, #root {
   font-size: 1rem;
   color: #1b2240;
 }
+
 .confian-title-container {
-  background-color: #fff; /* fondo blanco */
-  text-align: center;     /* centrado horizontal */
-  padding: 2rem 1rem;     /* espacio arriba y abajo */
+  background-color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
 }
 
 .confian-title-container h3 {
-  color: #000;            /* letras negras */
+  color: #000;
   font-size: 2rem;
   font-weight: 600;
-  margin: 0;              /* quitar margen por defecto */
+  margin: 0;
 }
+
 /* =========================================================
    PRODUCTS
    ======================================================= */
@@ -285,3 +288,49 @@ html, body, #root {
     gap: 2rem;
   }
 }
+
+/* ====== POPover mínimo, siempre visible cuando 'open' es true ====== */
+.fp-popover {
+  position: fixed;              /* fuera del flujo, no afecta sliders */
+  z-index: 2000;                /* por encima de todo */
+  width: min(340px, 92vw);
+  background: #111827;          /* negro corporativo */
+  color: #f8fafc;
+  border: 1px solid rgba(225,29,72,.35); /* rojo tenue */
+  border-radius: 12px;
+  padding: .9rem .95rem;
+  box-shadow: 0 18px 40px rgba(0,0,0,.25);
+  pointer-events: none;         /* informativo; no bloquea interacción */
+  opacity: 0;
+  transform: translateY(6px) scale(.98);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.fp-popover.fp-show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* flechita abajo (siempre) */
+.fp-popover::before {
+  content: "";
+  position: absolute;
+  top: -10px; left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-bottom-color: rgba(225,29,72,.35);
+}
+.fp-popover::after {
+  content: "";
+  position: absolute;
+  top: -9px; left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-bottom-color: #111827;
+}
+
+/* tipografía interna compacta */
+.fp-p { margin: 0 0 .35rem 0; }
+.fp-list { margin: .2rem 0 0 1.1rem; }
+.fp-list li { margin: .12rem 0; color: #e5e7eb; font-size: .92rem; }
+.fp-note { margin-top: .35rem; color: #cbd5e1; font-size: .9rem; }

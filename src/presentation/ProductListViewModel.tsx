@@ -1,34 +1,39 @@
-// src/presentation/viewmodels/ProductListViewModel.tsx
+import { ProductRepository } from "../data/repositories/ProductRepository"; // valor (ok)
+import { makeGetProductsUseCase } from "../domain/usecases/GetProductsUseCase";
+import { makeGetProductByCodeUseCase } from "../domain/usecases/GetProductByCodeUseCase";
 import type { Product } from "../domain/entities/Product";
-import { mockProducts } from "../domain/entities/mockProducts";
+import type { RycrepProduct } from "../domain/entities/RycrepProduct";
 
-// Helper: calcula precio final si hay discountPercentage
-function computeDiscountPrice(p: Product): number {
-  if (typeof p.discountPrice === "number") return p.discountPrice;
-  if (typeof p.discountPercentage === "number") {
-    return Math.round(p.price * (100 - p.discountPercentage) / 100);
-  }
-  return p.price;
+const repo = new ProductRepository();
+const listUC = makeGetProductsUseCase(repo);
+const detailUC = makeGetProductByCodeUseCase(repo);
+
+function toUi(p: RycrepProduct): Product {
+  return {
+    activated: true,
+    product_code: p.model_code || String(p.id),
+    name: p.name,
+    category: p.category,
+    brand: p.brand || "",            // ← antes "Rycrep"
+    price: p.price ?? 0,
+    stock: 99,
+    description: p.description ?? "",
+    images: p.image_url ? [p.image_url] : [],
+    discountPrice: p.oferta && p.price != null ? p.price : undefined,
+    discountPercentage: undefined,
+    oferta: p.oferta,                // ← NUEVO
+  };
 }
 
-export const products = async (category: string): Promise<Product[]> => {
-  console.log(`[MOCK] Fetching productos de la categoría: ${category}`);
-  // simula latencia
-  await new Promise((r) => setTimeout(r, 350));
 
-  // Enriquecer mock con discountPrice si aplica
-  const enriched = mockProducts.map((p) => {
-    if (p.discountPrice == null && typeof p.discountPercentage === "number") {
-      return { ...p, discountPrice: computeDiscountPrice(p) };
-    }
-    return p;
-  });
+export default async function fetchProductsByCategory(
+  category: string | "all"
+): Promise<Product[]> {
+  const data = await listUC({ category: category as any });
+  return data.map(toUi);
+}
 
-  if (!category || category === "all") return enriched;
-
-  return enriched.filter(
-    (p) => (p.category || "").toLowerCase() === category.toLowerCase()
-  );
-};
-
-export default products;
+export async function fetchProductByCode(code: string): Promise<Product | null> {
+  const p = await detailUC(code);
+  return p ? toUi(p) : null;
+}

@@ -55,11 +55,11 @@ const Navbar: React.FC = () => {
 
                 <ul className={`rc-submenu ${dropdownOpen ? 'is-open' : ''}`}>
                   <li><NavLink to="/productos/Alternadores" className={linkClass} onClick={closeMenu}>Alternadores</NavLink></li>
-                  <li><NavLink to="/productos/Baterias" className={linkClass} onClick={closeMenu}>Baterias</NavLink></li>
-                  <li><NavLink to="/productos/Focos" className={linkClass} onClick={closeMenu}>Focos</NavLink></li>
-                  <li><NavLink to="/productos/Respuestos" className={linkClass} onClick={closeMenu}>Respuestos</NavLink></li>
-                  <li><NavLink to="/productos/Seguridad" className={linkClass} onClick={closeMenu}>Seguridad</NavLink></li>
                   <li><NavLink to="/productos/Motores" className={linkClass} onClick={closeMenu}>Motores</NavLink></li>
+                  <li><NavLink to="/productos/Baterias" className={linkClass} onClick={closeMenu}>Baterias</NavLink></li>
+                  <li><NavLink to="/productos/fusibles" className={linkClass} onClick={closeMenu}>Fusibles</NavLink></li>
+                  <li><NavLink to="/productos/Seguridad" className={linkClass} onClick={closeMenu}>Artículos de seguridad</NavLink></li>
+                  <li><NavLink to="/productos/Motores" className={linkClass} onClick={closeMenu}>Faroles y luminarias</NavLink></li>
                 </ul>
               </li>
 

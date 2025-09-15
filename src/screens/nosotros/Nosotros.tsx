@@ -36,7 +36,7 @@ const Nosotros: React.FC = () => {
       <div className="nosotros-content">
         <span className="nosotros-arrow">→</span>
         <p>
-          Somos una empresa dedicada al soporte técnico especializado, mantenimiento
+          Somos una empresa dedicada a las ventas técnicas, soporte técnico especializado, mantenimiento
           y reparación de equipos electromecánicos. Nuestro propósito es brindar soluciones
           rápidas y confiables para la minería, industria y transporte, con foco en disponibilidad operacional
           y continuidad de servicio.
@@ -64,9 +64,9 @@ const Nosotros: React.FC = () => {
         <article className="ns-card">
           <h3>Representaciones y suministro</h3>
           <p>
-            Integramos marcas de prestigio en alternadores, motores de partida y soluciones eléctricas,
-            acercándolas a la operación local con disponibilidad y soporte técnico. La relación con C.E. Niehoff &amp; Co.
-            es parte clave de nuestro sello.
+            Integramos marcas de prestigio en alternadores, motores de partida, implementos de seguridad para maquinaria y equipos, y soluciones eléctricas,
+            acercándolas a la operación con ventas a nivel nacional e internacional con disponibilidad y soporte técnico. Destacamos C.E. Niehoff &amp; Co.
+            como principal producto de nuestra empresa.
           </p>
         </article>
         <article className="ns-card">
@@ -85,20 +85,38 @@ const Nosotros: React.FC = () => {
         </article>
       </div>
 
+            {/* Pilar: Transparencia y vinculación */}
+      <div className="ns-pillar ns-reveal">
+        <div className="ns-pillar-ico" aria-hidden>🤝</div>
+        <p>
+          Planteamos como pilar fundamental la <strong>transparencia</strong> y la
+          <strong> vinculación directa</strong> con nuestros clientes y trabajadores,
+          fortaleciendo los lazos que permitirán fundar <strong>cimientos sólidos</strong> en el
+          mercado <strong>minero</strong>, <strong>pesquero</strong> y de <strong>transporte</strong>.
+        </p>
+      </div>
+
       {/* Misión */}
       <h2 className="nosotros-title">Nuestra misión</h2>
       <div className="nosotros-content">
         <span className="nosotros-arrow">→</span>
         <p>
-          Ofrecer servicios de alta calidad al menor plazo posible, superando expectativas y construyendo
-          relaciones de largo plazo.
+          Ofrecer <strong>servicios de alta calidad</strong> en el <strong>menor plazo</strong>, satisfacer a plenitud los
+          requerimientos y <strong>superar expectativas</strong>, forjando relaciones comerciales de largo plazo.
         </p>
       </div>
       <div className="nosotros-content">
         <span className="nosotros-arrow">→</span>
         <p>
-          Contamos con una fuerza laboral multidisciplinaria, un ambiente de trabajo seguro y cumplimiento
-          de normativa chilena, apoyados por tecnología de punta.
+          Lo logramos con un <strong>equipo multidisciplinario</strong>, un <strong>ambiente de trabajo seguro</strong> y
+          <strong> cumplimiento</strong> de leyes y normas, apoyados por <strong>tecnología de vanguardia</strong>.
+        </p>
+      </div>
+      <div className="nosotros-content">
+        <span className="nosotros-arrow">→</span>
+        <p>
+          Impulsamos la <strong>mejora continua</strong> y la certificación en <strong>Calidad</strong>, 
+          <strong> Medio Ambiente</strong> y <strong>Seguridad y Salud Ocupacional</strong>, como sello de nuestra seriedad.
         </p>
       </div>
 
@@ -115,64 +133,43 @@ const Nosotros: React.FC = () => {
       <div className="nosotros-content">
         <span className="nosotros-arrow">→</span>
         <p>
-          Ser referentes en representación de productos, servicios integrales y formulación de
-          proyectos industriales a nivel nacional e internacional.
+          Ser los <strong>mejores representantes</strong> de productos, con <strong>servicios integrales</strong> y
+          formulación de <strong>proyectos industriales</strong> a nivel nacional e internacional.
         </p>
       </div>
       <div className="nosotros-content">
         <span className="nosotros-arrow">→</span>
         <p>
-          Responder a las necesidades de nuestros clientes con soluciones confiables y tecnológicas
-          que fortalezcan relaciones de largo plazo.
+          Responder a las necesidades de nuestros clientes <strong>desarrollando proyectos</strong> basados en
+          <strong> confiabilidad</strong> y <strong>tecnología aplicada</strong>, construyendo una identificación genuina con cada uno.
         </p>
       </div>
 
       {/* Seguridad */}
       <section className="ns-section" id="seguridad">
-        <h2 className="ns-title">Compromiso con la Seguridad</h2>
+        <h2 className="ns-title">Compromiso con la seguridad, medioambiente y recursos humanos</h2>
         <div className="ns-sec-grid">
           <div className="ns-sec-item">
             <div className="ns-sec-ico" aria-hidden>🛡️</div>
-            <h3>Primero las personas</h3>
+            <h3>Seguridad</h3>
             <p>
-              Cultura preventiva, charlas de 5 minutos, permisos de trabajo y análisis de riesgos.
-              La integridad del equipo y clientes es intransable.
+              La seguridad es un valor intransable. Fomentamos una cultura preventiva mediante charlas operativas, análisis de riesgos y permisos de trabajo bien estructurados.
+              Cada acción está orientada a proteger la integridad de nuestros equipos y clientes.
             </p>
           </div>
           <div className="ns-sec-item">
-            <div className="ns-sec-ico" aria-hidden>🔒</div>
-            <h3>Control de energías (LOTO)</h3>
+            <div className="ns-sec-ico" aria-hidden>🌳</div>
+            <h3>Medioambiente</h3>
             <p>
-              Bloqueo/etiquetado, verificación de ausencia de tensión y herramientas aisladas;
-              pruebas y registros de cada intervención.
+              Gestión responsable de residuos, reparación sobre reemplazo cuando es viable y reduciendo huella de reposición ambiental y promoción de tecnologías eficientes y responsables con el entorno natural
             </p>
           </div>
           <div className="ns-sec-item">
-            <div className="ns-sec-ico" aria-hidden>📋</div>
-            <h3>Cumplimiento normativo</h3>
+            <div className="ns-sec-ico" aria-hidden>🙋‍♂️</div>
+            <h3>Recursos Humanos</h3>
             <p>
-              Alineados a normativa eléctrica vigente (SEC) y buenas prácticas de la industria.
-              Capacitación continua y trazabilidad documental.
+              Creemos que las personas son el motor de toda transformación. Promovemos un entorno laboral colaborativo, inclusivo y orientado al desarrollo integral, donde cada trabajador es valorado por su aporte técnico y humano.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Medioambiente */}
-      <section className="ns-section" id="medioambiente">
-        <h2 className="ns-title">Medioambiente y Sostenibilidad</h2>
-        <div className="ns-env">
-          <div className="ns-env-block">
-            <div className="ns-dot" />
-            <p>Gestión responsable de residuos (baterías, aceites, solventes, embalajes) con segregación y gestores autorizados.</p>
-          </div>
-          <div className="ns-env-block">
-            <div className="ns-dot" />
-            <p>Reparación sobre reemplazo cuando es viable, extendiendo la vida útil y reduciendo huella de reposición.</p>
-          </div>
-          <div className="ns-env-block">
-            <div className="ns-dot" />
-            <p>Promoción de tecnologías de alta eficiencia en carga/arranque para operaciones más estables y eficientes.</p>
           </div>
         </div>
       </section>
@@ -216,7 +213,7 @@ const Nosotros: React.FC = () => {
           <div className="ns-tl-year">2009</div>
           <div className="ns-tl-card">
             <div className="ns-badge">Proyecto destacado</div>
-            <h3>Sala Carga de Baterías (Container 20/40 pies)</h3>
+            <h3>Sala Carga de Baterías (para camiones de extracción y equipo movimiento tierra)</h3>
             <p>
               Acondicionamiento integral conforme a normas para operación segura y eficiente.
               Implementamos <strong>sistema de carga simultánea</strong> hoy en 4 compañías mineras (I–IV Región).
@@ -246,7 +243,7 @@ const Nosotros: React.FC = () => {
           <div className="ns-tl-card">
             <h3>Certificaciones y alianzas</h3>
             <p>
-              La empresa cuenta con certificaciones <strong>ISO 9001</strong> e <strong>ISO 14001</strong>, lo que refleja altos
+              La empresa cuenta con certificaciones <strong>ISO 9001</strong>, <strong>ISO 14001</strong> e <strong>ISO 18000</strong>, lo que refleja altos
               estándares en gestión de calidad y medioambiente. Además, es un <strong>Centro Autorizado de Servicio (CAS)</strong>,
               y mantiene alianzas con marcas tecnológicas de clase mundial.
             </p>

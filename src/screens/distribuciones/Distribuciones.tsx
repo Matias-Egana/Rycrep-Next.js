@@ -12,6 +12,7 @@ import nikko from "../../assets/distribuciones/nikko.jpg";
 import prelub from "../../assets/distribuciones/prelub.png";
 import sawafuji from "../../assets/distribuciones/sawafuji.jpg";
 import tdi from "../../assets/distribuciones/tdi.jpg";
+import bussman from "../../assets/distribuciones/bussman.png";
 
 type Brand = {
   key: string;
@@ -64,13 +65,22 @@ const BRANDS: Brand[] = [
     filterValue: "Delso",
   },
   {
-    key: "tdi",
-    name: "TDI",
-    logo: tdi,
-    alt: "Logo TDI",
-    desc: "Arranque neumático por turbina para grandes motores diésel. Seguro y libre de chispa.",
-    highlights: ["Air starters", "Seguridad", "Motores grandes"],
-    filterValue: "TDI",
+    key: "bussman",
+    name: "BUSSMAN",
+    logo: bussman,
+    alt: "Logo Bussman",
+    desc: "Soluciones de protección eléctrica confiables para aplicaciones industriales y automotrices.",
+    highlights: ["Fusibles", "Aplicaciones industriales", "Automotriz y flota"],
+    filterValue: "Bussman",
+  },
+  {
+  key: "tdi",
+  name: "TDI",
+  logo: tdi,
+  alt: "Logo TDI",
+  desc: "Arranque neumático por turbina para grandes motores diésel. Seguro y libre de chispa.",
+  highlights: ["Air starters", "Seguridad", "Motores grandes"],
+  filterValue: "TDI",
   },
   {
     key: "bosch",
