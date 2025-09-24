@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+// src/components/Navbar.tsx
+import React, { useState, useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './navbar.css';
 import logo from '../../assets/inicio/ric-logo.svg';
+import CartNotification from './CartNotification';
+import { CartContext } from '../../domain/entities/context/CartContext';
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  // Usamos el contexto real sin redefinir tipos
+  const cartContext = useContext(CartContext);
+  const notification = cartContext?.notification;
+  const totalItems = cartContext?.getTotalItems ? cartContext.getTotalItems() : 0;
 
   const closeMenu = () => {
     setOpen(false);
@@ -29,20 +37,11 @@ const Navbar: React.FC = () => {
               <li><NavLink to="/nosotros" className={linkClass} onClick={closeMenu}>Nosotros</NavLink></li>
               <li><NavLink to="/representaciones" className={linkClass} onClick={closeMenu}>Representaciones</NavLink></li>
               <li><NavLink to="/distribuciones" className={linkClass} onClick={closeMenu}>Distribuciones</NavLink></li>
-
               <li><NavLink to="/servicios" className={linkClass} onClick={closeMenu}>Servicios</NavLink></li>
 
               {/* Dropdown Productos */}
               <li className={`rc-dropdown ${dropdownOpen ? 'is-open' : ''}`}>
-                <NavLink
-                  to="/productos"
-                  className={linkClass}
-                  onClick={closeMenu} // cierra menú y redirige
-                >
-                  Productos
-                </NavLink>
-
-                {/* Flecha para mobile */}
+                <NavLink to="/productos" className={linkClass} onClick={closeMenu}>Productos</NavLink>
                 <span
                   className={`rc-arrow ${dropdownOpen ? 'is-open' : ''}`}
                   onClick={(e) => {
@@ -69,7 +68,11 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="rc-right">
-          <NavLink to="/cotizado" className="rc-btn-cta" onClick={closeMenu}>Cotiza Ahora</NavLink>
+          {/* Botón Cotiza y carrito */}
+          <NavLink to="/cotizado" className="rc-btn-cta" onClick={closeMenu}>
+            Cotiza Ahora
+            {totalItems > 0 && <span className="rc-cart-badge">{totalItems}</span>}
+          </NavLink>
 
           <button
             className={`rc-burger ${open ? 'is-open' : ''}`}
@@ -81,6 +84,9 @@ const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Notificación del carrito */}
+      {notification?.visible && <CartNotification product={notification.product} />}
     </header>
   );
 };

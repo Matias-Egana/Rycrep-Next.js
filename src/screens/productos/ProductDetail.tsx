@@ -1,9 +1,11 @@
 // src/views/screens/ProductDetail.tsx
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Slider from "react-slick";
 import { fetchProductByCode } from "../../presentation/ProductListViewModel";
-import type { Product } from "../../domain/entities/Product";
+import type { Product as APIProduct } from "../../domain/entities/Product"; // solo tipo
+import { CartContext } from "../../domain/entities/context/CartContext";
+import type { CartProduct } from "../../domain/entities/context/CartContext"; // solo tipo
 import defaultImage from "../../assets/ryc.svg";
 import styles from "./ProductDetail.module.css";
 import "slick-carousel/slick/slick.css";
@@ -13,9 +15,14 @@ const sliderSettings = { dots: false, infinite: true, speed: 500, slidesToShow: 
 
 const ProductDetail: React.FC = () => {
   const { product_code } = useParams<{ product_code: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<APIProduct | null>(null);
   const sliderRef = useRef<Slider>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
+
+  const cartContext = useContext(CartContext);
+  if (!cartContext) {
+    throw new Error("CartContext no encontrado. Asegúrate de envolver tu App con CartProvider.");
+  }
 
   useEffect(() => {
     let active = true;
@@ -33,33 +40,23 @@ const ProductDetail: React.FC = () => {
 
   if (!product) return <p>Producto no encontrado.</p>;
 
-const computeFinalPrice = (p: Product): number | null => {
-  if (!p.oferta) return null;
+  const computeFinalPrice = (p: APIProduct): number | null => {
+    if (!p.oferta) return null;
+    if (typeof p.discountPrice === "number" && p.discountPrice > 0) return p.discountPrice;
+    if (typeof p.discountPercentage === "number" && typeof p.price === "number" && p.price > 0)
+      return Math.round((p.price * (100 - p.discountPercentage)) / 100);
+    if (typeof p.price === "number" && p.price > 0) return p.price;
+    return null;
+  };
 
-  if (typeof p.discountPrice === "number" && p.discountPrice > 0) {
-    return p.discountPrice;
-  }
-  if (
-    typeof p.discountPercentage === "number" &&
-    typeof p.price === "number" &&
-    p.price > 0
-  ) {
-    return Math.round((p.price * (100 - p.discountPercentage)) / 100);
-  }
-  if (typeof p.price === "number" && p.price > 0) {
-    return p.price;
-  }
-  return null;
-};
-
-const finalPrice = computeFinalPrice(product);
-const showOld =
-  Boolean(product.oferta) &&
-  typeof product.discountPercentage === "number" &&
-  typeof product.price === "number" &&
-  product.price > 0 &&
-  finalPrice !== null &&
-  finalPrice < product.price;
+  const finalPrice = computeFinalPrice(product);
+  const showOld =
+    Boolean(product.oferta) &&
+    typeof product.discountPercentage === "number" &&
+    typeof product.price === "number" &&
+    product.price > 0 &&
+    finalPrice !== null &&
+    finalPrice < product.price;
 
   const handleThumbnailClick = (index: number) => sliderRef.current?.slickGoTo(index);
 
@@ -83,7 +80,16 @@ const showOld =
   const isOutOfStock = product.stock === 0;
   const hasMultipleImages = (product.images?.length ?? 0) > 1;
 
-  const handleAddToQuote = () => alert(`"${product.name}" añadido a cotización ✅`);
+  // Agregar al carrito/cotización
+  const handleAddToQuote = () => {
+    const productToCart: CartProduct = {
+      name: product.name,
+      images: product.images?.length ? product.images : [defaultImage],
+      product_code: product.product_code,
+      quantity: 1,
+    };
+    cartContext.addToCart(productToCart);
+  };
 
   return (
     <div className={styles.productDetail}>
@@ -135,23 +141,14 @@ const showOld =
         <p><strong>Marca:</strong> {product.brand}</p>
         <p><strong>Categoría:</strong> {product.category}</p>
 
-{/* Precio solo si hay oferta y finalPrice válido */}
-{finalPrice !== null && (
-  <div className={styles.priceRow}>
-    {showOld && (
-      <span className={styles.originalPrice}>
-        ${Number(product.price).toLocaleString()}
-      </span>
-    )}
-    <span className={`${styles.price} ${product.oferta ? styles.priceRed : ''}`}>
-      ${finalPrice.toLocaleString()}
-    </span>
-  </div>
-)}
-
+        {finalPrice !== null && (
+          <div className={styles.priceRow}>
+            {showOld && <span className={styles.originalPrice}>${Number(product.price).toLocaleString()}</span>}
+            <span className={`${styles.price} ${product.oferta ? styles.priceRed : ""}`}>${finalPrice.toLocaleString()}</span>
+          </div>
+        )}
 
         <p className={styles.description}>{product.description}</p>
-
         {isOutOfStock && <p className={styles.outOfStock}>Agotado</p>}
 
         <div className={styles.buttonContainer}>

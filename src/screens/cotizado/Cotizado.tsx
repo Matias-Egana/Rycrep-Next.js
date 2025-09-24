@@ -1,34 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Cotizado.css';
-
-const productos = [
-  {
-    id: 1,
-    nombre: 'Viga IPN 100',
-    descripcion: 'Viga de acero estructural para construcciones industriales.',
-    cantidad: 10,
-  },
-  {
-    id: 2,
-    nombre: 'Chapa Galvanizada 1mm',
-    descripcion: 'Chapa resistente a la corrosión para cubiertas metálicas.',
-    cantidad: 20,
-  },
-  {
-    id: 3,
-    nombre: 'Tubería de Acero 2"',
-    descripcion: 'Tubería para conducción de fluidos a alta presión.',
-    cantidad: 15,
-  },
-  {
-    id: 4,
-    nombre: 'Perfil C 80x40x2',
-    descripcion: 'Perfil conformado en frío para estructuras livianas.',
-    cantidad: 25,
-  },
-];
+import { CartContext } from '../../domain/entities/context/CartContext';
+import type { CartProduct } from '../../domain/entities/context/CartContext';
 
 const Cotizado: React.FC = () => {
+  const cartContext = useContext(CartContext);
+  const cart: CartProduct[] = cartContext?.cart || [];
+
   return (
     <div className="container">
       {/* Formulario */}
@@ -37,7 +15,7 @@ const Cotizado: React.FC = () => {
         <p className="subtitle">
           Completa tus datos y revisa los productos en el carrito. <br />
           <strong>
-            Los productos que están en el carrito de la derecha se enviarán a la empresa para su
+            Los productos que están en el carrito se enviarán a la empresa para su
             cotización y nos pondremos en contacto contigo.
           </strong>
         </p>
@@ -77,13 +55,30 @@ const Cotizado: React.FC = () => {
       <div className="cartSection">
         <h3 className="cartTitle">Carrito de Cotización</h3>
 
-        {productos.map((producto) => (
-          <div key={producto.id} className="productCard">
-            <h4>{producto.nombre}</h4>
-            <p>{producto.descripcion}</p>
-            <span>Cantidad: {producto.cantidad}</span>
-          </div>
-        ))}
+        {/* Contenedor scrollable de productos */}
+        <div className="cartProducts">
+          {cart.length === 0 ? (
+            <p>No hay productos en el carrito.</p>
+          ) : (
+            cart.map((producto) => (
+              <div key={producto.product_code} className="productCard">
+                <h4>{producto.name}</h4>
+                <p>Código: {producto.product_code}</p>
+                <span>Cantidad: {producto.quantity}</span>
+                {producto.images && producto.images.length > 0 && (
+                  <img src={producto.images[0]} alt={producto.name} className="productImage" />
+                )}
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Botón Vaciar Carrito fuera del scroll */}
+        {cart.length > 0 && (
+          <button className="button clearCartBtn" onClick={() => cartContext?.clearCart?.()}>
+            Vaciar Carrito
+          </button>
+        )}
       </div>
     </div>
   );
