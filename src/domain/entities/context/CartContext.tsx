@@ -6,6 +6,7 @@ export interface CartProduct {
   images: string[];
   product_code: string;
   quantity: number;
+  price: number; // 👈 precio unitario obligatorio
 }
 
 interface Notification {
@@ -19,6 +20,7 @@ interface CartContextType {
   addToCart: (product: CartProduct) => void;
   clearCart: () => void;
   getTotalItems: () => number;
+  getTotalPrice: () => number;
 }
 
 export const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -30,7 +32,17 @@ interface Props {
 export function CartProvider({ children }: Props) {
   const [cart, setCart] = useState<CartProduct[]>(() => {
     const saved = localStorage.getItem('cart');
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+
+    const parsed: CartProduct[] = JSON.parse(saved);
+
+    // Asegurarse de que cada producto tenga price
+    const cartWithPrice = parsed.map(p => ({
+      ...p,
+      price: typeof p.price === 'number' ? p.price : 0,
+    }));
+
+    return cartWithPrice;
   });
 
   const [notification, setNotification] = useState<Notification | undefined>(undefined);
@@ -49,9 +61,9 @@ export function CartProvider({ children }: Props) {
         updated[existingIndex] = {
           ...updated[existingIndex],
           quantity: updated[existingIndex].quantity + product.quantity,
+          price: product.price, // 👈 actualizar precio por si cambió
         };
 
-        // Producto exacto del carrito para la notificación
         const updatedProduct = updated[existingIndex];
         setNotification({ visible: true, product: updatedProduct });
         setTimeout(() => setNotification(undefined), 3000);
@@ -71,8 +83,10 @@ export function CartProvider({ children }: Props) {
 
   const getTotalItems = () => cart.reduce((acc, p) => acc + p.quantity, 0);
 
+  const getTotalPrice = () => cart.reduce((acc, p) => acc + p.quantity * (p.price ?? 0), 0);
+
   return (
-    <CartContext.Provider value={{ cart, notification, addToCart, clearCart, getTotalItems }}>
+    <CartContext.Provider value={{ cart, notification, addToCart, clearCart, getTotalItems, getTotalPrice }}>
       {children}
     </CartContext.Provider>
   );

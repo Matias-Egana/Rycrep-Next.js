@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
                   <li><NavLink to="/productos/Baterias" className={linkClass} onClick={closeMenu}>Baterias</NavLink></li>
                   <li><NavLink to="/productos/fusibles" className={linkClass} onClick={closeMenu}>Fusibles</NavLink></li>
                   <li><NavLink to="/productos/Seguridad" className={linkClass} onClick={closeMenu}>Artículos de seguridad</NavLink></li>
-                  <li><NavLink to="/productos/Motores" className={linkClass} onClick={closeMenu}>Faroles y luminarias</NavLink></li>
+                  <li><NavLink to="/productos/Faroles-iluminacion" className={linkClass} onClick={closeMenu}>Faroles y luminarias</NavLink></li>
                 </ul>
               </li>
 

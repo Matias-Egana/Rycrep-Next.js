@@ -1,11 +1,10 @@
-// src/views/screens/ProductDetail.tsx
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Slider from "react-slick";
 import { fetchProductByCode } from "../../presentation/ProductListViewModel";
-import type { Product as APIProduct } from "../../domain/entities/Product"; // solo tipo
+import type { Product as APIProduct } from "../../domain/entities/Product"; 
 import { CartContext } from "../../domain/entities/context/CartContext";
-import type { CartProduct } from "../../domain/entities/context/CartContext"; // solo tipo
+import type { CartProduct } from "../../domain/entities/context/CartContext"; 
 import defaultImage from "../../assets/ryc.svg";
 import styles from "./ProductDetail.module.css";
 import "slick-carousel/slick/slick.css";
@@ -80,13 +79,16 @@ const ProductDetail: React.FC = () => {
   const isOutOfStock = product.stock === 0;
   const hasMultipleImages = (product.images?.length ?? 0) > 1;
 
-  // Agregar al carrito/cotización
   const handleAddToQuote = () => {
+    const finalPrice = computeFinalPrice(product);
+    if (finalPrice === null) return;
+
     const productToCart: CartProduct = {
       name: product.name,
       images: product.images?.length ? product.images : [defaultImage],
       product_code: product.product_code,
       quantity: 1,
+      price: finalPrice, // 👈 añadimos el precio al carrito
     };
     cartContext.addToCart(productToCart);
   };
