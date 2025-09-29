@@ -3,27 +3,40 @@ import "./WhatsAppWidget.css";
 
 type Position = "bottom-right" | "bottom-left";
 
-type WhatsAppWidgetProps = {
+export type WhatsAppContact = {
   /** Número en formato E.164 SIN el "+" (ej: "56998765432") */
   phone: string;
-  /** Mensaje por defecto para prellenar el chat */
+  /** Etiqueta visible del botón (ej: "Ventas", "Ventas Técnicas") */
+  label: string;
+  /** Mensaje por defecto para prellenar el chat (override por contacto) */
+  defaultMessage?: string;
+  /** Color de acento para este contacto (hex o CSS var) */
+  accentColor?: string;
+};
+
+type WhatsAppWidgetProps = {
+  /** (Legacy) Número en formato E.164 SIN el "+" (ej: "56998765432"). Si usas `contacts`, no es necesario. */
+  phone?: string;
+  /** Mensaje por defecto global (cada contacto puede sobreescribir con su `defaultMessage`) */
   defaultMessage?: string;
   /** Posición del widget */
   position?: Position;
   /** Abrir popover tras X ms (0 = no autoabrir) */
   autoOpenDelay?: number;
-  /** Texto del botón principal */
+  /** (Legacy) Texto del botón principal (se mantiene para compat) */
   ctaLabel?: string;
   /** Título cabecera del popover */
   title?: string;
   /** Subtítulo/estado (ej: “Respondemos rápido”) */
   subtitle?: string;
-  /** Color de acento (hex o CSS var) */
+  /** Color de acento global (usado si el contacto no define `accentColor`) */
   accentColor?: string;
   /** Z-index del widget (por si compite con tu header) */
   zIndex?: number;
-  /** Mensaje breve al pasar el mouse por el botón */
+  /** Mensaje breve al pasar el mouse por el botón flotante */
   tooltip?: string;
+  /** NUEVO: lista de contactos (ej: Ventas, Ventas Técnicas) */
+  contacts?: WhatsAppContact[];
 };
 
 function sanitizePhone(raw: string): string {
@@ -61,15 +74,51 @@ export default function WhatsAppWidget({
   accentColor = "#25D366",
   zIndex = 60,
   tooltip = "Escríbenos por WhatsApp",
+  contacts,
 }: WhatsAppWidgetProps) {
   const [open, setOpen] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
   const firstOpenRef = useRef(false);
 
-  const href = useMemo(
-    () => buildWhatsAppUrl(phone, defaultMessage),
-    [phone, defaultMessage]
-  );
+  // Deriva la lista de contactos. Si no pasan `contacts`, arma uno por compatibilidad.
+  const derivedContacts: WhatsAppContact[] = useMemo(() => {
+    if (contacts && contacts.length > 0) {
+      // Normaliza cada contacto con fallbacks globales
+      return contacts.map((c) => ({
+        phone: c.phone,
+        label: c.label,
+        defaultMessage: c.defaultMessage ?? defaultMessage,
+        accentColor: c.accentColor ?? accentColor,
+      }));
+    }
+    // Compatibilidad: si no hay `contacts`, usa `phone` legado con etiqueta "Ventas"
+    if (phone) {
+      return [
+        {
+          phone,
+          label: "Ventas",
+          defaultMessage,
+          accentColor,
+        },
+      ];
+    }
+    // Sin datos: no renderizamos nada y avisamos en consola
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[WhatsAppWidget] Debes pasar `phone` o `contacts` con al menos un contacto."
+      );
+    }
+    return [];
+  }, [contacts, phone, defaultMessage, accentColor]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  useEffect(() => {
+    // Si cambia la lista, resetea el índice activo
+    setActiveIndex(0);
+  }, [derivedContacts.length]);
+
+  const active = derivedContacts[activeIndex];
 
   useEffect(() => {
     if (autoOpenDelay > 0 && !firstOpenRef.current) {
@@ -80,6 +129,10 @@ export default function WhatsAppWidget({
       return () => clearTimeout(t);
     }
   }, [autoOpenDelay]);
+
+  if (derivedContacts.length === 0) return null;
+
+  const previewId = "wa-preview-msg";
 
   return (
     <div
@@ -120,27 +173,61 @@ export default function WhatsAppWidget({
         </div>
 
         <div className="wa-popover__body">
-          <p className="wa-popover__text">
-            Te abriremos WhatsApp con este mensaje prellenado:
-          </p>
-          <div className="wa-popover__msg" aria-label="Mensaje de ejemplo">
-            {defaultMessage}
+          <p className="wa-popover__text">Elige con quién quieres hablar:</p>
+
+          {/* Lista de CTAs (múltiples WhatsApp) */}
+          <div className="wa-contact-list" role="list">
+            {derivedContacts.map((c, i) => {
+              const href = buildWhatsAppUrl(c.phone, c.defaultMessage || "");
+              const isActive = i === activeIndex;
+              return (
+                <a
+                  key={`${c.label}-${i}`}
+                  role="listitem"
+                  className={`wa-contact ${isActive ? "is-active" : ""}`}
+                  style={
+                    {
+                      "--contact-accent": c.accentColor || accentColor,
+                    } as React.CSSProperties
+                  }
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-analytics={`whatsapp_cta_${c.label.toLowerCase().replace(/\s+/g, "_")}`}
+                  aria-label={`Abrir WhatsApp con ${c.label}`}
+                  aria-describedby={previewId}
+                  onMouseEnter={() => setActiveIndex(i)}
+                  onFocus={() => setActiveIndex(i)}
+                >
+                  <span className="wa-contact__icon" aria-hidden>
+                    <WhatsAppIcon />
+                  </span>
+                  <span className="wa-contact__labels">
+                    <strong className="wa-contact__title">{c.label}</strong>
+                    <span className="wa-contact__subtitle">
+                      {c.defaultMessage?.slice(0, 64) || "Abrir chat"}
+                      {c.defaultMessage && c.defaultMessage.length > 64 ? "…" : ""}
+                    </span>
+                  </span>
+                  <span className="wa-contact__chevron" aria-hidden>
+                    →
+                  </span>
+                </a>
+              );
+            })}
           </div>
 
-          <a
-            className="wa-popover__cta"
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-analytics="whatsapp_cta"
+          {/* Vista previa del mensaje activo */}
+          <div
+            id={previewId}
+            className="wa-popover__msg"
+            aria-label={`Mensaje de ejemplo para ${active.label}`}
           >
-            <WhatsAppIcon />
-            <span>{ctaLabel}</span>
-          </a>
+            {active.defaultMessage}
+          </div>
 
           <small className="wa-popover__hint">
-            Si usas escritorio, se abrirá{" "}
-            <strong>Web WhatsApp</strong>.
+            Si usas escritorio, se abrirá <strong>WhatsApp Web</strong>.
           </small>
         </div>
       </div>
@@ -149,7 +236,7 @@ export default function WhatsAppWidget({
       <button
         className="wa-fab"
         aria-label="Abrir contacto WhatsApp"
-        onClick={() => setOpen(v => !v)}
+        onClick={() => setOpen((v) => !v)}
         title={tooltip}
       >
         <WhatsAppIcon />

@@ -14,8 +14,8 @@ const images = [
   { name: 'Motores', image: motoresImg, path: '/products/motores' },
   { name: 'Alternadores', image: alternadorImg, path: '/products/alternadores' },
   { name: 'Baterías', image: bateriasImg, path: '/products/baterias' },
-  { name: 'Focos', image: lucesImg, path: '/products/focos' },
-  { name: 'Repuestos', image: fusiblesImg, path: '/products/repuestos' },
+  { name: 'Fusibles', image: fusiblesImg, path: '/products/repuestos' },
+  { name: 'Luminaria', image: lucesImg, path: '/products/focos' },
   { name: 'Seguridad', image: seguridadImg, path: '/products/seguridad' },
 ];
 

@@ -124,6 +124,83 @@
   font-size: .86rem;
 }
 
+/* ---- NUEVO: Lista de contactos (dos botones) ---- */
+.wa-contact-list {
+  display: grid;
+  gap: .5rem;
+  margin: .35rem 0 .75rem;
+}
+
+.wa-contact {
+  --contact-accent: var(--wa-accent, #25D366);
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: .6rem;
+  text-decoration: none;
+  padding: .6rem .7rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: #ffffff;
+  color: #111;
+  transition: box-shadow .18s ease, border-color .18s ease, transform .12s ease;
+  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+}
+
+.wa-contact:hover {
+  border-color: var(--contact-accent);
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+.wa-contact:active {
+  transform: translateY(1px);
+}
+
+.wa-contact:focus-visible {
+  outline: none;
+  border-color: var(--contact-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--contact-accent) 35%, transparent);
+}
+
+.wa-contact.is-active {
+  border-color: var(--contact-accent);
+}
+
+.wa-contact__icon {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  color: #fff;
+  background: var(--contact-accent);
+}
+
+.wa-contact__labels {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.wa-contact__title {
+  font-weight: 700;
+  font-size: .94rem;
+  color: #111;
+}
+
+.wa-contact__subtitle {
+  font-size: .78rem;
+  color: #5e5e5e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wa-contact__chevron {
+  color: #9a9a9a;
+  font-weight: 700;
+}
+
+/* Mensaje de ejemplo */
 .wa-popover__msg {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   background: #1b1b1b;
@@ -131,28 +208,9 @@
   border: 1px dashed rgba(255,255,255,.15);
   border-radius: 10px;
   padding: .6rem .7rem;
-  margin-bottom: .8rem;
+  margin-top: .4rem;
   white-space: pre-wrap;
   word-break: break-word;
-}
-
-.wa-popover__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  background: var(--wa-accent, #25D366);
-  color: #092a12;
-  text-decoration: none;
-  font-weight: 600;
-  border-radius: 999px;
-  padding: .7rem 1rem;
-  border: 2px solid transparent;
-}
-.wa-popover__cta:hover { filter: brightness(.95); }
-.wa-popover__cta:focus-visible {
-  outline: none;
-  border-color: #fff;
-  box-shadow: 0 0 0 4px rgba(37,211,102,.25);
 }
 
 .wa-popover__hint {
@@ -218,9 +276,6 @@
 }
 
 /* CTA mantiene el verde de acento; solo ajusta estados para light */
-.wa-popover__cta {
-  /* igual que antes, pero en light resalta más */
-}
 .wa-popover__hint {
   color: #666;              /* antes: #a0a0a0 en dark */
 }

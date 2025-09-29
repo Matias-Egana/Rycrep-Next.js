@@ -14,6 +14,7 @@ import bhpLogo from '../../assets/logos/bhp.png';
 import amLogo from '../../assets/logos/antofagasta-minerals.png';
 import collahuasiLogo from '../../assets/logos/collahuasi.jpg';
 import cumminsLogo from '../../assets/logos/cummins.png';
+import aesgener from '../../assets/logos/aesgener.png';
 
 import slide1 from '../../assets/hero/Niehoff & Co.png';
 import slide2 from '../../assets/hero/slide1.png';
@@ -31,6 +32,7 @@ const clientLogos = [
   amLogo,
   collahuasiLogo,
   cumminsLogo,
+  aesgener
 ];
 
 const slides = [
@@ -183,7 +185,7 @@ const getFeatureContent = (title: string) => {
       return (
         <div>
           <p className="fp-p">
-            Ejecutamos <strong>mantenimiento</strong> a partir del <strong>diagnóstico</strong>:
+            Ejecutamos <strong>mantenimiento/overhaul</strong> a partir del <strong>diagnóstico</strong>:
             planes preventivos/correctivos, limpieza, ajuste, recambio y pruebas.
           </p>
           <p className="fp-note">Puede derivar en <strong>mantenimiento y/o reparación</strong>.</p>
@@ -195,7 +197,7 @@ const getFeatureContent = (title: string) => {
         <div>
           <p className="fp-p">
             <strong>Reparación</strong> basada en diagnóstico: alternadores, motores de partida,
-            tableros y electrónica. Calibración y pruebas finales con garantía.
+            tableros y tarjetas electrónicas. Calibración y pruebas finales con garantía.
           </p>
           <p className="fp-note">Aplicamos lo más conveniente: <strong>mantenimiento y/o reparación</strong>.</p>
         </div>

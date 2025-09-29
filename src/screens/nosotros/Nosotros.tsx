@@ -51,7 +51,7 @@ const Nosotros: React.FC = () => {
         </div>
         <div className="ns-stat">
           <div className="ns-k">Antofagasta</div>
-          <div className="ns-l">Cobertura Norte</div>
+          <div className="ns-l">Oficina principal</div>
         </div>
         <div className="ns-stat">
           <div className="ns-k">Servicio integral</div>
@@ -79,7 +79,7 @@ const Nosotros: React.FC = () => {
         <article className="ns-card">
           <h3>Ingeniería aplicada</h3>
           <p>
-            Soporte en especificación, compatibilidad eléctrica y dimensionamiento de sistemas de carga,
+            Soporte en especificación, compatibilidad electromecánica y dimensionamiento de sistemas de carga,
             además de capacitación a equipos de mantenimiento.
           </p>
         </article>
@@ -168,7 +168,7 @@ const Nosotros: React.FC = () => {
             <div className="ns-sec-ico" aria-hidden>🙋‍♂️</div>
             <h3>Recursos Humanos</h3>
             <p>
-              Creemos que las personas son el motor de toda transformación. Promovemos un entorno laboral colaborativo, inclusivo y orientado al desarrollo integral, donde cada trabajador es valorado por su aporte técnico y humano.
+              Creemos que las personas son el motor de toda transformación. Promovemos un entorno laboral colaborativo, inclusivo y orientado al desarrollo integral, donde cada trabajador es valorado por su aporte profesional, técnico y humano.
             </p>
           </div>
         </div>
