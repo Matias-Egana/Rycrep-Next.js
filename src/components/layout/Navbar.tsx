@@ -10,7 +10,6 @@ const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Usamos el contexto real sin redefinir tipos
   const cartContext = useContext(CartContext);
   const notification = cartContext?.notification;
   const totalItems = cartContext?.getTotalItems ? cartContext.getTotalItems() : 0;
@@ -53,12 +52,36 @@ const Navbar: React.FC = () => {
                 </span>
 
                 <ul className={`rc-submenu ${dropdownOpen ? 'is-open' : ''}`}>
-                  <li><NavLink to="/productos/Alternadores" className={linkClass} onClick={closeMenu}>Alternadores</NavLink></li>
-                  <li><NavLink to="/productos/Motores" className={linkClass} onClick={closeMenu}>Motores</NavLink></li>
-                  <li><NavLink to="/productos/Baterias" className={linkClass} onClick={closeMenu}>Baterias</NavLink></li>
-                  <li><NavLink to="/productos/fusibles" className={linkClass} onClick={closeMenu}>Fusibles</NavLink></li>
-                  <li><NavLink to="/productos/Seguridad" className={linkClass} onClick={closeMenu}>Artículos de seguridad</NavLink></li>
-                  <li><NavLink to="/productos/Faroles-iluminacion" className={linkClass} onClick={closeMenu}>Faroles y luminarias</NavLink></li>
+                  <li>
+                    <NavLink to={`/productos?category=alternadores`} className={linkClass} onClick={closeMenu}>
+                      Alternadores
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={`/productos?category=motores`} className={linkClass} onClick={closeMenu}>
+                      Motores
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={`/productos?category=baterias`} className={linkClass} onClick={closeMenu}>
+                      Baterías
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={`/productos?category=fusibles`} className={linkClass} onClick={closeMenu}>
+                      Fusibles
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={`/productos?category=seguridad`} className={linkClass} onClick={closeMenu}>
+                      Artículos de seguridad
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={`/productos?category=faroles_luminarias`} className={linkClass} onClick={closeMenu}>
+                      Faroles y luminarias
+                    </NavLink>
+                  </li>
                 </ul>
               </li>
 

@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './CategoryGrid.module.css';
 import { Link } from 'react-router-dom';
 
-// importa las imágenes
 import motoresImg from '../../assets/CategoryGrid/motores.jpg';
 import alternadorImg from '../../assets/CategoryGrid/alternador.png';
 import bateriasImg from '../../assets/CategoryGrid/baterias.png';
@@ -10,13 +9,21 @@ import lucesImg from '../../assets/CategoryGrid/luces.png';
 import fusiblesImg from '../../assets/CategoryGrid/fusibles.png';
 import seguridadImg from '../../assets/CategoryGrid/seguridad.png';
 
+const normalizeCategory = (cat: string) => {
+  return cat
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\s\/]/g, "_");
+};
+
 const images = [
-  { name: 'Motores', image: motoresImg, path: '/products/motores' },
-  { name: 'Alternadores', image: alternadorImg, path: '/products/alternadores' },
-  { name: 'Baterías', image: bateriasImg, path: '/products/baterias' },
-  { name: 'Fusibles', image: fusiblesImg, path: '/products/repuestos' },
-  { name: 'Luminaria', image: lucesImg, path: '/products/focos' },
-  { name: 'Seguridad', image: seguridadImg, path: '/products/seguridad' },
+  { name: 'Motores', image: motoresImg },
+  { name: 'Alternadores', image: alternadorImg },
+  { name: 'Baterías', image: bateriasImg },
+  { name: 'Fusibles', image: fusiblesImg },
+  { name: 'Luminaria', image: lucesImg },
+  { name: 'Seguridad', image: seguridadImg },
 ];
 
 const loopImages = [...images, ...images];
@@ -28,7 +35,11 @@ const CategoryGrid: React.FC = () => {
       <div className={styles.carouselWrapper}>
         <div className={styles.carousel}>
           {loopImages.map((item, idx) => (
-            <Link key={idx} to={item.path} className={styles.link}>
+            <Link 
+              key={idx} 
+              to={`/productos?category=${normalizeCategory(item.name)}`} 
+              className={styles.link}
+            >
               <div className={styles.slide}>
                 <img src={item.image} alt={item.name} />
                 <p className={styles.categoryName}>{item.name}</p>

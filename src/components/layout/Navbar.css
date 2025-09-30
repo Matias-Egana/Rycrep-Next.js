@@ -55,7 +55,7 @@
 }
 .rc-logo-img{
   display: block;
-  height: 36px; /* reducido */
+  height: 36px;
   width: auto;
 }
 
@@ -76,7 +76,7 @@
   color: var(--text);
   text-decoration: none;
   font-weight: 500;
-  font-size: 14px; /* achicado */
+  font-size: 14px;
   opacity: .95;
   padding: 6px 8px;
   border-radius: var(--radius);
@@ -85,9 +85,10 @@
 }
 .rc-link:hover{ opacity: 1; }
 
+/* === LINK ACTIVO === */
 .rc-link.is-active{
-  background: var(--accent);
-  color: #fff;
+  background: #ffffff;       /* fondo blanco */
+  color: var(--accent);      /* letras rojas por defecto */
   padding: 8px 12px;
   font-weight: 600;
   border-radius: 12px;
@@ -120,7 +121,7 @@
   display: block;
   padding: 8px 12px;
   font-weight: 500;
-  font-size: 13px; /* un poco más pequeño que los principales */
+  font-size: 13px;
   border-radius: 0;
   opacity: 0.9;
 }
@@ -134,7 +135,7 @@
   position: relative;
   display: inline-block;
   padding: 0.5rem 1rem;
-  background-color: #007bff; /* tu color de botón */
+  background-color: #007bff;
   color: #fff;
   border-radius: 4px;
   text-decoration: none;
@@ -254,9 +255,13 @@
   }
   .rc-link{ 
     padding: 8px 10px; 
-    font-size: 13px; /* más pequeño en mobile */
+    font-size: 13px;
   }
-  .rc-link.is-active{ padding: 10px 12px; }
+  .rc-link.is-active{ 
+    padding: 10px 12px; 
+    background: #ffffff;      /* fondo blanco */
+    color: red;               /* Letras rojas solo en móvil */
+  }
 
   /* Dropdown en mobile */
   .rc-dropdown .rc-submenu {
@@ -267,8 +272,8 @@
   }
 
   .rc-submenu .rc-link {
-    color: #ffffff; /* texto blanco en mobile */
-    font-size: 12px; /* dropdown más pequeño */
+    color: #1b2240;
+    font-size: 12px;
     padding: 6px 10px;
   }
 

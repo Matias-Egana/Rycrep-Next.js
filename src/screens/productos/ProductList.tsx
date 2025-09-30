@@ -25,14 +25,13 @@ const ProductListPage: React.FC = () => {
     'motores',
     'baterias',
     'fusibles',
-    'articulos_seguridad',
+    'seguridad',
     'faroles_luminarias',
   ];
 
-  // IMPORTANTE: respeta los labels actuales (ojo con "Delso")
   const brands = ["Niehoff","Delso","Delco Remy","Nikko","TDI","Bosch","Leece-Neville","Sawafuji","Prelub"];
 
-  // Helper para mostrar bonito
+  // Mapea categorías a labels bonitos
   const categoryLabel = (c: string) => {
     const map: Record<string, string> = {
       all: 'Todas',
@@ -46,10 +45,10 @@ const ProductListPage: React.FC = () => {
     return map[c] ?? c;
   };
 
-  // Alias para aceptar Denso/Delso y otras variantes por query
+  // Alias de marcas para query params
   const brandAlias: Record<string, string> = {
     niehoff: "Niehoff",
-    denso: "Delso", // si llega 'denso', lo mapeamos a 'Delso'
+    denso: "Delso",
     delso: "Delso",
     "delco remy": "Delco Remy",
     nikko: "Nikko",
@@ -61,7 +60,17 @@ const ProductListPage: React.FC = () => {
     prelub: "Prelub",
   };
 
-  // Carga inicial
+  // Normaliza categorías para filtrar
+  const normalizeCategory = (cat: string) => {
+    if (!cat) return '';
+    return cat
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // elimina acentos
+      .replace(/[\s\/]/g, "_");        // espacios y "/" => "_"
+  };
+
+  // Carga inicial de productos
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -79,15 +88,38 @@ const ProductListPage: React.FC = () => {
     loadProducts();
   }, []);
 
+  // Filtros automáticos desde URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    // CATEGORÍA
+    const rawCategory = (params.get('category') || '').trim().toLowerCase();
+    const normalizedCategory = normalizeCategory(rawCategory);
+    const validCategory = categories.includes(normalizedCategory) ? normalizedCategory : null;
+
+    // MARCA
+    const rawBrand = (params.get('brand') || params.get('marca') || "").trim().toLowerCase();
+    const canonicalBrand = brandAlias[rawBrand];
+
+    if (validCategory) setSelectedCategories([validCategory]);
+    else setSelectedCategories(['all']);
+
+    if (canonicalBrand && brands.includes(canonicalBrand)) setSelectedBrands([canonicalBrand]);
+    else setSelectedBrands([]);
+  }, [location.search]);
+
   // Aplica filtros cuando cambian selections o la data
   useEffect(() => {
     let filtered = allProducts;
+
     if (!selectedCategories.includes("all")) {
-      filtered = filtered.filter(p => selectedCategories.includes(p.category));
+      filtered = filtered.filter(p => selectedCategories.includes(normalizeCategory(p.category)));
     }
+
     if (selectedBrands.length > 0) {
       filtered = filtered.filter(p => selectedBrands.includes(p.brand));
     }
+
     setProducts(filtered);
   }, [selectedCategories, selectedBrands, allProducts]);
 
@@ -96,20 +128,6 @@ const ProductListPage: React.FC = () => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
-
-  // Lee ?brand= o ?marca= de la URL y preselecciona
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const raw = (params.get('brand') || params.get('marca') || "").trim();
-    if (!raw) return;
-    const normalized = raw.toLowerCase();
-    const canonical = brandAlias[normalized];
-    if (canonical && brands.includes(canonical)) {
-      setSelectedBrands([canonical]); // mantenemos categorías en "all"
-      setSelectedCategories(["all"]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]);
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
@@ -122,36 +140,20 @@ const ProductListPage: React.FC = () => {
     setSelectedBrands(prev => checked ? [...prev, value] : prev.filter(b => b !== value));
   };
 
-// Calcula el precio final SOLO si está en oferta y hay un valor > 0.
-// Si no, retorna null (para no mostrar nada).
-const computeFinalPrice = (p: Product): number | null => {
-  if (!p.oferta) return null;
-
-  if (typeof p.discountPrice === "number" && p.discountPrice > 0) {
-    return p.discountPrice;
-  }
-
-  if (
-    typeof p.discountPercentage === "number" &&
-    typeof p.price === "number" &&
-    p.price > 0
-  ) {
-    return Math.round((p.price * (100 - p.discountPercentage)) / 100);
-  }
-
-  if (typeof p.price === "number" && p.price > 0) {
-    return p.price;
-  }
-
-  return null;
-};
+  const computeFinalPrice = (p: Product): number | null => {
+    if (!p.oferta) return null;
+    if (typeof p.discountPrice === "number" && p.discountPrice > 0) return p.discountPrice;
+    if (typeof p.discountPercentage === "number" && typeof p.price === "number" && p.price > 0)
+      return Math.round((p.price * (100 - p.discountPercentage)) / 100);
+    if (typeof p.price === "number" && p.price > 0) return p.price;
+    return null;
+  };
 
   if (loading) return <Spinner />;
   if (error) return <div className={styles.errorMsg}>{error}</div>;
 
   return (
     <div className={styles.container}>
-
       {/* Botón hamburguesa */}
       <button
         className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ""}`}
@@ -205,66 +207,64 @@ const computeFinalPrice = (p: Product): number | null => {
         <div className={styles.productGrid}>
           {products.length === 0 && <p>No hay productos disponibles.</p>}
 
-{products.map(product => {
-  const onSale = Boolean(product.oferta);
-  const finalPrice = computeFinalPrice(product);
+          {products.map(product => {
+            const onSale = Boolean(product.oferta);
+            const finalPrice = computeFinalPrice(product);
+            const showOld =
+              onSale &&
+              typeof product.discountPercentage === "number" &&
+              typeof product.price === "number" &&
+              product.price > 0 &&
+              finalPrice !== null &&
+              finalPrice < product.price;
 
-  // Mostrar tachado SOLO si hay descuento porcentual y precio base > 0 y el final es menor
-  const showOld =
-    onSale &&
-    typeof product.discountPercentage === "number" &&
-    typeof product.price === "number" &&
-    product.price > 0 &&
-    finalPrice !== null &&
-    finalPrice < product.price;
-  return (
-    <div
-      key={product.product_code}
-      className={`${styles.productCard} ${onSale ? styles.onSale : ''}`}
-      onClick={() => navigate(`/productos/${product.product_code}`)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/productos/${product.product_code}`); }}
-      aria-label={`Ver ${product.name}`}
-    >
-      {onSale && <span className={styles.offerBadge}>OFERTA</span>}
+            return (
+              <div
+                key={product.product_code}
+                className={`${styles.productCard} ${onSale ? styles.onSale : ''}`}
+                onClick={() => navigate(`/productos/${product.product_code}`)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/productos/${product.product_code}`); }}
+                aria-label={`Ver ${product.name}`}
+              >
+                {onSale && <span className={styles.offerBadge}>OFERTA</span>}
 
-      <img
-        src={(product.images && product.images[0]) || defaultImage}
-        alt={product.name}
-        className={styles.productImage}
-        loading="lazy"
-      />
+                <img
+                  src={(product.images && product.images[0]) || defaultImage}
+                  alt={product.name}
+                  className={styles.productImage}
+                  loading="lazy"
+                />
 
-      <h3 className={styles.productName}>{product.name}</h3>
-      <p className={styles.category}>{categoryLabel(product.category)}</p>
-      <p className={styles.brand}>{product.brand}</p>
+                <h3 className={styles.productName}>{product.name}</h3>
+                <p className={styles.category}>{categoryLabel(product.category)}</p>
+                <p className={styles.brand}>{product.brand}</p>
 
-      {/* Precio: solo si hay oferta y finalPrice válido */}
-      {finalPrice !== null && (
-        <div className={styles.priceWrapper}>
-          {showOld && (
-            <span className={styles.originalPrice}>
-              ${Number(product.price).toLocaleString()}
-            </span>
-          )}
-          <span className={`${styles.price} ${onSale ? styles.priceRed : ''}`}>
-            ${finalPrice.toLocaleString()}
-          </span>
-        </div>
-      )}
+                {finalPrice !== null && (
+                  <div className={styles.priceWrapper}>
+                    {showOld && (
+                      <span className={styles.originalPrice}>
+                        ${Number(product.price).toLocaleString()}
+                      </span>
+                    )}
+                    <span className={`${styles.price} ${onSale ? styles.priceRed : ''}`}>
+                      ${finalPrice.toLocaleString()}
+                    </span>
+                  </div>
+                )}
 
-      <div className={styles.cardActions}>
-        <button
-          type="button"
-          className={`${styles.addToQuoteBtn} ${styles.isDisabled}`}
-          title="Pronto podrás añadir a tu cotizado"
-          aria-disabled="true"
-          disabled
-          onClick={(e) => e.stopPropagation()}
-        >
-          añadir al cotizado
-        </button>
+                <div className={styles.cardActions}>
+                  <button
+                    type="button"
+                    className={`${styles.addToQuoteBtn} ${styles.isDisabled}`}
+                    title="Pronto podrás añadir a tu cotizado"
+                    aria-disabled="true"
+                    disabled
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    añadir al cotizado
+                  </button>
                 </div>
               </div>
             );
