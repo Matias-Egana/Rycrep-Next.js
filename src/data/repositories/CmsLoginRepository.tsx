@@ -2,7 +2,7 @@
 import type { ICmsLoginRepository } from '../../domain/repositories/CmsLoginRepository';
 import type { CmsAuthPayload } from '../../lib/cmsAuth';
 
-const API_BASE = import.meta.env.VITE_API_URL ?? '/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
 export class CmsLoginRepository implements ICmsLoginRepository {
   async login({ username, password }: { username: string; password: string }): Promise<CmsAuthPayload> {
