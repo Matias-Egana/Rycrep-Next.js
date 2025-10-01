@@ -1,15 +1,14 @@
-// src/domain/usecases/GetAllProducts.tsx
-import type { IProductRepository, ProductListParams } from "../repositories/IProductRepository";
+import type { ProductRepository, ProductListParams } from "../repositories/ProductRepository";
 import type { RycrepProduct } from "../entities/RycrepProduct";
 
-export class GetAllProducts {
-  private repo: IProductRepository;         // ← declara la propiedad normal
+export class GetAllProductsUseCase {
+  private repo: ProductRepository;
 
-  constructor(repo: IProductRepository) {   // ← sin "private" aquí
-    this.repo = repo;                       // ← asignación explícita
+  constructor(repo: ProductRepository) {
+    this.repo = repo;
   }
 
-  async execute(params?: ProductListParams): Promise<RycrepProduct[]> {
+  execute(params?: ProductListParams): Promise<RycrepProduct[]> {
     return this.repo.list(params);
   }
 }

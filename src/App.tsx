@@ -1,5 +1,5 @@
 // src/App.tsx
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 
 // Screens públicas (tus existentes)
@@ -20,15 +20,30 @@ import WhatsAppWidget, { type WhatsAppContact } from './components/layout/WhatsA
 // *** CMS ***
 import CmsLogin from './screens/CMS/login/Login';
 import CmsProductos from './screens/CMS/productos/Productos';
+import { useEffect } from 'react';
 
 const contactos: WhatsAppContact[] = [
   { label: "Ventas", phone: "56951992909", defaultMessage: "¡Hola, equipo de Ventas! Necesito información comercial 😊", accentColor: "#25D366" },
   { label: "Ventas Técnicas", phone: "56982298903", defaultMessage: "Hola, Ventas Técnicas. Tengo una duda técnica sobre el producto.", accentColor: "#128C7E" },
 ];
 
+function BodyClassController() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const isCMS = pathname.startsWith('/cms');
+    document.body.classList.toggle('cms-mode', isCMS);
+    return () => document.body.classList.remove('cms-mode');
+  }, [pathname]);
+  return null;
+}
+
 function App() {
+    const { pathname } = useLocation();
+  const showWidget = !pathname.startsWith('/cms'); // <- no estorba en el CMS
+
   return (
     <>
+    <BodyClassController />
       <Routes>
         {/* Sitio público bajo tu Layout */}
         <Route path="/" element={<Layout />}>
@@ -44,7 +59,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* Rutas CMS sin Layout público (login minimalista, pantalla privada) */}
+        {/* CMS sin Layout público */}
         <Route path="/cms/login" element={<CmsLogin />} />
         <Route path="/cms/productos" element={<CmsProductos />} />
       </Routes>

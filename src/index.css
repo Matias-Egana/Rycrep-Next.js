@@ -66,3 +66,23 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* ======= CMS MODE RESET ======= */
+body.cms-mode {
+  /* anula el layout centrado global del template */
+  display: block;
+  place-items: initial;
+  min-height: auto;
+
+  /* CMS claro y legible */
+  background-color: #ffffff;
+  color: #1f2937;
+}
+
+body.cms-mode #root {
+  /* evita el contenedor centrado del template */
+  max-width: none;
+  padding: 0;
+  text-align: initial;
+}
+

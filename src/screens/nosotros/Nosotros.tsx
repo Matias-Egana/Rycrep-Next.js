@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './nosotros.css';
 
 import teamPhoto from '../../assets/nosotros/portada.jpeg';   // NO se mueve
-import teamPhoto2 from '../../assets/nosotros/ceo.jpg';       // NO se mueve
+import teamPhoto2 from '../../assets/nosotros/ceo2.jpg';       // NO se mueve
 // Eliminada la imagen final (timeline.png)
 
 const Nosotros: React.FC = () => {
@@ -123,7 +123,7 @@ const Nosotros: React.FC = () => {
       {/* Imagen 2 (no tocar) + título superior animado */}
       <div className="nosotros-photo captioned">
         <span className="ns-photo-title" role="note">
-          Gustavo Reyes, CEO de RYCREP junto a la ministra de minería Aurora Williams, 2025
+          Gustavo Reyes, CEO de RYCREP en la sede de Niehoff, Chicago 2024
         </span>
         <img src={teamPhoto2} alt="Equipo" />
       </div>
