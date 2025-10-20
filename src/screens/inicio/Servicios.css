@@ -1,0 +1,195 @@
+/* Paleta estricta */
+:root{
+  --white:#ffffff;
+  --blue:#121a3a;
+  --red:#c03030;
+  --black:#000000; /* usar solo para texto */
+}
+
+/* Reset mínimo contextual */
+.svc *{box-sizing:border-box}
+
+/* --------- Contenedor general --------- */
+.svc{
+  background: var(--white);
+  padding: 32px 20px 60px;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;
+  color: var(--black);
+  animation: fadeIn .4s ease;
+}
+@keyframes fadeIn{
+  from{opacity:0; transform: translateY(6px)}
+  to{opacity:1; transform: translateY(0)}
+}
+
+/* --------- Hero --------- */
+.svc-hero{
+  max-width: 1200px;
+  margin: 0 auto 26px;
+  text-align: center;
+}
+.svc-hero__stripe{
+  height: 6px; width: 160px;
+  margin: 0 auto 16px;
+  background: linear-gradient(90deg, var(--red) 0 50%, var(--blue) 50% 100%);
+}
+.svc-hero__title{
+  margin: 0 0 8px;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800; letter-spacing: .2px;
+}
+.svc-hero__lead{ margin: 0 auto; max-width: 840px; font-size: 16px; line-height: 1.6 }
+
+/* --------- Grid de tarjetas --------- */
+.svc-grid{
+  max-width: 1200px;
+  margin: 28px auto 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 18px;
+}
+
+/* --------- Tarjeta --------- */
+.svc-card{
+  border: 2px solid #e8e8e8;
+  border-color: var(--blue);
+  background: var(--white);
+  display: flex; flex-direction: column;
+  transition: transform .2s ease;
+}
+.svc-card:hover{ transform: translateY(-4px) scale(1.01) }
+.svc-card__media{
+  position: relative; aspect-ratio: 16/9; overflow: hidden;
+  border-bottom: 2px solid var(--blue);
+}
+.svc-card__media img{ width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.02) }
+.svc-card__tag{
+  position: absolute; left: 10px; bottom: 10px;
+  background: var(--red); color: var(--white);
+  padding: 6px 10px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+}
+.svc-card__body{ padding: 14px 14px 16px }
+.svc-card__title{ margin: 0 0 6px; font-size: 18px }
+.svc-card__summary{ margin: 0 0 12px; font-size: 14px; line-height: 1.55 }
+.svc-card__cta{ display: flex; gap: 10px; flex-wrap: wrap }
+
+/* --------- Botones (scoped para evitar estilos globales) --------- */
+.svc .btn{
+  appearance: none;
+  border: 2px solid transparent;
+  padding: 8px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease, color .15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  width: auto !important;   /* corrige botones estirados */
+  min-width: 0;
+  border-radius: 6px;
+  line-height: 1;
+}
+.svc .btn:active{ transform: translateY(1px) }
+/* Ambos, primary y "danger", serán azules */
+.svc .btn--primary,
+.svc .btn--danger{
+  background: var(--blue) !important;
+  color: var(--white) !important;
+  border-color: var(--blue) !important;
+}
+.svc .btn--primary:hover,
+.svc .btn--danger:hover{ transform: translateY(-1px) }
+.svc .btn--ghost{
+  background: transparent;
+  color: var(--black);
+  border: 2px solid var(--blue);
+}
+
+/* --------- Modal --------- */
+.svc-modal{ position: fixed; inset: 0; z-index: 999; display: grid; place-items: center }
+.svc-modal__backdrop{ position: absolute; inset: 0; background: rgba(255,255,255,.95) }
+.svc-modal__panel{
+  position: relative; z-index: 1; width: min(1100px, 96vw);
+  background: var(--white); border: 3px solid var(--blue);
+  animation: pop .18s ease; display: flex; flex-direction: column; max-height: 92vh;
+}
+@keyframes pop{ from{ transform: scale(.98)} to{ transform: scale(1)} }
+
+.svc-modal__header{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-bottom: 3px solid var(--red); gap: 12px;
+}
+.svc-modal__title{ margin: 0; font-size: 20px }
+.svc-modal__subtitle{ margin: 2px 0 0; font-size: 13px; opacity: .9 }
+
+/* Botón de cierre pequeño y a la derecha (azul) */
+.svc-modal__close{
+  width: 36px; height: 36px; padding: 0;
+  display: inline-grid; place-items: center;
+  background: var(--blue); color: var(--white);
+  border: 2px solid var(--blue); border-radius: 8px;
+  flex: 0 0 auto;
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease;
+}
+.svc-modal__close:hover{ transform: translateY(-1px) }
+.svc-modal__close svg{ width: 18px; height: 18px }
+
+/* Tabs */
+.svc-modal__tabs{ display: flex; gap: 8px; padding: 10px 14px }
+.tab{
+  padding: 8px 12px; font-weight: 800; border: 2px solid var(--blue);
+  background: var(--white); color: var(--black); cursor: pointer;
+}
+.tab.is-active{ background: var(--blue); color: var(--white) }
+
+/* Cuerpo modal */
+.svc-modal__content{
+  display: grid; grid-template-columns: 1.2fr .8fr;
+  gap: 16px; padding: 12px 14px 8px; overflow: auto;
+}
+@media (max-width: 900px){ .svc-modal__content{ grid-template-columns: 1fr } }
+
+.svc-modal__summary{ margin: 0 0 10px; font-size: 14px; line-height: 1.55 }
+.svc-modal__block{ margin: 8px 0 12px }
+.svc-modal__blockTitle{ margin: 0 0 6px; font-size: 14px; color: var(--blue); text-transform: uppercase; letter-spacing: .4px }
+.svc-modal__list{ padding-left: 18px; margin: 0; font-size: 14px; line-height: 1.55 }
+
+/* --------- Galería --------- */
+.gallery{ width: 100% }
+.gallery__viewport{
+  position: relative; aspect-ratio: 16/9; border: 3px solid var(--blue);
+  background: var(--white); overflow: hidden;
+}
+.gallery__viewport img{ width: 100%; height: 100%; object-fit: cover; display: block }
+
+/* Flechas: centradas, azules y con hover que agranda el ícono */
+.gallery__ctrl{
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 42px; height: 42px; border-radius: 8px;
+  border: 2px solid var(--blue); background: var(--blue); color: var(--white);
+  cursor: pointer; display: grid; place-items: center;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.gallery__ctrl--prev{ left: 8px }
+.gallery__ctrl--next{ right: 8px }
+.gallery__ctrl svg{ width: 24px; height: 24px; transition: transform .15s ease }
+.gallery__ctrl:hover svg{ transform: scale(1.12) }
+
+.gallery__dots{ display: flex; gap: 8px; justify-content: center; padding: 10px 0 0 }
+.dot{ width: 12px; height: 12px; border: 2px solid var(--blue); background: var(--white); cursor: pointer }
+.dot.is-active{ background: var(--blue) }
+
+/* --------- Video --------- */
+.video{ width: 100%; aspect-ratio: 16/9; border: 3px solid var(--red); background: var(--white) }
+.video iframe{ width: 100%; height: 100%; display: block }
+
+/* --------- Footer modal --------- */
+.svc-modal__footer{
+  padding: 12px 14px 16px; display: flex; gap: 10px; flex-wrap: wrap;
+  border-top: 3px solid var(--blue);
+  justify-content: flex-start; align-items: center;
+}
+/* Evita que se estiren en el footer */
+.svc-modal__footer .btn{ flex: 0 0 auto; width: auto !important }

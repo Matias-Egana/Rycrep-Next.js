@@ -19,31 +19,32 @@ const ProductListPage: React.FC = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
-  const categories = [
-    'all',
-    'alternadores',
-    'motores',
-    'baterias',
-    'fusibles',
-    'seguridad',
-    'faroles_luminarias',
-  ];
+const categories = [
+  'all',
+  'alternadores',
+  'motores',
+  'baterias',
+  'fusibles',
+  'articulos_seguridad',  // ← canon backend
+  'faroles_luminarias',
+  'accesorios',           // ← nuevo
+];
 
   const brands = ["Niehoff","Delso","Delco Remy","Nikko","TDI","Bosch","Leece-Neville","Sawafuji","Prelub"];
 
-  // Mapea categorías a labels bonitos
-  const categoryLabel = (c: string) => {
-    const map: Record<string, string> = {
-      all: 'Todas',
-      alternadores: 'Alternadores',
-      motores: 'Motores',
-      baterias: 'Baterías',
-      fusibles: 'Fusibles',
-      articulos_seguridad: 'Artículos de seguridad',
-      faroles_luminarias: 'Faroles/Luminarias',
-    };
-    return map[c] ?? c;
+const categoryLabel = (c: string) => {
+  const map: Record<string, string> = {
+    all: 'Todas',
+    alternadores: 'Alternadores',
+    motores: 'Motores',
+    baterias: 'Baterías',
+    fusibles: 'Fusibles',
+    articulos_seguridad: 'Artículos de seguridad',
+    faroles_luminarias: 'Faroles/Luminarias',
+    accesorios: 'Accesorios',
   };
+  return map[c] ?? c;
+};
 
   // Alias de marcas para query params
   const brandAlias: Record<string, string> = {
@@ -87,7 +88,11 @@ const ProductListPage: React.FC = () => {
     };
     loadProducts();
   }, []);
-
+const categoryAlias: Record<string, string> = {
+  seguridad: 'articulos_seguridad',
+  articulos_seguridad: 'articulos_seguridad',
+  faroles: 'faroles_luminarias',
+};
   // Filtros automáticos desde URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -95,7 +100,8 @@ const ProductListPage: React.FC = () => {
     // CATEGORÍA
     const rawCategory = (params.get('category') || '').trim().toLowerCase();
     const normalizedCategory = normalizeCategory(rawCategory);
-    const validCategory = categories.includes(normalizedCategory) ? normalizedCategory : null;
+const canonicalCategory = categoryAlias[normalizedCategory] ?? normalizedCategory;
+const validCategory = categories.includes(canonicalCategory) ? canonicalCategory : null;
 
     // MARCA
     const rawBrand = (params.get('brand') || params.get('marca') || "").trim().toLowerCase();

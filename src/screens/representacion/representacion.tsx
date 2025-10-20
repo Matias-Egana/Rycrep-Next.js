@@ -126,7 +126,7 @@ const Representacion: React.FC<NiehoffBannerProps> = ({
           <div className="nb-bullets">
             <div className="bullet">
               <span className="dot" />
-              <p>Integración habitual con <strong>motores Cummins</strong> y <strong>motores diésel de alto rendimiento</strong>.</p>
+              <p>Integración habitual con <strong>motores Cummins, Detroit y Caterpillar.</strong> <strong>Motores diésel de alto rendimiento</strong>.</p>
             </div>
             <div className="bullet">
               <span className="dot" />

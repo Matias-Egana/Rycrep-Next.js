@@ -1,0 +1,215 @@
+[
+  {
+    "id": "carga-arranque",
+    "title": "Carga y Arranque",
+    "subtitle": "Alternadores y Motores de Partida para camiones de extracción, palas y perforadoras y equipo movimiento tierra",
+    "summary": "Diagnóstico, reparación, mantención y overhaul de alternadores  y motores de partida eléctricos con trazabilidad completa.",
+    "blocks": [
+      {
+        "label": "Alcance",
+        "items": [
+          "Diagnóstico, reparación, mantención y overhaul de alternadores (placa de diodo, rodamiento, estatores, rotores y caja reguladora).",
+          "Diagnóstico, reparación, mantención y overhaul de motores de partida eléctricos (inducidos, campos, solenoide, carbones, porta carbones y bujes).",
+          "Limpieza por ultrasonido, reemplazo de rodamientos, rectificado de colectores.",
+          "Trazabilidad de pruebas e informe técnico de entrega."
+        ]
+      },
+      {
+        "label": "Especificaciones",
+        "items": [
+          "Alternadores y motores de partida 6 a 32 V de distintas marcas.",
+          "Motores de partida: eléctricos, prelubricados, neumáticos (Ingersoll Rand) y de turbina (TDI)."
+        ]
+      }
+    ],
+    "images": [
+      "https://rycrep.cl/images/191d9a6d-8d31-4bdb-b8d4-c9f0cf5f6cd0.jpg?crc=4015435682"
+    ],
+    "videoUrl": "https://www.youtube.com/embed/ysz5S6PUM-U"
+  },
+  {
+    "id": "equipos-autonomos",
+    "title": "Equipos Autónomos y Estacionarios",
+    "subtitle": "Grupos electrógenos, torres de iluminación, soldadoras y compresores",
+    "summary": "Mantenimiento preventivo/correctivo y overhaul con protocolos de prueba y repuestos de primera calidad.",
+    "blocks": [
+      {
+        "label": "Equipos atendidos",
+        "items": [
+          "Grupos electrógenos.",
+          "Motores Diesel y bencineros (alternadores, motores de partida, tablero, luminarias).",
+          "Torres de iluminación (motor, alternador, tablero, luminarias).",
+          "Soldadoras autónomas y eléctricas (rectificadores, tableros).",
+          "Compresores estacionarios y autónomos."
+        ]
+      },
+      {
+        "label": "Servicios",
+        "items": [
+          "Mantenimiento preventivo/correctivo y overhaul.",
+          "Mantención del tablero del grupo electrógeno y de transferencia.",
+          "Mantención del alternador de generación.",
+          "Pruebas con banco de carga y protocolos de prueba funcional (entrega con checklist).",
+          "Mantenimiento programado con uso de repuestos y materiales de primera calidad."
+        ]
+      }
+    ],
+    "images": [
+      "https://i.imgur.com/vLJUi96.jpeg",
+      "https://i.imgur.com/YkQqnf9.jpeg"
+    ],
+    "videoUrl": "https://web.facebook.com/reel/1680673995841608"
+  },
+  {
+    "id": "electronica-industrial",
+    "title": "Electrónica Industrial, Control y Automatización de salas de control",
+    "subtitle": "SCADA, DCS, PLC, Variadores y HMI",
+    "summary": "Diseño, reparación e integración de control y potencia. Simulación y ensayo previo a puesta en servicio.",
+    "blocks": [
+      {
+        "label": "Desarrollo y soporte",
+        "items": [
+          "Reparación y diseño de tarjetas electrónicas (control y potencia).",
+          "Diseño/implementación de SCADA y DCS; montaje de sistemas de control.",
+          "Integración de sensores/actuadores; instalación de redes de comunicación.",
+          "HMI: PanelView y PC industriales tipo TFT/LCD.",
+          "Diseño y construcción de fuentes de poder y módulos inteligentes.",
+          "Simulación y ensayo previo a puesta en servicio."
+        ]
+      },
+      {
+        "label": "Plataformas y pruebas",
+        "items": [
+          "PLC y módulos de control (SIMATIC/Siemens, ABB, Allen Bradley y otros).",
+          "Variadores de frecuencia.",
+          "Pruebas VFC, VCM, PM&ST."
+        ]
+      }
+    ],
+    "images": [
+      "https://i.imgur.com/CMIyEMt.jpeg",
+      "https://i.imgur.com/OLvmejV.jpeg",
+      "https://i.imgur.com/GphO7GK.jpeg",
+      "https://www.precision.tech/media/catalog/product/cache/4c9fe7b7837e419ea0db7fb1a77a0933/1/5/1511_878_9.jpg",
+      "https://www.copadata.com/hubfs/Images%20Website/Hero-Banner%20Images/Hero-Banner%20small/herobanner_small_1420x757px_WhatisScada2.png",
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=cro"
+    ],
+    "videoUrl": "https://www.youtube.com/shorts/63WtoJfi-k8"
+  },
+  {
+    "id": "servicio-electrico",
+    "title": "Servicio Eléctrico Industrial",
+    "subtitle": "Potencia y Distribución",
+    "summary": "Proyectos e instalaciones de MT/BT, subestaciones, fuerza y control con mantención y seguridad operacional.",
+    "blocks": [
+      {
+        "label": "Proyectos e instalaciones",
+        "items": [
+          "Construcción y mantenimiento de redes de distribución subterránea.",
+          "Mantención de salas eléctricas y generales en contextos industriales y mineros",
+          "Montaje de subestaciones eléctricas.",
+          "Instalaciones de Media Tensión y Salas Eléctricas.",
+          "Instalaciones de fuerza; armado y modificación de tableros.",
+          "Montaje de motores eléctricos.",
+          "Sistemas de control y pantallas HMI."
+        ]
+      },
+      {
+        "label": "Mantención y seguridad",
+        "items": [
+          "Mantención preventiva y correctiva de subestaciones (alta y baja tensión).",
+          "Inspecciones, termografías y pruebas de funcionamiento.",
+          "Gestión documental y protocolos de seguridad."
+        ]
+      }
+    ],
+    "images": [
+      "https://i.imgur.com/GphO7GK.jpeg"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=DVMa2Y6WOiw"
+  },
+    {
+    "id": "mecanica-diesel",
+    "title": "Mecánica Diésel Aplicada",
+    "subtitle": "Reparación y mantención diesel",
+    "summary": "Reparación y mantención de motores diésel de marcas líderes, con pruebas de carga y overhauls.",
+    "blocks": [
+      {
+        "label": "Alcance",
+        "items": [
+          "Reparación y mantención de motores diésel asociados a generadores, torres e soldadoras.",
+          "Cambio de periféricos, ajuste de parámetros y pruebas de carga.",
+          "Mantenciones preventivas, correctivas y overhaul."
+        ]
+      },
+      {
+        "label": "Marcas",
+        "items": ["Caterpillar, Cummins, Perkins, Deutz, Kubota, Lamborghini, Iveco."]
+      }
+    ],
+    "images": [
+      "https://i.imgur.com/0sEWKJf.png"    ],
+    "videoUrl": "https://www.youtube.com/embed/ysz5S6PUM-U"
+  },
+ 
+
+  {
+    "id": "modalidades-trabajo",
+    "title": "Modalidades de Trabajo y Entregables",
+    "summary": "Programas de mantención, overhauls, informes, trazabilidad y logística de abastecimiento/retorno.",
+    "blocks": [
+      {
+        "label": "Modalidades",
+        "items": [
+          "Programas de mantención: predictivo, preventivo y correctivo.",
+          "Overhaul completo con checklist de fábrica.",
+          "Informes técnicos, registro fotográfico y curvas de prueba.",
+          "Protocolos de entrega con checklist y trazabilidad de pruebas.",
+          "Abastecimiento y despacho dentro de Chile cuando aplica."
+        ]
+      }
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop"
+    ],
+    "videoUrl": "https://www.youtube.com/embed/ysz5S6PUM-U"
+  },
+  {
+    "id": "container-baterias",
+    "title": "Container Sala de Carga de Baterías",
+    "subtitle": "Servicio de carga de baterías",
+    "summary": "Contenedor de 20/40 pies habilitado como sala de carga, seguro y normado para operación minera.",
+    "blocks": [
+      {
+        "label": "Descripción",
+        "items": [
+          "Estructuración de contenedor de 20 o 40 pies como sala de carga de baterías comerciales, equipada para una operación eficaz y segura bajo normas compatibles."
+        ]
+      },
+      {
+        "label": "Operación y alcance",
+        "items": [
+          "Sistema de carga simultánea de baterías, en funcionamiento en compañías mineras entre la I y IV Región."
+        ]
+      },
+      {
+        "label": "Seguridad y control",
+        "items": [
+          "Objetivos: evitar inhalación de gases del electrolito, asegurar efectividad del proceso y prevenir accidentes o fuego por cortocircuitos."
+        ]
+      },
+      {
+        "label": "Medidas y equipamiento",
+        "items": [
+          "Puertas con sistema antipánico.",
+          "Sistema detector y supresor de incendio.",
+          "Extractores y ventiladores para ventilación adecuada.",
+          "Ducha y lavaojos para descontaminación por contacto con elementos ácidos."
+        ]
+      }
+    ],
+    "images": [
+      "https://i.imgur.com/K14Vde1.jpeg"    ],
+    "videoUrl": "https://www.youtube.com/watch?v=6wGTEf6FFgE"
+  }
+]

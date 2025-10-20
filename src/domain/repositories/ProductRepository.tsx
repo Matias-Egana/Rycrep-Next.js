@@ -8,15 +8,21 @@ export type ProductListParams = {
     | "fusibles"
     | "articulos_seguridad"
     | "faroles_luminarias"
+    | "accesorios"
     | "all";
   search?: string;
   oferta?: boolean;
+
+  // ← NUEVOS filtros soportados por el backend y usados en ProductRepository.list()
+  brand?: string;
+  series?: string;
+  voltage?: string;
 };
 
 export type UpdateProductPatch = {
   id: number | string;
-  oferta: boolean;
-  // Solo se envía price cuando NO está en oferta (regla del negocio)
+  // envía solo lo que quieras actualizar (oferta y/o price)
+  oferta?: boolean;
   price?: number;
 };
 

@@ -7,7 +7,7 @@ import bosch from "../../assets/distribuciones/bosch.jpg";
 import delcoremy from "../../assets/distribuciones/delcoremy.jpg";
 import denso from "../../assets/distribuciones/denso.jpg";
 import leece from "../../assets/distribuciones/leece.png";
-import niehoff from "../../assets/distribuciones/niehoff.jpg";
+import niehoff from "../../assets/distribuciones/niehoff.png";
 import nikko from "../../assets/distribuciones/nikko.jpg";
 import prelub from "../../assets/distribuciones/prelub.png";
 import sawafuji from "../../assets/distribuciones/sawafuji.jpg";
