@@ -87,79 +87,50 @@
 
 /* === LINK ACTIVO === */
 .rc-link.is-active{
-  background: #ffffff;       /* fondo blanco */
-  color: var(--accent);      /* letras rojas por defecto */
+  background: #ffffff;
+  color: var(--accent);
   padding: 8px 12px;
   font-weight: 600;
   border-radius: 12px;
 }
 
-/* ==== Dropdown ==== */
+/* ==== Dropdown (base desktop) ==== */
 .rc-dropdown { position: relative; cursor: pointer; }
 
-.rc-submenu {
+.rc-submenu{
   opacity: 0;
   transform: translateY(-10px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity .25s ease, transform .25s ease;
   display: block;
   position: absolute;
   top: 100%;
   left: 0;
   min-width: 200px;
-  background: #fff;
+  background: #fff;                  /* panel blanco */
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 6px 0;
   pointer-events: none;
   z-index: 1000;
 }
-
-.rc-submenu li { list-style: none; }
-
-.rc-submenu .rc-link {
-  color: #1b2240;
+.rc-submenu li{ list-style: none; }
+.rc-submenu .rc-link{
+  color: #1b2240;                    /* texto oscuro */
   display: block;
   padding: 8px 12px;
   font-weight: 500;
   font-size: 13px;
   border-radius: 0;
-  opacity: 0.9;
+  opacity: .9;
 }
-
-.rc-submenu .rc-link:hover {
-  background: #f0f4fa;
+.rc-submenu .rc-link:hover{
+  background: #f0f4fa;               /* hover gris claro */
   opacity: 1;
-}
-
-.rc-btn-cta {
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  text-decoration: none;
-}
-
-.rc-cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background-color: red;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
 }
 
 /* Hover en desktop para mostrar dropdown */
 @media (min-width: 961px){
-  .rc-dropdown:hover .rc-submenu {
+  .rc-dropdown:hover .rc-submenu{
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -167,15 +138,12 @@
 }
 
 /* Flecha ▾ animada */
-.rc-arrow {
+.rc-arrow{
   display: inline-block;
   margin-left: 6px;
-  transition: transform 0.25s ease;
+  transition: transform .25s ease;
 }
-
-.rc-dropdown .rc-arrow.is-open {
-  transform: rotate(180deg);
-}
+.rc-dropdown .rc-arrow.is-open{ transform: rotate(180deg); }
 
 /* ==== CTA right ==== */
 .rc-right{
@@ -184,10 +152,12 @@
   gap: 14px;
 }
 .rc-btn-cta{
+  position: relative;
+  display: inline-block;
+  padding: 10px 16px;
   text-decoration: none;
   background: var(--cta-bg);
   color: var(--cta-text);
-  padding: 10px 16px;
   border-radius: 12px;
   font-weight: 700;
   box-shadow: var(--shadow);
@@ -198,16 +168,22 @@
   transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(0,0,0,.22);
 }
+.rc-cart-badge{
+  position: absolute;
+  top: -6px; right: -6px;
+  background: red; color: #fff;
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: bold;
+}
 
 /* ==== Burger (solo mobile) ==== */
 .rc-burger{
   display: none;
   width: 42px; height: 42px;
   background: transparent;
-  border: 0;
-  border-radius: 8px;
-  padding: 10px;
-  cursor: pointer;
+  border: 0; border-radius: 8px;
+  padding: 10px; cursor: pointer;
 }
 .rc-burger span{
   display: block;
@@ -220,7 +196,7 @@
 .rc-burger.is-open span:nth-child(2){ opacity: 0; }
 .rc-burger.is-open span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
 
-/* ==== Responsive ==== */
+/* ==== Responsive (Mobile Nav) ==== */
 @media (max-width: 960px){
   .rc-right{ gap: 6px; }
   .rc-burger{ display: inline-block; }
@@ -229,23 +205,16 @@
     display: block;
     position: fixed;
     top: var(--nav-h);
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 0; right: 0; bottom: 0;
     background: var(--nav-bg);
     transform: translateY(-8px);
-    opacity: 0;
-    visibility: hidden;
+    opacity: 0; visibility: hidden;
     transition: opacity .2s ease, transform .2s ease, visibility .2s;
     box-shadow: 0 10px 20px rgba(0,0,0,.25);
     overflow-y: auto;
     z-index: 40;
   }
-  .rc-nav.is-open{
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
+  .rc-nav.is-open{ transform: translateY(0); opacity: 1; visibility: visible; }
 
   .rc-menu{
     flex-direction: column;
@@ -253,38 +222,41 @@
     gap: 10px;
     padding: 14px 20px 20px;
   }
-  .rc-link{ 
-    padding: 8px 10px; 
-    font-size: 13px;
-  }
-  .rc-link.is-active{ 
-    padding: 10px 12px; 
-    background: #ffffff;      /* fondo blanco */
-    color: red;               /* Letras rojas solo en móvil */
+  .rc-link{ padding: 8px 10px; font-size: 13px; }
+  .rc-link.is-active{
+    padding: 10px 12px;
+    background: #ffffff;       /* pastilla blanca activa */
+    color: var(--accent);      /* rojo */
   }
 
-  /* Dropdown en mobile */
-  .rc-dropdown .rc-submenu {
-    position: static;
-    background: var(--nav-bg);
-    box-shadow: none;
-    padding-left: 10px;
+  /* ===== Submenú móvil: SOLO visible cuando está activo (.is-open) ===== */
+  .rc-dropdown .rc-submenu{
+    position: static;          /* que empuje el flujo dentro del panel */
+    background: #fff;          /* panel blanco (diseño original) */
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
+    margin: 6px 0 10px 6px;    /* leve separación */
+    padding: 6px 0;
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
   }
-
-  .rc-submenu .rc-link {
-    color: #1b2240;
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  .rc-submenu .rc-link:hover {
-    background: rgba(255,255,255,0.1);
-    opacity: 1;
-  }
-
-  .rc-dropdown .rc-submenu.is-open {
+  .rc-dropdown .rc-submenu.is-open{
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+  }
+
+  /* Enlaces del submenú: estilo original (texto oscuro + hover gris) */
+  .rc-submenu .rc-link{
+    color: #1b2240;
+    background: transparent;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 10px;       /* pastilla suave como en tu captura */
+    opacity: 1;
+  }
+  .rc-submenu .rc-link:hover{
+    background: #f0f4fa;
   }
 }

@@ -17,10 +17,7 @@
   color: var(--black);
   animation: fadeIn .4s ease;
 }
-@keyframes fadeIn{
-  from{opacity:0; transform: translateY(6px)}
-  to{opacity:1; transform: translateY(0)}
-}
+@keyframes fadeIn{ from{opacity:0; transform: translateY(6px)} to{opacity:1; transform: translateY(0)} }
 
 /* --------- Hero --------- */
 .svc-hero{
@@ -40,14 +37,29 @@
 }
 .svc-hero__lead{ margin: 0 auto; max-width: 840px; font-size: 16px; line-height: 1.6 }
 
-/* --------- Grid de tarjetas --------- */
+/* --------- Grid de tarjetas (COLUMNAS FIJAS) --------- */
+/* XL: 4 | Desktop: 3 | Tablet: 2 | Móvil: 1 */
 .svc-grid{
   max-width: 1200px;
   margin: 28px auto 0;
+  padding-inline: 16px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  grid-template-columns: repeat(3, 1fr); /* base desktop */
   gap: 18px;
 }
+@media (min-width: 1400px){
+  .svc-grid{ grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1024px){
+  .svc-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px){
+  .svc-grid{ grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* Evita que textos largos empujen el ancho */
+.svc-card__title,
+.svc-card__summary{ overflow-wrap:anywhere; }
 
 /* --------- Tarjeta --------- */
 .svc-card{
@@ -63,36 +75,36 @@
   border-bottom: 2px solid var(--blue);
 }
 .svc-card__media img{ width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.02) }
+
+/* Banda roja a ancho completo, sin recortes */
 .svc-card__tag{
-  position: absolute; left: 10px; bottom: 10px;
+  position: absolute; left: 0; right: 0; bottom: 0; /* full width */
   background: var(--red); color: var(--white);
-  padding: 6px 10px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  padding: 10px 12px;
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  white-space: normal; overflow-wrap:anywhere; line-height:1.25;
 }
 .svc-card__body{ padding: 14px 14px 16px }
 .svc-card__title{ margin: 0 0 6px; font-size: 18px }
 .svc-card__summary{ margin: 0 0 12px; font-size: 14px; line-height: 1.55 }
 .svc-card__cta{ display: flex; gap: 10px; flex-wrap: wrap }
 
-/* --------- Botones (scoped para evitar estilos globales) --------- */
+/* --------- Botones (scoped) --------- */
 .svc .btn{
   appearance: none;
   border: 2px solid transparent;
-  padding: 8px 14px;
+  padding: 10px 14px;        /* touch target */
   font-weight: 700;
   cursor: pointer;
   transition: transform .15s ease, background-color .15s ease, border-color .15s ease, color .15s ease;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center;
   user-select: none;
-  width: auto !important;   /* corrige botones estirados */
-  min-width: 0;
-  border-radius: 6px;
-  line-height: 1;
+  width: auto !important; min-width: 0;
+  border-radius: 6px; line-height: 1;
+  min-height: 44px;
 }
 .svc .btn:active{ transform: translateY(1px) }
-/* Ambos, primary y "danger", serán azules */
 .svc .btn--primary,
 .svc .btn--danger{
   background: var(--blue) !important;
@@ -102,9 +114,7 @@
 .svc .btn--primary:hover,
 .svc .btn--danger:hover{ transform: translateY(-1px) }
 .svc .btn--ghost{
-  background: transparent;
-  color: var(--black);
-  border: 2px solid var(--blue);
+  background: transparent; color: var(--black); border: 2px solid var(--blue);
 }
 
 /* --------- Modal --------- */
@@ -113,7 +123,8 @@
 .svc-modal__panel{
   position: relative; z-index: 1; width: min(1100px, 96vw);
   background: var(--white); border: 3px solid var(--blue);
-  animation: pop .18s ease; display: flex; flex-direction: column; max-height: 92vh;
+  animation: pop .18s ease; display: flex; flex-direction: column;
+  max-height: min(92vh, 92svh, 92dvh);
 }
 @keyframes pop{ from{ transform: scale(.98)} to{ transform: scale(1)} }
 
@@ -124,7 +135,6 @@
 .svc-modal__title{ margin: 0; font-size: 20px }
 .svc-modal__subtitle{ margin: 2px 0 0; font-size: 13px; opacity: .9 }
 
-/* Botón de cierre pequeño y a la derecha (azul) */
 .svc-modal__close{
   width: 36px; height: 36px; padding: 0;
   display: inline-grid; place-items: center;
@@ -137,7 +147,7 @@
 .svc-modal__close svg{ width: 18px; height: 18px }
 
 /* Tabs */
-.svc-modal__tabs{ display: flex; gap: 8px; padding: 10px 14px }
+.svc-modal__tabs{ display: flex; gap: 8px; padding: 10px 14px; flex-wrap: wrap }
 .tab{
   padding: 8px 12px; font-weight: 800; border: 2px solid var(--blue);
   background: var(--white); color: var(--black); cursor: pointer;
@@ -149,7 +159,7 @@
   display: grid; grid-template-columns: 1.2fr .8fr;
   gap: 16px; padding: 12px 14px 8px; overflow: auto;
 }
-@media (max-width: 900px){ .svc-modal__content{ grid-template-columns: 1fr } }
+@media (max-width: 1024px){ .svc-modal__content{ grid-template-columns: 1fr } }
 
 .svc-modal__summary{ margin: 0 0 10px; font-size: 14px; line-height: 1.55 }
 .svc-modal__block{ margin: 8px 0 12px }
@@ -164,7 +174,7 @@
 }
 .gallery__viewport img{ width: 100%; height: 100%; object-fit: cover; display: block }
 
-/* Flechas: centradas, azules y con hover que agranda el ícono */
+/* Flechas */
 .gallery__ctrl{
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 42px; height: 42px; border-radius: 8px;
@@ -177,8 +187,8 @@
 .gallery__ctrl svg{ width: 24px; height: 24px; transition: transform .15s ease }
 .gallery__ctrl:hover svg{ transform: scale(1.12) }
 
-.gallery__dots{ display: flex; gap: 8px; justify-content: center; padding: 10px 0 0 }
-.dot{ width: 12px; height: 12px; border: 2px solid var(--blue); background: var(--white); cursor: pointer }
+.gallery__dots{ display: flex; gap: 8px; justify-content: center; padding: 10px 0 0; flex-wrap: wrap }
+.dot{ width: 12px; height: 12px; border: 2px solid var(--blue); background: var(--white); cursor: pointer; border-radius: 50% }
 .dot.is-active{ background: var(--blue) }
 
 /* --------- Video --------- */
@@ -191,5 +201,25 @@
   border-top: 3px solid var(--blue);
   justify-content: flex-start; align-items: center;
 }
-/* Evita que se estiren en el footer */
 .svc-modal__footer .btn{ flex: 0 0 auto; width: auto !important }
+
+/* --------- Ajustes móviles --------- */
+@media (max-width: 640px){
+  .svc{ padding: 24px 14px 48px; }
+  .svc-card__body{ padding: 12px 12px 14px; }
+  .svc-card__cta{ gap: 8px; }
+  .svc-card__cta .btn{ flex: 1 1 48%; }
+
+  .svc-modal__tabs{ flex-wrap: wrap; gap: 6px; padding: 8px 12px; }
+  .svc-modal__content{ padding: 10px 12px 8px; gap: 12px; }
+  .svc-modal__footer{ padding: 10px 12px 14px; gap: 8px; }
+  .svc-modal__footer .btn{ flex: 1 1 100%; }
+
+  .gallery__ctrl{ width: 36px; height: 36px; }
+  .gallery__ctrl svg{ width: 20px; height: 20px; }
+}
+
+/* --------- Muy pequeño --------- */
+@media (max-width: 420px){
+  .svc-card__cta .btn{ flex: 1 1 100%; }
+}
