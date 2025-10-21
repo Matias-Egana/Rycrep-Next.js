@@ -11,7 +11,7 @@
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-/* ===== Imágenes (NO se tocan) ===== */
+/* ===== Imágenes ===== */
 .nosotros-photo img {
   width: 100%;
   max-width: 100%;
@@ -211,119 +211,12 @@
   line-height: 1.6;
 }
 
-/* Hitos (texto) */
-.ns-timeline {
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto 1rem;
-  padding: 0 1rem;
-}
-.ns-hit {
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  gap: .6rem;
-  text-align: left;
-  margin: .3rem 0;
-}
-.ns-year {
-  display: inline-block;
-  background: #111827;
-  color: #fff;
-  font-weight: 800;
-  border-radius: 10px;
-  padding: .35rem .6rem;
-  width: max-content;
-  text-align: center;
-}
-.ns-hit p {
-  margin: 0;
-  color: #4b5563;
-  line-height: 1.6;
-}
-@media (max-width: 560px) {
-  .ns-hit { grid-template-columns: 1fr; }
-}
-
-/* CTA final */
-.ns-cta{
-  margin-top: 1rem;
-}
-.ns-btn{
-  display: inline-block;
-  background: #e11d48; /* rojo corporativo */
-  color: #fff;
-  text-decoration: none;
-  padding: .7rem 1.2rem;
-  border-radius: 12px;
-  font-weight: 900;
-  box-shadow: 0 8px 20px rgba(225,29,72,.25);
-  transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
-}
-.ns-btn:hover{
-  transform: translateY(-1px);
-  background: rgb(17, 12, 115);
-  color: white;
-  box-shadow: 0 12px 24px rgba(225,29,72,.28);
-}
-
-/* ====== Título sobre la imagen (arriba) con animación ====== */
-.nosotros-photo.captioned {
-  position: relative; /* permite overlay sin afectar la imagen */
-}
-
-.ns-photo-title {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translate(-50%, -8px);
-  padding: .55rem .9rem;
-  border-radius: 12px;
-  color: #fff;
-  background: rgba(0, 0, 0, .72);
-  font-weight: 900;
-  letter-spacing: .2px;
-  line-height: 1;
-  white-space: nowrap;
-  box-shadow: 0 8px 18px rgba(0,0,0,.28);
-  border-bottom: 3px solid #e11d48; /* acento rojo corporativo */
-  animation: nsTitleEnter .45s ease-out .08s both;
-}
-
-/* animación de entrada: leve caída y fade */
-@keyframes nsTitleEnter {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -18px);
-    filter: blur(2px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -8px);
-    filter: blur(0);
-  }
-}
-
-/* micro-interacción al pasar el mouse (sin mover la imagen) */
-.nosotros-photo.captioned:hover .ns-photo-title {
-  transform: translate(-50%, -8px) scale(1.02);
-  transition: transform .15s ease, box-shadow .2s ease;
-  box-shadow: 0 12px 24px rgba(0,0,0,.32);
-}
-
-/* responsive: si la imagen es estrecha, permitimos salto de línea */
-@media (max-width: 500px) {
-  .ns-photo-title {
-    white-space: normal;
-    text-align: center;
-    max-width: calc(100% - 20px);
-  }
-}
-
-/* ====== Título sobre la imagen 2 (arriba) con animación ====== */
+/* ===== Overlay de título sobre imagen (una sola definición consolidada) ===== */
 .nosotros-photo.captioned { position: relative; }
 .ns-photo-title{
   position: absolute;
-  top: 10px; left: 50%;
+  top: 10px;
+  left: 50%;
   transform: translate(-50%, -8px);
   padding: .55rem .9rem;
   border-radius: 12px;
@@ -490,11 +383,80 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* CTA final */
+.ns-cta{
+  margin-top: 1rem;
+}
+.ns-btn{
+  display: inline-block;
+  background: #e11d48; /* rojo corporativo */
+  color: #fff;
+  text-decoration: none;
+  padding: .7rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 900;
+  box-shadow: 0 8px 20px rgba(225,29,72,.25);
+  transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+}
+.ns-btn:hover{
+  transform: translateY(-1px);
+  background: rgb(17, 12, 115);
+  color: white;
+  box-shadow: 0 12px 24px rgba(225,29,72,.28);
+}
+
+/* ====== Layout: Línea de tiempo + foto lateral (NUEVO) ====== */
+.ns-tl-layout{
+  max-width: 1100px;
+  margin: 0 auto 1.5rem;
+  padding: 0 1rem;
+
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 420px; /* TL | Foto */
+  gap: clamp(1rem, 2vw, 2rem);
+  align-items: start;
+}
+
+/* columna principal (timeline) — previene desbordes */
+.ns-tl-main{ min-width: 0; }
+
+/* foto fija al hacer scroll (solo desktop) */
+.ns-tl-aside{
+  position: sticky;
+  top: 96px; /* ajusta según altura de tu header */
+  align-self: start;
+}
+
+/* cuando la timeline está dentro del layout, evitamos márgenes/padding dobles */
+.ns-tl-layout .ns-timeline{
+  max-width: none;
+  padding: 0 0 1rem;
+  margin: 0;
+}
+
+/* foto lateral con borde suave */
+.nosotros-photo.tight img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
 /* Responsive */
 @media (max-width: 720px){
   .ns-timeline::before{ left: 18px; }
   .ns-tl-item{ padding-left: 54px; }
   .ns-tl-dot{ left: 10px; }
+}
+
+@media (max-width: 960px){
+  .ns-tl-layout{
+    grid-template-columns: 1fr;
+  }
+  .ns-tl-aside{
+    position: static;
+    margin-top: 1rem;
+  }
 }
 
 @media (max-width: 560px){

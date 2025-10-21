@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import './nosotros.css';
 
 import teamPhoto from '../../assets/nosotros/portada.jpeg';   // NO se mueve
-import teamPhoto2 from '../../assets/nosotros/ceo2.jpg';       // NO se mueve
-// Eliminada la imagen final (timeline.png)
+import teamPhoto2 from '../../assets/nosotros/ceo2.jpg';
+import teamPhoto3 from '../../assets/nosotros/foto_atardecer.png';
 
 const Nosotros: React.FC = () => {
   // Animación: marca como visible cada item al entrar en viewport
   useEffect(() => {
+    // Señal de que podemos ocultar y animar elementos (evita “pantalla vacía” si el IO no corre aún)
+    document.documentElement.classList.add('io-ready');
+
     const items = document.querySelectorAll<HTMLElement>('.ns-tl-item');
     const io = new IntersectionObserver(
       (entries) => {
@@ -85,7 +88,7 @@ const Nosotros: React.FC = () => {
         </article>
       </div>
 
-            {/* Pilar: Transparencia y vinculación */}
+      {/* Pilar: Transparencia y vinculación */}
       <div className="ns-pillar ns-reveal">
         <div className="ns-pillar-ico" aria-hidden>🤝</div>
         <p>
@@ -145,7 +148,7 @@ const Nosotros: React.FC = () => {
         </p>
       </div>
 
-      {/* Seguridad */}
+      {/* Seguridad / Medioambiente / RRHH */}
       <section className="ns-section" id="seguridad">
         <h2 className="ns-title">Compromiso con la seguridad, medioambiente y recursos humanos</h2>
         <div className="ns-sec-grid">
@@ -174,84 +177,96 @@ const Nosotros: React.FC = () => {
         </div>
       </section>
 
-      {/* Historia: LÍNEA DE TIEMPO ANIMADA */}
+      {/* Historia + Foto lateral */}
       <h2 className="nosotros-title">Nuestra Historia</h2>
-      <section className="ns-timeline" aria-label="Línea de tiempo de la empresa">
-        {/* 1982 */}
-        <article className="ns-tl-item">
-          <span className="ns-tl-dot" aria-hidden />
-          <div className="ns-tl-year">1982</div>
-          <div className="ns-tl-card">
-            <h3>Inicio de representaciones</h3>
-            <p>Comenzamos la representación y distribución de productos eléctricos para movimiento de tierra y transporte.</p>
-          </div>
-        </article>
 
-        {/* 1987 */}
-        <article className="ns-tl-item">
-          <span className="ns-tl-dot" aria-hidden />
-          <div className="ns-tl-year">1987</div>
-          <div className="ns-tl-card">
-            <h3>Servicios de mantenimiento</h3>
-            <p>Overhaul y mantenimiento de generadores, torres de iluminación, soldadoras, motores de partida y alternadores (12/24V).</p>
-          </div>
-        </article>
+      <div className="ns-tl-layout">
+        {/* Columna: Línea de tiempo */}
+        <section className="ns-tl-main">
+          <section className="ns-timeline" aria-label="Línea de tiempo de la empresa">
+            {/* 1982 */}
+            <article className="ns-tl-item">
+              <span className="ns-tl-dot" aria-hidden />
+              <div className="ns-tl-year">1982</div>
+              <div className="ns-tl-card">
+                <h3>Inicio de representaciones</h3>
+                <p>Comenzamos la representación y distribución de productos eléctricos para movimiento de tierra y transporte.</p>
+              </div>
+            </article>
 
-        {/* 2008 */}
-        <article className="ns-tl-item">
-          <span className="ns-tl-dot" aria-hidden />
-          <div className="ns-tl-year">2008</div>
-          <div className="ns-tl-card">
-            <h3>Servicio electrónico industrial</h3>
-            <p>Reparación y diseño de tarjetas industriales (SCADA/DCS y módulos inteligentes) con soporte especializado.</p>
-          </div>
-        </article>
+            {/* 1987 */}
+            <article className="ns-tl-item">
+              <span className="ns-tl-dot" aria-hidden />
+              <div className="ns-tl-year">1987</div>
+              <div className="ns-tl-card">
+                <h3>Servicios de mantenimiento</h3>
+                <p>Overhaul y mantenimiento de generadores, torres de iluminación, soldadoras, motores de partida y alternadores (12/24V).</p>
+              </div>
+            </article>
 
-        {/* 2009 - Proyecto destacado */}
-        <article className="ns-tl-item is-featured">
-          <span className="ns-tl-dot" aria-hidden />
-          <div className="ns-tl-year">2009</div>
-          <div className="ns-tl-card">
-            <div className="ns-badge">Proyecto destacado</div>
-            <h3>Sala Carga de Baterías (para camiones de extracción y equipo movimiento tierra)</h3>
-            <p>
-              Acondicionamiento integral conforme a normas para operación segura y eficiente.
-              Implementamos <strong>sistema de carga simultánea</strong> hoy en 4 compañías mineras (I–IV Región).
-            </p>
-            <ul className="ns-tl-bullets">
-              <li>Ventilación y extracción para mitigar gases del electrolito.</li>
-              <li>Puertas antipánico y detección/supresión de incendios.</li>
-              <li>Ducha y lavaojos para emergencias por exposición a ácidos.</li>
-            </ul>
-          </div>
-        </article>
+            {/* 2008 */}
+            <article className="ns-tl-item">
+              <span className="ns-tl-dot" aria-hidden />
+              <div className="ns-tl-year">2008</div>
+              <div className="ns-tl-card">
+                <h3>Servicio electrónico industrial</h3>
+                <p>Reparación y diseño de tarjetas industriales (SCADA/DCS y módulos inteligentes) con soporte especializado.</p>
+              </div>
+            </article>
 
-        {/* 2018 */}
-        <article className="ns-tl-item">
-          <span className="ns-tl-dot" aria-hidden />
-          <div className="ns-tl-year">2018</div>
-          <div className="ns-tl-card">
-            <h3>Laboratorio de inyección diésel</h3>
-            <p>Se consolida el laboratorio de inyección diésel con soporte técnico especializado para pruebas y calibración.</p>
-          </div>
-        </article>
+            {/* 2009 - Proyecto destacado */}
+            <article className="ns-tl-item is-featured">
+              <span className="ns-tl-dot" aria-hidden />
+              <div className="ns-tl-year">2009</div>
+              <div className="ns-tl-card">
+                <div className="ns-badge">Proyecto destacado</div>
+                <h3>Sala Carga de Baterías (para camiones de extracción y equipo movimiento tierra)</h3>
+                <p>
+                  Acondicionamiento integral conforme a normas para operación segura y eficiente.
+                  Implementamos <strong>sistema de carga simultánea</strong> hoy en 4 compañías mineras (I–IV Región).
+                </p>
+                <ul className="ns-tl-bullets">
+                  <li>Ventilación y extracción para mitigar gases del electrolito.</li>
+                  <li>Puertas antipánico y detección/supresión de incendios.</li>
+                  <li>Ducha y lavaojos para emergencias por exposición a ácidos.</li>
+                </ul>
+              </div>
+            </article>
 
-        {/* 2025 - NUEVO hito con el texto de la imagen */}
-        <article className="ns-tl-item">
-          <span className="ns-tl-dot" aria-hidden />
-          <div className="ns-tl-year">2025</div>
-          <div className="ns-tl-card">
-            <h3>Certificaciones y alianzas</h3>
-            <p>
-              La empresa cuenta con certificaciones <strong>ISO 9001</strong>, <strong>ISO 14001</strong> e <strong>ISO 18000</strong>, lo que refleja altos
-              estándares en gestión de calidad y medioambiente. Además, es un <strong>Centro Autorizado de Servicio (CAS)</strong>,
-              y mantiene alianzas con marcas tecnológicas de clase mundial.
-            </p>
-          </div>
-        </article>
-      </section>
+            {/* 2018 */}
+            <article className="ns-tl-item">
+              <span className="ns-tl-dot" aria-hidden />
+              <div className="ns-tl-year">2018</div>
+              <div className="ns-tl-card">
+                <h3>Laboratorio de inyección diésel</h3>
+                <p>Se consolida el laboratorio de inyección diésel con soporte técnico especializado para pruebas y calibración.</p>
+              </div>
+            </article>
 
-      {/* (Eliminada la foto final) */}
+            {/* 2025 */}
+            <article className="ns-tl-item">
+              <span className="ns-tl-dot" aria-hidden />
+              <div className="ns-tl-year">2025</div>
+              <div className="ns-tl-card">
+                <h3>Certificaciones y alianzas</h3>
+                <p>
+                  La empresa cuenta con certificaciones <strong>ISO 9001</strong>, <strong>ISO 14001</strong> e <strong>ISO 18000</strong>, lo que refleja altos
+                  estándares en gestión de calidad y medioambiente. Además, es un <strong>Centro Autorizado de Servicio (CAS)</strong>,
+                  y mantiene alianzas con marcas tecnológicas de clase mundial.
+                </p>
+              </div>
+            </article>
+          </section>
+        </section>
+
+        {/* Columna: Foto lateral timeline */}
+        <aside className="ns-tl-aside" aria-label="Imagen relacionada a la historia">
+          <figure className="ns-tl-photo">
+            <img src={teamPhoto3} alt="Atardecer en Antofagasta, trabajador con equipo" />
+            <figcaption className="ns-tl-photo-badge">Atardecer en Antofagasta, 2024</figcaption>
+          </figure>
+        </aside>
+      </div>
 
       {/* Cierre */}
       <div className="ns-cta">
