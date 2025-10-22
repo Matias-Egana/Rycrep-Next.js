@@ -42,7 +42,8 @@ const Cotizado: React.FC = () => {
         name: p.name,
         product_code: p.product_code,
         quantity: parseNumber(p.quantity),
-        price: parseNumber(p.price),
+        // price removido del payload visible, pero si el backend lo requiere puedes dejarlo en 0
+        price: 0,
       }));
 
       const res = await fetch(`${API_BASE_URL}/send-cotizacion/`, {
@@ -76,8 +77,6 @@ const Cotizado: React.FC = () => {
       setLoading(false);
     }
   };
-
-  const totalCarrito = cart.reduce((acc, p) => acc + parseNumber(p.quantity) * parseNumber(p.price), 0);
 
   return (
     <div className="container">
@@ -131,11 +130,9 @@ const Cotizado: React.FC = () => {
           ) : (
             cart.map(producto => (
               <div key={producto.product_code} className="productCard">
-                <h4>{producto.name}</h4>
-                <p>Código: {producto.product_code}</p>
-                <span>Cantidad: {parseNumber(producto.quantity)}</span>
-                <span>Precio: ${parseNumber(producto.price).toLocaleString()}</span>
-                <span>Subtotal: ${(parseNumber(producto.quantity) * parseNumber(producto.price)).toLocaleString()}</span>
+                <h4 className="productName">{producto.name}</h4>
+                <p className="productCode"><strong>Código:</strong> {producto.product_code}</p>
+                <span className="productQty"><strong>Cantidad:</strong> {parseNumber(producto.quantity)}</span>
                 {producto.images && producto.images.length > 0 && (
                   <img src={producto.images[0]} alt={producto.name} className="productImage" />
                 )}
@@ -143,11 +140,9 @@ const Cotizado: React.FC = () => {
             ))
           )}
         </div>
+        {/* Campos de precio/subtotal/total removidos a pedido */}
         {cart.length > 0 && (
-          <>
-            <p className="totalCarrito">TOTAL: ${totalCarrito.toLocaleString()}</p>
-            <button className="button clearCartBtn" onClick={() => cartContext?.clearCart()}>Vaciar Carrito</button>
-          </>
+          <button className="button clearCartBtn" onClick={() => cartContext?.clearCart()}>Vaciar Carrito</button>
         )}
       </div>
     </div>

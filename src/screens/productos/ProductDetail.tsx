@@ -53,6 +53,7 @@ const ProductDetail: React.FC = () => {
 
   if (!product) return <p>Producto no encontrado.</p>;
 
+  // Si no se puede calcular, devolvemos null (lo tratamos como "sin precio" en UI)
   const computeFinalPrice = (p: UIProduct): number | null => {
     if (!p.oferta) return null;
     if (typeof p.discountPrice === "number" && p.discountPrice > 0) return p.discountPrice;
@@ -94,14 +95,14 @@ const ProductDetail: React.FC = () => {
   const hasMultipleImages = (product.images?.length ?? 0) > 1;
 
   const handleAddToQuote = () => {
-    const f = computeFinalPrice(product);
-    if (f === null) return;
+    // 👉 Permitimos añadir aunque finalPrice sea null; lo normalizamos a 0
+    const unitPrice = finalPrice ?? 0;
     const productToCart: CartProduct = {
       name: product.name,
       images: product.images?.length ? product.images : [defaultImage],
       product_code: product.product_code,
       quantity: 1,
-      price: f,
+      price: unitPrice,
     };
     cartContext.addToCart(productToCart);
   };
@@ -190,13 +191,17 @@ const ProductDetail: React.FC = () => {
         {isPresent(product.brand) && <p><strong>Marca:</strong> {product.brand}</p>}
         {isPresent(product.category) && <p><strong>Categoría:</strong> {product.category}</p>}
 
-        {/* Precio (solo si hay oferta/precio calculable) */}
-        {finalPrice !== null && (
+        {/* Precio */}
+        {finalPrice !== null ? (
           <div className={styles.priceRow}>
             {showOld && <span className={styles.originalPrice}>${Number(product.price).toLocaleString()}</span>}
             <span className={`${styles.price} ${product.oferta ? styles.priceRed : ""}`}>
               ${finalPrice.toLocaleString()}
             </span>
+          </div>
+        ) : (
+          <div className={styles.priceRow}>
+            <span className={styles.price}>Precio no disponible</span>
           </div>
         )}
 
@@ -228,8 +233,8 @@ const ProductDetail: React.FC = () => {
           <button
             className={`${styles.quoteButton} ${isOutOfStock ? styles.disabled : ""}`}
             onClick={handleAddToQuote}
-            disabled={isOutOfStock || finalPrice === null}
-            title={finalPrice === null ? "Este producto no tiene precio disponible aún" : "Añadir a cotización"}
+            disabled={isOutOfStock}
+            title={finalPrice === null ? "Se añadirá con precio 0 (a confirmar)" : "Añadir a cotización"}
           >
             Añadir a cotización
           </button>
