@@ -3,12 +3,10 @@ import './nosotros.css';
 
 import teamPhoto from '../../assets/nosotros/portada.jpeg';   // NO se mueve
 import teamPhoto2 from '../../assets/nosotros/ceo2.jpg';
-import teamPhoto3 from '../../assets/nosotros/foto_atardecer.png';
 
 const Nosotros: React.FC = () => {
   // Animación: marca como visible cada item al entrar en viewport
   useEffect(() => {
-    // Señal de que podemos ocultar y animar elementos (evita “pantalla vacía” si el IO no corre aún)
     document.documentElement.classList.add('io-ready');
 
     const items = document.querySelectorAll<HTMLElement>('.ns-tl-item');
@@ -148,40 +146,10 @@ const Nosotros: React.FC = () => {
         </p>
       </div>
 
-      {/* Seguridad / Medioambiente / RRHH */}
-      <section className="ns-section" id="seguridad">
-        <h2 className="ns-title">Compromiso con la seguridad, medioambiente y recursos humanos</h2>
-        <div className="ns-sec-grid">
-          <div className="ns-sec-item">
-            <div className="ns-sec-ico" aria-hidden>🛡️</div>
-            <h3>Seguridad</h3>
-            <p>
-              La seguridad es un valor intransable. Fomentamos una cultura preventiva mediante charlas operativas, análisis de riesgos y permisos de trabajo bien estructurados.
-              Cada acción está orientada a proteger la integridad de nuestros equipos y clientes.
-            </p>
-          </div>
-          <div className="ns-sec-item">
-            <div className="ns-sec-ico" aria-hidden>🌳</div>
-            <h3>Medioambiente</h3>
-            <p>
-              Gestión responsable de residuos, reparación sobre reemplazo cuando es viable y reduciendo huella de reposición ambiental y promoción de tecnologías eficientes y responsables con el entorno natural
-            </p>
-          </div>
-          <div className="ns-sec-item">
-            <div className="ns-sec-ico" aria-hidden>🙋‍♂️</div>
-            <h3>Recursos Humanos</h3>
-            <p>
-              Creemos que las personas son el motor de toda transformación. Promovemos un entorno laboral colaborativo, inclusivo y orientado al desarrollo integral, donde cada trabajador es valorado por su aporte profesional, técnico y humano.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Historia + Foto lateral */}
+      {/* Historia (SOLO la línea de tiempo; sin imagen lateral) */}
       <h2 className="nosotros-title">Nuestra Historia</h2>
-
       <div className="ns-tl-layout">
-        {/* Columna: Línea de tiempo */}
+        {/* Columna: Línea de tiempo (única) */}
         <section className="ns-tl-main">
           <section className="ns-timeline" aria-label="Línea de tiempo de la empresa">
             {/* 1982 */}
@@ -258,14 +226,6 @@ const Nosotros: React.FC = () => {
             </article>
           </section>
         </section>
-
-        {/* Columna: Foto lateral timeline */}
-        <aside className="ns-tl-aside" aria-label="Imagen relacionada a la historia">
-          <figure className="ns-tl-photo">
-            <img src={teamPhoto3} alt="Atardecer en Antofagasta, trabajador con equipo" />
-            <figcaption className="ns-tl-photo-badge">Atardecer en Antofagasta, 2024</figcaption>
-          </figure>
-        </aside>
       </div>
 
       {/* Cierre */}

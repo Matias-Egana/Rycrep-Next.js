@@ -211,7 +211,7 @@
   line-height: 1.6;
 }
 
-/* ===== Overlay de título sobre imagen (una sola definición consolidada) ===== */
+/* ===== Overlay de título sobre imagen ===== */
 .nosotros-photo.captioned { position: relative; }
 .ns-photo-title{
   position: absolute;
@@ -405,58 +405,19 @@
   box-shadow: 0 12px 24px rgba(225,29,72,.28);
 }
 
-/* ====== Layout: Línea de tiempo + foto lateral (NUEVO) ====== */
+/* ====== Layout: Línea de tiempo (SIN foto lateral) ====== */
 .ns-tl-layout{
   max-width: 1100px;
   margin: 0 auto 1.5rem;
   padding: 0 1rem;
-
-  display: grid;
-  grid-template-columns: minmax(0,1fr) 420px; /* TL | Foto */
-  gap: clamp(1rem, 2vw, 2rem);
-  align-items: start;
 }
-
-/* columna principal (timeline) — previene desbordes */
 .ns-tl-main{ min-width: 0; }
 
-/* foto fija al hacer scroll (solo desktop) */
-.ns-tl-aside{
-  position: sticky;
-  top: 96px; /* ajusta según altura de tu header */
-  align-self: start;
-}
-
-/* cuando la timeline está dentro del layout, evitamos márgenes/padding dobles */
-.ns-tl-layout .ns-timeline{
-  max-width: none;
-  padding: 0 0 1rem;
-  margin: 0;
-}
-
-/* foto lateral con borde suave */
-.nosotros-photo.tight img{
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 12px;
-}
-
-/* Responsive */
+/* Responsive tweaks existentes */
 @media (max-width: 720px){
   .ns-timeline::before{ left: 18px; }
   .ns-tl-item{ padding-left: 54px; }
   .ns-tl-dot{ left: 10px; }
-}
-
-@media (max-width: 960px){
-  .ns-tl-layout{
-    grid-template-columns: 1fr;
-  }
-  .ns-tl-aside{
-    position: static;
-    margin-top: 1rem;
-  }
 }
 
 @media (max-width: 560px){

@@ -1,36 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import fetchProductsByCategory from "../../presentation/ProductListViewModel";
+import { fetchProducts } from "../../presentation/ProductListViewModel";
 import defaultImage from '../../assets/ryc.svg';
 import Spinner from '../../components/layout/Spinner';
 import type { Product } from '../../domain/entities/Product';
 import styles from './ProductList.module.css';
+import HeroBrand from '../../components/HeroBrand/HeroBrand';
 
-const ProductListPage: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+type CategoryKey =
+  | 'all'
+  | 'alternadores'
+  | 'motores'
+  | 'baterias'
+  | 'fusibles'
+  | 'articulos_seguridad'
+  | 'faroles_luminarias';
 
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(['all']);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
-
-const categories = [
+const categories: CategoryKey[] = [
   'all',
   'alternadores',
   'motores',
   'baterias',
   'fusibles',
-  'articulos_seguridad',  // ← canon backend
+  'articulos_seguridad',
   'faroles_luminarias',
-  'accesorios',           // ← nuevo
 ];
-
-  const brands = ["Niehoff","Delso","Delco Remy","Nikko","TDI","Bosch","Leece-Neville","Sawafuji","Prelub"];
 
 const categoryLabel = (c: string) => {
   const map: Record<string, string> = {
@@ -41,109 +35,166 @@ const categoryLabel = (c: string) => {
     fusibles: 'Fusibles',
     articulos_seguridad: 'Artículos de seguridad',
     faroles_luminarias: 'Faroles/Luminarias',
-    accesorios: 'Accesorios',
   };
   return map[c] ?? c;
 };
 
-  // Alias de marcas para query params
-  const brandAlias: Record<string, string> = {
-    niehoff: "Niehoff",
-    denso: "Delso",
-    delso: "Delso",
-    "delco remy": "Delco Remy",
-    nikko: "Nikko",
-    tdi: "TDI",
-    bosch: "Bosch",
-    "leece-neville": "Leece-Neville",
-    leeceneville: "Leece-Neville",
-    sawafuji: "Sawafuji",
-    prelub: "Prelub",
-  };
+// =============== Helpers ===============
+const normalize = (s: string) =>
+  (s || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\/\s]+/g, "_")
+    .trim();
 
-  // Normaliza categorías para filtrar
-  const normalizeCategory = (cat: string) => {
-    if (!cat) return '';
-    return cat
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // elimina acentos
-      .replace(/[\s\/]/g, "_");        // espacios y "/" => "_"
+const toCanonCategory = (raw?: string): CategoryKey | 'all' => {
+  const alias: Record<string, CategoryKey> = {
+    seguridad: 'articulos_seguridad',
+    articulos_seguridad: 'articulos_seguridad',
+    faroles: 'faroles_luminarias',
+    accesorios: 'articulos_seguridad',
   };
-
-  // Carga inicial de productos
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchProductsByCategory("all");
-        const activeProducts = data.filter(p => p.activated);
-        setAllProducts(activeProducts);
-        setProducts(activeProducts);
-      } catch {
-        setError('Error cargando productos.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
-const categoryAlias: Record<string, string> = {
-  seguridad: 'articulos_seguridad',
-  articulos_seguridad: 'articulos_seguridad',
-  faroles: 'faroles_luminarias',
+  const n = normalize(raw || "");
+  const c = (alias as any)[n] ?? n;
+  return (categories as readonly string[]).includes(c) ? (c as CategoryKey) : 'all';
 };
-  // Filtros automáticos desde URL
+
+// Marca → key robusta
+const brandKey = (raw?: string) =>
+  (raw || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "");
+
+// key → etiqueta visible
+const BRAND_LABEL: Record<string, string> = {
+  niehoff: 'Niehoff',
+  delcoremy: 'Delco Remy',
+  denso: 'Denso',
+  segbosch: 'SEG (Bosch)',
+  nikko: 'Nikko',
+  americansuperior: 'American Superior',
+  rc: 'R&C',
+  peterson: 'Peterson',
+  neolite: 'Neolite',
+  syfco: 'Syfco',
+  bussmann: 'Bussmann',
+};
+
+// alias de URL → key
+const BRAND_ALIAS_TO_KEY: Record<string, string> = {
+  niehoff: 'niehoff',
+  denso: 'denso',
+  delso: 'denso',
+  'delco remy': 'delcoremy',
+  delcoremy: 'delcoremy',
+  nikko: 'nikko',
+  seg: 'segbosch',
+  'seg (bosch)': 'segbosch',
+  'seg-bosch': 'segbosch',
+  bosch: 'segbosch',
+  'american superior': 'americansuperior',
+  american: 'americansuperior',
+  'r&c': 'rc',
+  'r c': 'rc',
+  ryc: 'rc',
+  peterson: 'peterson',
+  neolite: 'neolite',
+  syfco: 'syfco',
+  bussmann: 'bussmann',
+};
+// ======================================
+
+const ProductListPage: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [selectedCategory, setSelectedCategory] = useState<CategoryKey>('all');
+  const [selectedBrandKeys, setSelectedBrandKeys] = useState<string[]>([]);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+
+  // URL → estado inicial
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+    const validCategory = toCanonCategory((params.get('category') || '').trim());
 
-    // CATEGORÍA
-    const rawCategory = (params.get('category') || '').trim().toLowerCase();
-    const normalizedCategory = normalizeCategory(rawCategory);
-const canonicalCategory = categoryAlias[normalizedCategory] ?? normalizedCategory;
-const validCategory = categories.includes(canonicalCategory) ? canonicalCategory : null;
+    const rawBrand = (params.get('brand') || params.get('marca') || '').trim().toLowerCase();
+    const urlBrandKey = BRAND_ALIAS_TO_KEY[rawBrand] ?? brandKey(rawBrand);
 
-    // MARCA
-    const rawBrand = (params.get('brand') || params.get('marca') || "").trim().toLowerCase();
-    const canonicalBrand = brandAlias[rawBrand];
-
-    if (validCategory) setSelectedCategories([validCategory]);
-    else setSelectedCategories(['all']);
-
-    if (canonicalBrand && brands.includes(canonicalBrand)) setSelectedBrands([canonicalBrand]);
-    else setSelectedBrands([]);
+    setSelectedCategory(validCategory);
+    setSelectedBrandKeys(urlBrandKey ? [urlBrandKey] : []);
   }, [location.search]);
 
-  // Aplica filtros cuando cambian selections o la data
+  // FETCH (backend) al cambiar categoría o marcas
   useEffect(() => {
-    let filtered = allProducts;
+    let alive = true;
+    (async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await fetchProducts({
+          category: selectedCategory,
+          brandKeys: selectedBrandKeys,
+        });
+        const active = data.filter(p => p.activated);
+        if (!alive) return;
+        setProducts(active);
+      } catch {
+        if (!alive) return;
+        setError('Error cargando productos.');
+        setProducts([]);
+      } finally {
+        if (!alive) return;
+        setLoading(false);
+      }
+    })();
+    return () => { alive = false; };
+  }, [selectedCategory, selectedBrandKeys]);
 
-    if (!selectedCategories.includes("all")) {
-      filtered = filtered.filter(p => selectedCategories.includes(normalizeCategory(p.category)));
-    }
+  // Marcas disponibles (desde lo que devolvió backend)
+  const availableBrands = useMemo(() => {
+    const byKey = new Map<string, string>();
+    products.forEach(p => {
+      const key = brandKey(p.brand);
+      if (!key) return;
+      const label = BRAND_LABEL[key] ?? (p.brand || '').trim();
+      if (!byKey.has(key)) byKey.set(key, label);
+    });
+    return Array.from(byKey.entries())
+      .map(([key, label]) => ({ key, label }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [products]);
 
-    if (selectedBrands.length > 0) {
-      filtered = filtered.filter(p => selectedBrands.includes(p.brand));
-    }
+  // Hero por marca (solo si hay 1 marca seleccionada)
+  const heroBrandKey = selectedBrandKeys.length === 1 ? selectedBrandKeys[0] : undefined;
+  const heroBrandLabel =
+    heroBrandKey
+      ? (availableBrands.find(b => b.key === heroBrandKey)?.label
+          ?? BRAND_LABEL[heroBrandKey]
+          ?? heroBrandKey.toUpperCase())
+      : undefined;
 
-    setProducts(filtered);
-  }, [selectedCategories, selectedBrands, allProducts]);
-
-  // Bloquea scroll cuando el menú está abierto
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [menuOpen]);
-
+  // Handlers
   const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-    if (value === "all") setSelectedCategories(checked ? ["all"] : []);
-    else setSelectedCategories(prev => checked ? [...prev.filter(c => c!=="all"), value] : prev.filter(c=>c!==value));
+    const v = value as CategoryKey;
+    if (!checked) {
+      if (v === selectedCategory) setSelectedCategory('all');
+      return;
+    }
+    setSelectedCategory(v);
+    setSelectedBrandKeys([]); // limpiar marcas al cambiar de categoría
   };
 
   const handleBrandChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = e.target;
-    setSelectedBrands(prev => checked ? [...prev, value] : prev.filter(b => b !== value));
+    const { value, checked } = e.target; // value = brandKey
+    setSelectedBrandKeys(prev => checked ? [...prev, value] : prev.filter(k => k !== value));
   };
 
   const computeFinalPrice = (p: Product): number | null => {
@@ -159,125 +210,137 @@ const validCategory = categories.includes(canonicalCategory) ? canonicalCategory
   if (error) return <div className={styles.errorMsg}>{error}</div>;
 
   return (
-    <div className={styles.container}>
-      {/* Botón hamburguesa */}
-      <button
-        className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ""}`}
-        onClick={() => setMenuOpen(prev => !prev)}
-        aria-label={menuOpen ? "Cerrar filtros" : "Abrir filtros"}
-      >
-        {menuOpen ? "✖" : "☰"}
-      </button>
+    <>
+      {/* HERO SIEMPRE ARRIBA DE TODO */}
+      {heroBrandKey && (
+        <HeroBrand brandKey={heroBrandKey} label={heroBrandLabel} />
+      )}
 
-      {/* Sidebar */}
-      <aside className={`${styles.filters} ${menuOpen ? styles.filtersOpen : ''}`}>
-        <h2>Filtros</h2>
+      {/* Contenedor con filtros + grid de productos */}
+      <div className={styles.container}>
+        {/* Botón hamburguesa */}
+        <button
+          className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ""}`}
+          onClick={() => setMenuOpen(prev => !prev)}
+          aria-label={menuOpen ? "Cerrar filtros" : "Abrir filtros"}
+        >
+          {menuOpen ? "✖" : "☰"}
+        </button>
 
-        <h3>Categorías</h3>
-        {categories.map(cat => (
-          <label key={cat} className={styles.filterOption}>
-            {categoryLabel(cat)}
-            <input
-              type="checkbox"
-              value={cat}
-              checked={selectedCategories.includes(cat)}
-              onChange={handleCategoryChange}
-            />
-          </label>
-        ))}
+        {/* Sidebar */}
+        <aside className={`${styles.filters} ${menuOpen ? styles.filtersOpen : ''}`}>
+          <h2>Filtros</h2>
 
-        <h3>Marcas</h3>
-        {brands.map(brand => (
-          <label key={brand} className={styles.filterOption}>
-            {brand}
-            <input
-              type="checkbox"
-              value={brand}
-              checked={selectedBrands.includes(brand)}
-              onChange={handleBrandChange}
-            />
-          </label>
-        ))}
-      </aside>
+          <h3>Categorías</h3>
+          {categories.map(cat => (
+            <label key={cat} className={styles.filterOption}>
+              {categoryLabel(cat)}
+              <input
+                type="checkbox"
+                value={cat}
+                checked={selectedCategory === cat}
+                onChange={handleCategoryChange}
+              />
+            </label>
+          ))}
 
-      {/* Overlay */}
-      <div
-        className={`${styles.overlay} ${menuOpen ? styles.overlayVisible : ''}`}
-        onClick={() => setMenuOpen(false)}
-      />
-
-      {/* Productos */}
-      <main className={styles.products}>
-        <h1>Productos</h1>
-
-        <div className={styles.productGrid}>
-          {products.length === 0 && <p>No hay productos disponibles.</p>}
-
-          {products.map(product => {
-            const onSale = Boolean(product.oferta);
-            const finalPrice = computeFinalPrice(product);
-            const showOld =
-              onSale &&
-              typeof product.discountPercentage === "number" &&
-              typeof product.price === "number" &&
-              product.price > 0 &&
-              finalPrice !== null &&
-              finalPrice < product.price;
-
-            return (
-              <div
-                key={product.product_code}
-                className={`${styles.productCard} ${onSale ? styles.onSale : ''}`}
-                onClick={() => navigate(`/productos/${product.product_code}`)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/productos/${product.product_code}`); }}
-                aria-label={`Ver ${product.name}`}
-              >
-                {onSale && <span className={styles.offerBadge}>OFERTA</span>}
-
-                <img
-                  src={(product.images && product.images[0]) || defaultImage}
-                  alt={product.name}
-                  className={styles.productImage}
-                  loading="lazy"
+          <h3>Marcas</h3>
+          {availableBrands.length === 0 ? (
+            <p className={styles.mutedSmall}>Sin marcas para esta selección</p>
+          ) : (
+            availableBrands.map(({ key, label }) => (
+              <label key={key} className={styles.filterOption}>
+                {label}
+                <input
+                  type="checkbox"
+                  value={key}
+                  checked={selectedBrandKeys.includes(key)}
+                  onChange={handleBrandChange}
                 />
+              </label>
+            ))
+          )}
+        </aside>
 
-                <h3 className={styles.productName}>{product.name}</h3>
-                <p className={styles.category}>{categoryLabel(product.category)}</p>
-                <p className={styles.brand}>{product.brand}</p>
+        {/* Overlay */}
+        <div
+          className={`${styles.overlay} ${menuOpen ? styles.overlayVisible : ''}`}
+          onClick={() => setMenuOpen(false)}
+        />
 
-                {finalPrice !== null && (
-                  <div className={styles.priceWrapper}>
-                    {showOld && (
-                      <span className={styles.originalPrice}>
-                        ${Number(product.price).toLocaleString()}
+        {/* Productos */}
+        <main className={styles.products}>
+          <h1>Productos</h1>
+
+          <div className={styles.productGrid}>
+            {products.length === 0 && <p>No hay productos disponibles.</p>}
+
+            {products.map(product => {
+              const onSale = Boolean(product.oferta);
+              const finalPrice = computeFinalPrice(product);
+              const showOld =
+                onSale &&
+                typeof product.discountPercentage === "number" &&
+                typeof product.price === "number" &&
+                (product.price ?? 0) > 0 &&
+                finalPrice !== null &&
+                finalPrice < (product.price as number);
+
+              return (
+                <div
+                  key={product.product_code}
+                  className={`${styles.productCard} ${onSale ? styles.onSale : ''}`}
+                  onClick={() => navigate(`/productos/${product.product_code}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/productos/${product.product_code}`); }}
+                  aria-label={`Ver ${product.name}`}
+                >
+                  {onSale && <span className={styles.offerBadge}>OFERTA</span>}
+
+                  <img
+                    src={(product.images && product.images[0]) || defaultImage}
+                    alt={product.name}
+                    className={styles.productImage}
+                    loading="lazy"
+                  />
+
+                  <h3 className={styles.productName}>{product.name}</h3>
+                  <p className={styles.category}>{categoryLabel(product.category)}</p>
+                  <p className={styles.brand}>{BRAND_LABEL[brandKey(product.brand)] ?? product.brand}</p>
+
+                  {finalPrice !== null && (
+                    <div className={styles.priceWrapper}>
+                      {showOld && (
+                        <span className={styles.originalPrice}>
+                          ${Number(product.price).toLocaleString()}
+                        </span>
+                      )}
+                      <span className={`${styles.price} ${onSale ? styles.priceRed : ''}`}>
+                        ${finalPrice.toLocaleString()}
                       </span>
-                    )}
-                    <span className={`${styles.price} ${onSale ? styles.priceRed : ''}`}>
-                      ${finalPrice.toLocaleString()}
-                    </span>
-                  </div>
-                )}
+                    </div>
+                  )}
 
-                <div className={styles.cardActions}>
-                  <button
-                    type="button"
-                    className={`${styles.addToQuoteBtn} ${styles.isDisabled}`}
-                    title="Pronto podrás añadir a tu cotizado"
-                    aria-disabled="true"
-                    disabled
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    añadir al cotizado
-                  </button>
+                  <div className={styles.cardActions}>
+                    <button
+                      type="button"
+                      className={`${styles.addToQuoteBtn} ${styles.isDisabled}`}
+                      title="Pronto podrás añadir a tu cotizado"
+                      aria-disabled="true"
+                      disabled
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      añadir al cotizado
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </main>
-    </div>
+              );
+            })}
+          </div>
+        </main>
+      </div>
+    </>
   );
 };
 

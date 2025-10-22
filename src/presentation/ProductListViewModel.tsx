@@ -23,7 +23,7 @@ function toUi(p: RycrepProduct): Product {
     discountPercentage: undefined,
     oferta: p.oferta,
 
-    // extras útiles
+    // extras
     oem_code: p.oem_code,
     series: p.series,
     voltage: p.voltage,
@@ -38,10 +38,15 @@ function toUi(p: RycrepProduct): Product {
   };
 }
 
-export default async function fetchProductsByCategory(
-  category: string | "all"
-): Promise<Product[]> {
-  const data = await listUC({ category: category as any });
+/** Nueva API: consulta al backend con category + brandKeys (multi) */
+export async function fetchProducts(params: {
+  category: string | "all";
+  brandKeys?: string[];
+}): Promise<Product[]> {
+  const data = await listUC({
+    category: params.category as any,
+    brand_keys: params.brandKeys ?? [],
+  });
   return data.map(toUi);
 }
 
@@ -49,3 +54,5 @@ export async function fetchProductByCode(code: string): Promise<Product | null> 
   const p = await detailUC(code);
   return p ? toUi(p) : null;
 }
+
+export default fetchProducts; // (sigue export default para compatibilidad si la usas en otros lados)

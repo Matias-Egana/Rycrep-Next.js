@@ -11,6 +11,9 @@ export type ProductListParams = {
     | "all";
   search?: string;
   oferta?: boolean;
+
+  /** NUEVO: lista de keys de marca (niehoff, segbosch, rc, etc.) */
+  brand_keys?: string[];
 };
 
 export interface IProductRepository {

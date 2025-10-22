@@ -2,10 +2,9 @@ import { apiGet, apiGetAll } from "../../api/http";
 import type { ProductDTO } from "../dto/ProductDTO";
 import { dtoToDomain } from "../mappers/productMapper";
 import type {
-  ProductRepository as IProductRepository,
+  IProductRepository,
   ProductListParams,
-  UpdateProductPatch,
-} from "../../domain/repositories/ProductRepository";
+} from "../../domain/repositories/IProductRepository";
 import type { RycrepProduct } from "../../domain/entities/RycrepProduct";
 import { cmsAuth } from "../../lib/cmsAuth";
 
@@ -78,9 +77,11 @@ export class ProductRepository implements IProductRepository {
     if (params?.category && params.category !== "all") query.category = params.category;
     if (params?.search) query.search = params.search;
     if (params?.oferta !== undefined) query.oferta = params.oferta;
-    if (params?.brand) query.brand = params.brand;
-    if (params?.series) query.series = params.series;
-    if (params?.voltage) query.voltage = params.voltage;
+
+    // NUEVO: marcas múltiples (como keys) → brand_in (comma-separated) para el backend
+    if (params?.brand_keys && params.brand_keys.length > 0) {
+      query.brand_in = params.brand_keys.join(",");
+    }
 
     const dtos = await apiGetAll<ProductDTO>("products/", query);
     return dtos.map(dtoToDomain);
@@ -97,9 +98,5 @@ export class ProductRepository implements IProductRepository {
     return null;
   }
 
-  async update(patch: UpdateProductPatch): Promise<RycrepProduct> {
-    const { id, ...body } = patch;
-    const dto = await apiPatchAuth<ProductDTO>(`products/${id}/`, body);
-    return dtoToDomain(dto);
-  }
+  // (update se mantiene igual, si lo usas)
 }

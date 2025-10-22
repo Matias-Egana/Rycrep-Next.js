@@ -16,9 +16,9 @@ import cumminsLogo from '../../assets/logos/cummins.png';
 import aesgener from '../../assets/logos/aesgener.png';
 
 import slide1 from '../../assets/hero/Niehoff & Co.png';
-import slide2 from '../../assets/hero/slide1.jpg';
+import slide2 from '../../assets/hero/slide1.png';
 import slide3 from '../../assets/hero/slide2.png';
-import slide4 from '../../assets/hero/slide3.jpg';
+import slide4 from '../../assets/hero/slide3.png';
 
 /* =========================
    DATA

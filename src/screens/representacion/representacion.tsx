@@ -9,6 +9,9 @@ import alt1 from "../../assets/representacion/alternadores/alternador1.png";
 import alt2 from "../../assets/representacion/alternadores/alternador2.png";
 import alt3 from "../../assets/representacion/alternadores/alternador3.png";
 
+// Nuevo componente: botón "Ver video" que abre YouTube
+import YouTubeAutoplayVideo from "../../components/representaciones/YoutubeAutoplayVideo";
+
 type NiehoffBannerProps = {
   logoSrc: string;
   buildingBgSrc: string;
@@ -108,6 +111,12 @@ const Representacion: React.FC<NiehoffBannerProps> = ({
           </div>
         </div>
       </section>
+
+      {/* 🔽 NUEVO DIV — botón "Ver video" (abre YouTube) */}
+      <YouTubeAutoplayVideo
+        url="https://www.youtube.com/watch?v=100kV-T8VlA"
+        title="Ver video"
+      />
 
       {/* Bloque: Aplicaciones y marcas */}
       <section className="nb-uses">

@@ -57,9 +57,9 @@
 .nb-hero {
   position: relative;
   width: 100%;
-  height: 45vh; /* usa porcentaje de la altura de la ventana */
-  min-height: 300px; /* no demasiado pequeño */
-  max-height: 500px; /* no demasiado grande */
+  height: 45vh;
+  min-height: 300px;
+  max-height: 500px;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -71,7 +71,6 @@
 .nb-overlay {
   position: absolute;
   inset: 0;
-  /* Tono negro con leve matiz carmesí, sin salirse del look corporativo */
   background: linear-gradient(0deg, rgba(0,0,0,.62), rgba(0,0,0,.62));
 }
 
@@ -118,13 +117,13 @@
   font-size: .8rem;
   color: #111827;
   background: rgba(255,255,255,.95);
-  border: 1px solid rgba(225, 29, 72, .25); /* rojo corporativo suave */
+  border: 1px solid rgba(225, 29, 72, .25);
   backdrop-filter: saturate(1.15) blur(1.5px);
 }
 
 .nb-cta {
   display: inline-block;
-  background: #e11d48; /* rojo corporativo */
+  background: #e11d48;
   color: #ffffff;
   text-decoration: none;
   font-weight: 900;
@@ -139,10 +138,10 @@
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
   opacity: 0.95;
   color: #ffffff;
-  background-color: #9f1239; /* rojo oscuro */
+  background-color: #9f1239;
 }
 
-/* ----------------------------- Alternadores a la derecha (SIN CAMBIOS) ------------------------------ */
+/* ----------------------------- Alternadores a la derecha (contenedor intacto) ------------------------------ */
 .nb-hero-right {
   position: relative;
   display: flex;
@@ -150,13 +149,13 @@
   justify-content: center;
   gap: 0;
   background: rgba(0, 0, 0, 0.45);
-  padding: 0.75rem 2rem; /* reduce padding para pantallas pequeñas */
+  padding: 0.75rem 2rem;
   border-radius: 12px;
   min-width: 300px;
   max-width: 700px;
   min-height: 120px;
   margin: 0 auto;
-  flex-wrap: wrap; /* permite que se acomoden alternadores en móviles */
+  flex-wrap: wrap;
 }
 .nb-hero-right .alt {
   max-height: 120px;
@@ -196,7 +195,6 @@
 /* ========================= */
 /*      SECCIONES NUEVAS     */
 /* ========================= */
-
 .title {
   font-size: 1.6rem;
   font-weight: 900;
@@ -234,7 +232,6 @@
   border-radius: 14px;
   padding: 1rem;
   box-shadow: 0 6px 22px rgba(2, 6, 23, 0.06);
-  backdrop-filter: blur(6px);
 }
 .panel-ico { font-size: 1.25rem; line-height: 1; margin-bottom: .5rem; }
 .panel h3 { margin: 0 0 .3rem 0; font-size: 1.02rem; color: #111827; }
@@ -260,7 +257,7 @@
   gap: .5rem;
 }
 .brand-chip {
-  background: #111827; /* negro */
+  background: #111827;
   color: #f3f4f6;
   padding: .35rem .7rem;
   border-radius: 999px;
@@ -280,7 +277,7 @@
   align-items: flex-start;
   gap: .55rem;
   padding: .7rem .8rem;
-  border: 1px dashed rgba(225, 29, 72, .35); /* rojo tenue */
+  border: 1px dashed rgba(225, 29, 72, .35);
   border-radius: 10px;
   background: #fafafa;
 }
@@ -295,7 +292,7 @@
 
 /* CTA ancho */
 .nb-cta-wide {
-  background: linear-gradient(90deg, #0b0b0b, #1f1f1f); /* negro a casi negro */
+  background: linear-gradient(90deg, #0b0b0b, #1f1f1f);
   color: white;
   padding: 2.2rem 1.2rem;
   border-top: 1px solid rgba(0,0,0,.3);
@@ -315,11 +312,75 @@
   font-weight: 900;
   letter-spacing: .2px;
 }
-.nb-cta-wide h3 span { color: #fecdd3; } /* rojo claro */
+.nb-cta-wide h3 span { color: #fecdd3; }
 .nb-cta-wide p { margin: .5rem 0 1rem 0; color: #f3f4f6; }
 
 .nb-cta.alt-cta {
-  background: #e11d48; /* rojo corporativo */
+  background: #e11d48;
   border: 1px solid rgba(255,255,255,.18);
 }
 .nb-cta.alt-cta:hover { background: #9f1239; }
+
+/* ===================================================== */
+/*         ESTILOS BLOQUE "VER VIDEO" (YouTube)          */
+/* ===================================================== */
+
+.nb-yt-block {
+  background: #0b0b0b; /* consistente con CTA dark */
+  color: #f9fafb;
+  padding: 1.4rem 1.2rem 1.8rem;
+  border-top: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(0,0,0,.2);
+  position: relative;
+}
+.nb-yt-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 90% at 50% 0%, rgba(225,29,72,.16), transparent 55%);
+  pointer-events: none;
+}
+.nb-yt-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Botón estético */
+.nb-yt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  background: linear-gradient(90deg, #e11d48, #9f1239);
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: .2px;
+  padding: .6rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  text-decoration: none;
+  transition: transform .08s ease, box-shadow .2s ease, opacity .2s ease, background .2s ease;
+  border: 1px solid rgba(255,255,255,.14);
+}
+.nb-yt-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0,0,0,.28);
+  opacity: .95;
+}
+.nb-yt-btn:active {
+  transform: translateY(0);
+}
+.nb-yt-btn:focus-visible {
+  outline: 3px solid #fecdd3;
+  outline-offset: 2px;
+}
+.nb-yt-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+/* Responsive padding tweak */
+@media (max-width: 900px) {
+  .nb-yt-block { padding: 1.2rem .9rem 1.4rem; }
+}
