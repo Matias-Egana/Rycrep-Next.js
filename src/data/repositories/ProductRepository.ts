@@ -88,14 +88,20 @@ export class ProductRepository implements IProductRepository {
   }
 
   async getByModelCode(code: string): Promise<RycrepProduct | null> {
-    const dtos = await apiGetAll<ProductDTO>("products/", { model_code: code });
-    if (dtos.length > 0) return dtoToDomain(dtos[0]);
-
-    if (/^\d+$/.test(code)) {
-      const dto = await apiGet<ProductDTO>(`products/${code}/`);
+    // ✅ Usar SIEMPRE el endpoint de detalle exacto.
+    // Evita pedir la lista con model_code (que no filtra en el backend) y tomar el primer elemento.
+    try {
+      const safe = encodeURIComponent(code.trim());
+      const dto = await apiGet<ProductDTO>(`products/${safe}/`);
       return dtoToDomain(dto);
+    } catch (err: any) {
+      // Si la API responde 404, devolvemos null; el resto de errores se propagan.
+      const msg = String(err?.message ?? err);
+      if (err?.status === 404 || /404/.test(msg) || /not_found/i.test(msg)) {
+        return null;
+      }
+      throw err;
     }
-    return null;
   }
 
   // (update se mantiene igual, si lo usas)
