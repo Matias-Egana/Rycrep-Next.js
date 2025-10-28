@@ -1,0 +1,394 @@
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --ink: #101828;
+  --ink-muted: #667085;
+  --border: #e6e8eb;
+  --border-strong: #d0d5dd;
+  --primary: #111827;
+  --primary-ink: #fff;
+  --focus: #0ea5e9;
+  --accent: #16a34a;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+  --row-alt: #fbfdff;
+
+  /* ancho único para la columna Acciones (header+body+colgroup) */
+  --actions-col-w: 190px;
+}
+
+/* Página */
+.cms-page {
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.nice-surface .cms-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+/* Header */
+.cms-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0 16px;
+}
+
+.title-wrap h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+.cms-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Buscador */
+.search-wrap {
+  position: relative;
+  min-width: 320px;
+  display: flex;
+  align-items: center;
+}
+
+.search-wrap .search-icon {
+  position: absolute;
+  left: 10px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.cms-input.search {
+  padding-left: 28px;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--ink-muted);
+  padding: 2px 6px;
+}
+.clear-btn:hover { color: var(--ink); }
+
+.sort-pill {
+  font-size: 12px;
+  color: var(--ink-muted);
+  background: #eef2ff;
+  border: 1px solid #e0e7ff;
+  padding: 6px 8px;
+  border-radius: 999px;
+}
+
+/* Inputs genéricos */
+.cms-input {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink);
+  padding: 8px 10px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.cms-input:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 25%, transparent);
+}
+
+.cms-input.url-input {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Alertas */
+.cms-alert {
+  border: 1px solid var(--border-strong);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+}
+.cms-alert.error {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #b91c1c;
+}
+
+/* Tabla */
+.table-wrap {
+  position: relative; /* contenedor para sticky */
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 1px 0 rgba(16,24,40,.04), 0 1px 2px rgba(16,24,40,.06);
+  /* evita “saltos” con la barra de scroll */
+  scrollbar-gutter: stable both-edges;
+}
+
+.bw-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  table-layout: fixed;
+  font-size: 14px;
+}
+
+.bw-table th, .bw-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 12px;
+  vertical-align: top;
+  word-wrap: break-word;
+}
+
+.bw-table th { text-align: left; color: #374151; font-weight: 600; }
+
+tbody tr:nth-child(odd) { background: var(--row-alt); }
+.row-editing { background: #f9fafb !important; }
+
+/* Encabezado sticky */
+.sticky-header th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 3;
+}
+
+/* Columna derecha sticky (header + body) alineada y con zebra correcto */
+.bw-table .sticky-right {
+  position: sticky;
+  inset-inline-end: 0;                 /* right: 0 lógico */
+  width: var(--actions-col-w);
+  min-width: var(--actions-col-w);
+  max-width: var(--actions-col-w);
+  z-index: 2;
+  box-sizing: border-box;
+  /* no fijamos background aquí para que cada tipo (th/td) lo defina */
+}
+
+/* El header debe ser sólido */
+.sticky-header th.sticky-right {
+  background: var(--surface);
+  box-shadow: -1px 0 0 var(--border);
+  z-index: 4;
+}
+
+/* Las celdas del body heredan el fondo de su fila para evitar el desfase visual */
+.bw-table td.sticky-right {
+  background: inherit;                  /* mantiene el zebra */
+  box-shadow: -1px 0 0 var(--border);   /* divisor vertical consistente */
+}
+
+/* Padding de la columna Acciones para que los botones no queden pegados al borde */
+.bw-table td.sticky-right,
+.bw-table th.sticky-right {
+  padding-left: 8px;
+  padding-right: 12px;
+}
+
+/* Imagen */
+.cell-image img {
+  width: 100px;
+  height: 66px;
+  object-fit: cover;
+  border: 1px solid var(--border-strong);
+  display: block;
+  border-radius: 8px;
+  background: #f2f2f2;
+}
+
+.thumb-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.thumb-view {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  background: rgba(0,0,0,.7);
+  color: #fff;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.img-edit {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.open-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--surface);
+}
+.open-link:hover {
+  background: #f3f4f6;
+}
+
+/* Texto ellipsis */
+.text-ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Switch de oferta */
+.switch {
+  --h: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.switch input { display: none; }
+.switch .slider {
+  width: calc(var(--h) * 1.8);
+  height: var(--h);
+  background: #e5e7eb;
+  border-radius: var(--h);
+  position: relative;
+  transition: background .2s;
+  border: 1px solid var(--border-strong);
+}
+.switch .slider::after {
+  content: "";
+  position: absolute;
+  top: 2px; left: 2px;
+  width: calc(var(--h) - 6px);
+  height: calc(var(--h) - 6px);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  transition: transform .2s;
+}
+.switch input:checked + .slider {
+  background: #dcfce7;
+  border-color: #bbf7d0;
+}
+.switch input:checked + .slider::after {
+  transform: translateX(calc(var(--h) * 0.8));
+}
+.switch .switch-label {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+/* Píldoras de estado */
+.status-pill {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid var(--border-strong);
+  color: var(--ink);
+  background: #f8fafc;
+}
+.status-pill.on {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+.status-pill.off {
+  background: #f8fafc;
+  color: #475569;
+}
+
+/* Columna de acciones: layout interno */
+.row-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start; /* antes: flex-end; así no queda tan a la derecha */
+}
+
+/* Botones */
+.cms-btn {
+  background: var(--primary);
+  color: var(--primary-ink);
+  border: 1px solid var(--primary);
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform .02s ease-in, background .15s, color .15s, border .15s;
+  white-space: nowrap;
+}
+.cms-btn:active { transform: translateY(1px); }
+.cms-btn.primary { background: var(--primary); color: var(--primary-ink); }
+.cms-btn.ghost { background: var(--surface); color: var(--ink); border-color: var(--border-strong); }
+.cms-btn.outline { background: var(--surface); color: var(--primary); border-color: var(--primary); }
+.cms-btn:disabled { opacity: .6; cursor: default; }
+
+/* Loading dentro de tabla */
+.loading-row { padding: 18px; }
+.skeleton-row {
+  height: 14px;
+  background: linear-gradient(90deg, #f3f4f6, #eee, #f3f4f6);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Estados */
+.muted { color: var(--ink-muted); }
+
+.empty-state { text-align: center; }
+.empty-card {
+  padding: 26px 12px;
+  color: var(--ink-muted);
+}
+.empty-title { font-weight: 600; margin-bottom: 4px; }
+
+/* Foco visible también para botones/links */
+button:focus-visible, a:focus-visible, .open-link:focus-visible, .cms-btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--focus) 40%, transparent);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* Responsive pequeñas mejoras */
+@media (max-width: 880px) {
+  .search-wrap { min-width: 220px; }
+  .sort-pill { display: none; }
+}

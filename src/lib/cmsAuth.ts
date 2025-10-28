@@ -4,7 +4,7 @@ export type CmsUser = {
   username: string;
   email: string | null;
   is_staff: boolean;
-  is_superuser: boolean;
+  is_superuser: boolean; // si tu backend no lo manda, lo fijamos en false
 };
 
 export type CmsAuthPayload = {
@@ -20,7 +20,7 @@ const USER_KEY = 'cms_user';
 export const cmsAuth = {
   save(payload: CmsAuthPayload) {
     localStorage.setItem(ACCESS_KEY, payload.access);
-    localStorage.setItem(REFRESH_KEY, payload.refresh);
+    localStorage.setItem(REFRESH_KEY, payload.refresh || '');
     localStorage.setItem(USER_KEY, JSON.stringify(payload.user));
   },
   getAccess() {

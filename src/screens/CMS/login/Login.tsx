@@ -1,16 +1,16 @@
 // src/screens/CMS/login/Login.tsx
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import { cmsAuth } from '../../../lib/cmsAuth';
 import { useCmsLoginVM } from './ViewModel';
 import './Login.css';
+import { cmsAuth } from '../../../lib/cmsAuth';
 
 export default function CmsLogin() {
   const nav = useNavigate();
   const { state, setUsername, setPassword, setShowPwd, submit } = useCmsLoginVM();
 
   useEffect(() => {
-    //if (cmsAuth.isLoggedIn()) nav('/cms/productos', { replace: true });
+    if (cmsAuth.isLoggedIn()) nav('/cms/productos', { replace: true });
   }, [nav]);
 
   return (
@@ -50,7 +50,7 @@ export default function CmsLogin() {
         <button
           className="btn"
           disabled={state.loading}
-          //onClick={() => submit(() => nav('/cms/productos', { replace: true }))}
+          onClick={() => submit(() => nav('/cms/productos', { replace: true }))}
         >
           {state.loading ? 'Ingresando…' : 'Ingresar'}
         </button>

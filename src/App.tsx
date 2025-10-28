@@ -2,7 +2,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 
-// Screens públicas (tus existentes)
 import Inicio from './screens/inicio/Inicio';
 import Nosotros from './screens/nosotros/Nosotros';
 import Servicios from './screens/servicios/servicios';
@@ -14,12 +13,10 @@ import Distribuciones from './screens/distribuciones/Distribuciones';
 import Cotizado from './screens/cotizado/Cotizado';
 import NotFound from './screens/NotFound';
 
-// WhatsApp widget
 import WhatsAppWidget, { type WhatsAppContact } from './components/layout/WhatsAppWidget/WhatsAppWidget';
 
-// *** CMS ***
 import CmsLogin from './screens/CMS/login/Login';
-//import CmsProductos from './screens/CMS/productos/Productos';
+import CmsProductos from './screens/CMS/productos/Productos'; // ← NUEVO
 import { useEffect } from 'react';
 
 const contactos: WhatsAppContact[] = [
@@ -38,14 +35,14 @@ function BodyClassController() {
 }
 
 function App() {
-    const { pathname } = useLocation();
-  const showWidget = !pathname.startsWith('/cms'); // <- no estorba en el CMS
+  const { pathname } = useLocation();
+  const showWidget = !pathname.startsWith('/cms');
 
   return (
     <>
-    <BodyClassController />
+      <BodyClassController />
       <Routes>
-        {/* Sitio público bajo tu Layout */}
+        {/* Sitio público */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Inicio />} />
           <Route path="nosotros" element={<Nosotros />} />
@@ -59,21 +56,22 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* CMS sin Layout público */}
+        {/* CMS */}
         <Route path="/cms/login" element={<CmsLogin />} />
-        {/* <Route path="/cms/productos" element={<CmsProductos />} />*/}
+        <Route path="/cms/productos" element={<CmsProductos />} />
       </Routes>
 
-      {/* Widget flotante global */}
-      <WhatsAppWidget
-        title="¿Con quién quieres hablar?"
-        subtitle="Elegí el canal adecuado para ayudarte mejor"
-        contacts={contactos}
-        position="bottom-right"
-        autoOpenDelay={0}
-        tooltip="Escríbenos por WhatsApp"
-        zIndex={60}
-      />
+      {showWidget && (
+        <WhatsAppWidget
+          title="¿Con quién quieres hablar?"
+          subtitle="Elegí el canal adecuado para ayudarte mejor"
+          contacts={contactos}
+          position="bottom-right"
+          autoOpenDelay={0}
+          tooltip="Escríbenos por WhatsApp"
+          zIndex={60}
+        />
+      )}
     </>
   );
 }

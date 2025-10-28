@@ -18,7 +18,21 @@ export class CmsLoginRepository implements ICmsLoginRepository {
       throw new Error(msg);
     }
 
-    const data = (await res.json()) as CmsAuthPayload;
-    return data;
+    // Tu backend retorna { token, user: { id, username, first_name, last_name, is_staff } }
+    const data = await res.json();
+
+    const payload: CmsAuthPayload = {
+      access: data.token as string,
+      refresh: '', // no usamos refresh en este backend
+      user: {
+        id: data.user.id,
+        username: data.user.username,
+        email: null,
+        is_staff: !!data.user.is_staff,
+        is_superuser: false,
+      },
+    };
+
+    return payload;
   }
 }
