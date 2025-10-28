@@ -1,5 +1,4 @@
-// src/components/Navbar.tsx
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './navbar.css';
 import logo from '../../assets/inicio/ric-logo.svg';
@@ -19,6 +18,12 @@ const Navbar: React.FC = () => {
     setDropdownOpen(false);
   };
 
+  // Bloquear scroll y poder ocultar FABs cuando el menú está abierto
+  useEffect(() => {
+    document.body.classList.toggle('rc-menu-open', open);
+    return () => document.body.classList.remove('rc-menu-open');
+  }, [open]);
+
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `rc-link ${isActive ? 'is-active' : ''}`;
 
@@ -30,7 +35,11 @@ const Navbar: React.FC = () => {
             <img src={logo} alt="R&C Representaciones" className="rc-logo-img" />
           </Link>
 
-          <nav className={`rc-nav ${open ? 'is-open' : ''}`} aria-label="Principal">
+          <nav
+            className={`rc-nav ${open ? 'is-open' : ''}`}
+            aria-label="Principal"
+            aria-hidden={!open}
+          >
             <ul className="rc-menu">
               <li><NavLink to="/" end className={linkClass} onClick={closeMenu}>Inicio</NavLink></li>
               <li><NavLink to="/nosotros" className={linkClass} onClick={closeMenu}>Nosotros</NavLink></li>
@@ -45,7 +54,7 @@ const Navbar: React.FC = () => {
                   className={`rc-arrow ${dropdownOpen ? 'is-open' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setDropdownOpen(!dropdownOpen);
+                    setDropdownOpen(v => !v);
                   }}
                 >
                   ▾
@@ -91,7 +100,6 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="rc-right">
-          {/* Botón Cotiza y carrito */}
           <NavLink to="/cotizado" className="rc-btn-cta" onClick={closeMenu}>
             Cotiza Ahora
             {totalItems > 0 && <span className="rc-cart-badge">{totalItems}</span>}
@@ -99,7 +107,7 @@ const Navbar: React.FC = () => {
 
           <button
             className={`rc-burger ${open ? 'is-open' : ''}`}
-            aria-label="Abrir menú"
+            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={open}
             onClick={() => setOpen(v => !v)}
           >
@@ -108,7 +116,6 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Notificación del carrito */}
       {notification?.visible && <CartNotification product={notification.product} />}
     </header>
   );

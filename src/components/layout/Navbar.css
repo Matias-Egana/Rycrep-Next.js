@@ -14,10 +14,11 @@
 
 * { box-sizing: border-box; }
 
+/* ===== Header sobre todo ===== */
 .rc-navbar{
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 4000; /* SUBIDO: header por encima de contenido/filtros */
   background: var(--nav-bg);
   color: var(--text);
   height: var(--nav-h);
@@ -106,7 +107,7 @@
   top: 100%;
   left: 0;
   min-width: 200px;
-  background: #fff;                  /* panel blanco */
+  background: #fff;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 6px 0;
@@ -115,7 +116,7 @@
 }
 .rc-submenu li{ list-style: none; }
 .rc-submenu .rc-link{
-  color: #1b2240;                    /* texto oscuro */
+  color: #1b2240;
   display: block;
   padding: 8px 12px;
   font-weight: 500;
@@ -124,7 +125,7 @@
   opacity: .9;
 }
 .rc-submenu .rc-link:hover{
-  background: #f0f4fa;               /* hover gris claro */
+  background: #f0f4fa;
   opacity: 1;
 }
 
@@ -184,6 +185,10 @@
   background: transparent;
   border: 0; border-radius: 8px;
   padding: 10px; cursor: pointer;
+
+  /* Para que la X quede por encima del panel fijo */
+  position: relative;
+  z-index: 4200; /* MAYOR que el panel */
 }
 .rc-burger span{
   display: block;
@@ -212,7 +217,9 @@
     transition: opacity .2s ease, transform .2s ease, visibility .2s;
     box-shadow: 0 10px 20px rgba(0,0,0,.25);
     overflow-y: auto;
-    z-index: 40;
+
+    /* CAPA por encima de FABs/botones de filtros */
+    z-index: 4100; /* > header (4000) y < burger (4200) */
   }
   .rc-nav.is-open{ transform: translateY(0); opacity: 1; visibility: visible; }
 
@@ -225,17 +232,17 @@
   .rc-link{ padding: 8px 10px; font-size: 13px; }
   .rc-link.is-active{
     padding: 10px 12px;
-    background: #ffffff;       /* pastilla blanca activa */
-    color: var(--accent);      /* rojo */
+    background: #ffffff;
+    color: var(--accent);
   }
 
-  /* ===== Submenú móvil: SOLO visible cuando está activo (.is-open) ===== */
+  /* ===== Submenú móvil ===== */
   .rc-dropdown .rc-submenu{
-    position: static;          /* que empuje el flujo dentro del panel */
-    background: #fff;          /* panel blanco (diseño original) */
+    position: static;
+    background: #fff;
     box-shadow: var(--shadow);
     border-radius: var(--radius);
-    margin: 6px 0 10px 6px;    /* leve separación */
+    margin: 6px 0 10px 6px;
     padding: 6px 0;
     opacity: 0;
     transform: translateY(-6px);
@@ -247,16 +254,22 @@
     pointer-events: auto;
   }
 
-  /* Enlaces del submenú: estilo original (texto oscuro + hover gris) */
   .rc-submenu .rc-link{
     color: #1b2240;
     background: transparent;
     font-size: 13px;
     padding: 10px 14px;
-    border-radius: 10px;       /* pastilla suave como en tu captura */
+    border-radius: 10px;
     opacity: 1;
   }
   .rc-submenu .rc-link:hover{
     background: #f0f4fa;
   }
 }
+
+/* ===== Body: sin scroll con el menú abierto ===== */
+body.rc-menu-open { overflow: hidden; }
+
+/* Si tienes un FAB de filtros, dale una clase y escóndelo cuando el menú esté abierto.
+   Ejemplo: .filters-fab; ajusta el selector a tu caso real. */
+body.rc-menu-open .filters-fab { display: none !important; }

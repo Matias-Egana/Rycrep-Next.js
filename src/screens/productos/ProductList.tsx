@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchProducts } from "../../presentation/ProductListViewModel";
 import defaultImage from '../../assets/ryc.svg';
@@ -6,6 +6,10 @@ import Spinner from '../../components/layout/Spinner';
 import type { Product } from '../../domain/entities/Product';
 import styles from './ProductList.module.css';
 import HeroBrand from '../../components/HeroBrand/HeroBrand';
+
+// 👉 Cart
+import { CartContext } from "../../domain/entities/context/CartContext";
+import type { CartProduct } from "../../domain/entities/context/CartContext";
 
 type CategoryKey =
   | 'all'
@@ -60,7 +64,7 @@ const toCanonCategory = (raw?: string): CategoryKey | 'all' => {
   return (categories as readonly string[]).includes(c) ? (c as CategoryKey) : 'all';
 };
 
-// Marca → key robusta
+// Marca → key robusta (para comparar/filtrar de forma estable)
 const brandKey = (raw?: string) =>
   (raw || "")
     .toLowerCase()
@@ -111,7 +115,16 @@ const ProductListPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Cart
+  const cartContext = useContext(CartContext);
+  if (!cartContext) {
+    throw new Error("CartContext no encontrado. Asegúrate de envolver tu App con CartProvider.");
+  }
+
+  // Productos “activos” crudos (sin filtrar por marca) y productos visibles (filtrados por marca)
+  const [rawProducts, setRawProducts] = useState<Product[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -131,24 +144,39 @@ const ProductListPage: React.FC = () => {
     setSelectedBrandKeys(urlBrandKey ? [urlBrandKey] : []);
   }, [location.search]);
 
-  // FETCH (backend) al cambiar categoría o marcas
+  // FETCH (backend) al cambiar categoría o marcas (filtramos marca también en cliente para robustez)
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
         setLoading(true);
         setError(null);
+
+        // Si tu backend soporta brandKeys, déjalo; igual filtramos en cliente
         const data = await fetchProducts({
           category: selectedCategory,
           brandKeys: selectedBrandKeys,
         });
+
         const active = data.filter(p => p.activated);
+
         if (!alive) return;
-        setProducts(active);
+
+        // Guardamos los activos SIN filtrar por marca
+        setRawProducts(active);
+
+        // Aplicamos filtro por marca en cliente (OR)
+        const filtered =
+          selectedBrandKeys.length === 0
+            ? active
+            : active.filter(p => selectedBrandKeys.includes(brandKey(p.brand)));
+
+        setProducts(filtered);
       } catch {
         if (!alive) return;
         setError('Error cargando productos.');
         setProducts([]);
+        setRawProducts([]);
       } finally {
         if (!alive) return;
         setLoading(false);
@@ -157,10 +185,10 @@ const ProductListPage: React.FC = () => {
     return () => { alive = false; };
   }, [selectedCategory, selectedBrandKeys]);
 
-  // Marcas disponibles (desde lo que devolvió backend)
+  // Marcas disponibles (desde rawProducts para no “perder” opciones al filtrar)
   const availableBrands = useMemo(() => {
     const byKey = new Map<string, string>();
-    products.forEach(p => {
+    rawProducts.forEach(p => {
       const key = brandKey(p.brand);
       if (!key) return;
       const label = BRAND_LABEL[key] ?? (p.brand || '').trim();
@@ -169,7 +197,7 @@ const ProductListPage: React.FC = () => {
     return Array.from(byKey.entries())
       .map(([key, label]) => ({ key, label }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [products]);
+  }, [rawProducts]);
 
   // Hero por marca (solo si hay 1 marca seleccionada)
   const heroBrandKey = selectedBrandKeys.length === 1 ? selectedBrandKeys[0] : undefined;
@@ -204,6 +232,19 @@ const ProductListPage: React.FC = () => {
       return Math.round((p.price * (100 - p.discountPercentage)) / 100);
     if (typeof p.price === "number" && p.price > 0) return p.price;
     return null;
+  };
+
+  const handleAddToQuote = (e: React.MouseEvent, p: Product) => {
+    e.stopPropagation(); // evita navegar a la ficha
+    const unitPrice = computeFinalPrice(p) ?? 0; // permite 0 si no hay precio (como en ProductDetail)
+    const item: CartProduct = {
+      name: p.name,
+      images: p.images?.length ? p.images : [defaultImage],
+      product_code: p.product_code,
+      quantity: 1,
+      price: unitPrice,
+    };
+    cartContext.addToCart(item);
   };
 
   if (loading) return <Spinner />;
@@ -309,6 +350,7 @@ const ProductListPage: React.FC = () => {
                   <p className={styles.category}>{categoryLabel(product.category)}</p>
                   <p className={styles.brand}>{BRAND_LABEL[brandKey(product.brand)] ?? product.brand}</p>
 
+                  {/* Precio: solo si existe (sin fallback) */}
                   {finalPrice !== null && (
                     <div className={styles.priceWrapper}>
                       {showOld && (
@@ -325,13 +367,11 @@ const ProductListPage: React.FC = () => {
                   <div className={styles.cardActions}>
                     <button
                       type="button"
-                      className={`${styles.addToQuoteBtn} ${styles.isDisabled}`}
-                      title="Pronto podrás añadir a tu cotizado"
-                      aria-disabled="true"
-                      disabled
-                      onClick={(e) => e.stopPropagation()}
+                      className={styles.addToQuoteBtn} // azul activo (CSS)
+                      title={finalPrice === null ? "Se añadirá con precio 0 (a confirmar)" : "Añadir a cotización"}
+                      onClick={(e) => handleAddToQuote(e, product)}
                     >
-                      añadir al cotizado
+                      Añadir a cotización
                     </button>
                   </div>
                 </div>

@@ -24,6 +24,9 @@
 
   /* Ancho del contenedor */
   --container: 1200px;
+
+  /* Tamaño de logos del slider */
+  --logo-h: clamp(120px, 8vw, 180px);
 }
 
 html, body, #root{
@@ -176,12 +179,29 @@ img{ max-width:100%; height:auto; display:block; }
   font-size:var(--fs-h3);
 }
 .logos-viewport{ overflow:hidden; }
+
+/* Track con separación proporcional al tamaño del logo */
 .logos-track{
-  display:flex; gap: clamp(1.5rem, 1rem + 2vw, 4rem);
-  animation: scroll 20s linear infinite;
+  display:flex;
+  gap: clamp(2rem, calc(var(--logo-h) * 0.6), 5rem);
+  animation: scroll 12s linear infinite;
   will-change: transform;
 }
-.logo-item img{ max-height:80px; object-fit:contain; }
+
+/* Centramos cada logo y usamos la altura variable */
+.logo-item{
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(.25rem, .4vw, .75rem);
+}
+.logo-item img{
+  height: var(--logo-h);
+  width: auto;
+  max-height: none;  /* ya no limitamos a 80px */
+  object-fit: contain;
+}
 
 /* Duplica contenido en HTML para scroll infinito suave
    <div class="logos-track">[items] [items clone]</div> */
@@ -208,7 +228,8 @@ img{ max-width:100%; height:auto; display:block; }
   /* Hero: padding extra y contención del texto */
   .hero-content{ padding-inline: var(--sp-2); }
 
-  /* Logos: reduce separación */
+  /* Logos: tamaño y separación más contenidos en móviles chicos */
+  :root{ --logo-h: clamp(90px, 18vw, 140px); }
   .logos-track{ gap: 2rem; }
 
   /* Botones táctiles genéricos (si los usas) */

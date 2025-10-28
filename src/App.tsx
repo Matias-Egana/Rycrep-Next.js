@@ -19,7 +19,7 @@ import WhatsAppWidget, { type WhatsAppContact } from './components/layout/WhatsA
 
 // *** CMS ***
 import CmsLogin from './screens/CMS/login/Login';
-import CmsProductos from './screens/CMS/productos/Productos';
+//import CmsProductos from './screens/CMS/productos/Productos';
 import { useEffect } from 'react';
 
 const contactos: WhatsAppContact[] = [
@@ -61,7 +61,7 @@ function App() {
 
         {/* CMS sin Layout público */}
         <Route path="/cms/login" element={<CmsLogin />} />
-        <Route path="/cms/productos" element={<CmsProductos />} />
+        {/* <Route path="/cms/productos" element={<CmsProductos />} />*/}
       </Routes>
 
       {/* Widget flotante global */}

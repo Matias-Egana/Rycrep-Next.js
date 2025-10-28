@@ -192,16 +192,16 @@ const ProductDetail: React.FC = () => {
         {isPresent(product.category) && <p><strong>Categoría:</strong> {product.category}</p>}
 
         {/* Precio */}
-        {finalPrice !== null ? (
+        {finalPrice !== null && (
           <div className={styles.priceRow}>
-            {showOld && <span className={styles.originalPrice}>${Number(product.price).toLocaleString()}</span>}
+            {showOld && (
+              <span className={styles.originalPrice}>
+                ${Number(product.price).toLocaleString()}
+              </span>
+            )}
             <span className={`${styles.price} ${product.oferta ? styles.priceRed : ""}`}>
               ${finalPrice.toLocaleString()}
             </span>
-          </div>
-        ) : (
-          <div className={styles.priceRow}>
-            <span className={styles.price}>Precio no disponible</span>
           </div>
         )}
 
