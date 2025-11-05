@@ -1,3 +1,4 @@
+// src/screens/CMS/productos/Productos.tsx
 import { useEffect, useMemo, useRef, useState, useCallback, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CmsNavbar from '../../../components/cms/CmsNavbar';
@@ -40,6 +41,32 @@ export default function Productos() {
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [draft, setDraft] = useState<Partial<CmsProduct>>({});
+
+  // NEW: creación (hemos añadido campos avanzados aquí)
+  const [showCreate, setShowCreate] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [newDraft, setNewDraft] = useState<Partial<CmsProduct>>({
+    name: '',
+    category: '',
+    brand: '',
+    image_url: '',
+    price: 0,
+    oferta: false,
+    // campos avanzados iniciales
+    model_code: '',
+    oem_code: '',
+    description: '',
+    voltage: '',
+    amp_rating: undefined,
+    watt_rating: undefined,
+    led_count: undefined,
+    kelvin: undefined,
+    color: '',
+    beam_pattern: '',
+    series: '',
+    lens_color: '',
+    attributes: undefined,
+  });
 
   const nameInputRef = useRef<HTMLInputElement | null>(null);
   const urlInputRef = useRef<HTMLInputElement | null>(null);
@@ -121,6 +148,68 @@ export default function Productos() {
     }
   };
 
+  // NUEVO: crear producto (ahora admite campos avanzados)
+  const onCreate = async () => {
+    if (creating) return;
+    setErr(null);
+    // Validaciones mínimas
+    if (!newDraft.name || !newDraft.category || !newDraft.brand) {
+      setErr('Nombre, categoría y marca son obligatorios.');
+      return;
+    }
+    try {
+      setCreating(true);
+      const payload: any = {
+        name: (newDraft.name ?? '').toString(),
+        category: (newDraft.category ?? '').toString(),
+        brand: (newDraft.brand ?? '').toString(),
+        image_url: (newDraft.image_url ?? '')?.toString() || undefined,
+        price: newDraft.price == null ? undefined : Number(newDraft.price),
+        oferta: !!newDraft.oferta,
+      };
+
+      // añadimos campos avanzados si están presentes
+      const extras = [
+        'model_code','oem_code','description','voltage','amp_rating','watt_rating',
+        'led_count','kelvin','color','beam_pattern','series','lens_color','attributes'
+      ] as const;
+      for (const k of extras) {
+        const v = (newDraft as any)[k];
+        if (v !== undefined) payload[k] = v;
+      }
+
+      const created = await repo.create(payload as any);
+      // Insertar al inicio y ocultar form
+      setItems(prev => [created, ...prev]);
+      setShowCreate(false);
+      setNewDraft({
+        name: '',
+        category: '',
+        brand: '',
+        image_url: '',
+        price: 0,
+        oferta: false,
+        model_code: '',
+        oem_code: '',
+        description: '',
+        voltage: '',
+        amp_rating: undefined,
+        watt_rating: undefined,
+        led_count: undefined,
+        kelvin: undefined,
+        color: '',
+        beam_pattern: '',
+        series: '',
+        lens_color: '',
+        attributes: undefined,
+      });
+    } catch (e: any) {
+      setErr(e?.message || 'No se pudo crear el producto.');
+    } finally {
+      setCreating(false);
+    }
+  };
+
   // Foco al iniciar edición
   useEffect(() => {
     if (editingId != null) {
@@ -159,25 +248,34 @@ export default function Productos() {
           </div>
 
           <div className="cms-actions">
-            <div className="search-wrap">
-              <span className="search-icon" aria-hidden>🔎</span>
-              <input
-                className="cms-input search"
-                placeholder="Buscar por nombre, marca o categoría…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                aria-label="Buscar productos"
-              />
-              {search && (
-                <button
-                  className="clear-btn"
-                  aria-label="Limpiar búsqueda"
-                  title="Limpiar"
-                  onClick={() => setSearch('')}
-                >
-                  ×
-                </button>
-              )}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <button
+                className="cms-btn primary"
+                onClick={() => { setShowCreate(s => !s); if (!showCreate) setTimeout(() => nameInputRef.current?.focus(), 0); }}
+                title="Agregar nuevo producto"
+              >
+                {showCreate ? 'Cerrar' : 'Agregar producto'}
+              </button>
+
+              <div className="search-wrap">
+                <input
+                  className="cms-input search"
+                  placeholder="Buscar por nombre, marca o categoría…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  aria-label="Buscar productos"
+                />
+                {search && (
+                  <button
+                    className="clear-btn"
+                    aria-label="Limpiar búsqueda"
+                    title="Limpiar"
+                    onClick={() => setSearch('')}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="sort-pill" role="status" aria-live="polite">
@@ -187,6 +285,82 @@ export default function Productos() {
         </header>
 
         {err && <div className="cms-alert error" role="alert">{err}</div>}
+
+        {/* Formulario de creación (colapsable) — mantuve la UI original y añadí "Campos avanzados" */}
+        {showCreate && (
+          <div className="create-card">
+            <div className="create-grid">
+              <input
+                ref={nameInputRef}
+                className="cms-input"
+                placeholder="Nombre del producto *"
+                value={newDraft.name ?? ''}
+                onChange={(e) => setNewDraft(d => ({ ...d, name: e.target.value }))}
+                aria-label="Nombre del nuevo producto"
+              />
+              <input
+                className="cms-input"
+                placeholder="Categoría *"
+                value={newDraft.category ?? ''}
+                onChange={(e) => setNewDraft(d => ({ ...d, category: e.target.value }))}
+                aria-label="Categoría del nuevo producto"
+              />
+              <input
+                className="cms-input"
+                placeholder="Marca *"
+                value={newDraft.brand ?? ''}
+                onChange={(e) => setNewDraft(d => ({ ...d, brand: e.target.value }))}
+                aria-label="Marca del nuevo producto"
+              />
+              <input
+                className="cms-input"
+                placeholder="URL imagen"
+                value={newDraft.image_url ?? ''}
+                onChange={(e) => setNewDraft(d => ({ ...d, image_url: e.target.value }))}
+                aria-label="URL de imagen"
+              />
+              <input
+                className="cms-input"
+                type="number"
+                inputMode="numeric"
+                min={0}
+                step={1}
+                placeholder="Precio (CLP)"
+                value={newDraft.price ?? 0}
+                onChange={(e) => setNewDraft(d => ({ ...d, price: Number(e.target.value) }))}
+                aria-label="Precio"
+              />
+              <label className="switch" title="Marcar como oferta" style={{ alignSelf: 'center' }}>
+                <input
+                  type="checkbox"
+                  checked={!!newDraft.oferta}
+                  onChange={(e) => setNewDraft(d => ({ ...d, oferta: e.target.checked }))}
+                  aria-label="En oferta"
+                />
+                <span className="slider" aria-hidden="true" />
+                <span className="switch-label">En oferta</span>
+              </label>
+            </div>
+
+            <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+              <button
+                className="cms-btn primary"
+                onClick={onCreate}
+                disabled={creating}
+                aria-busy={creating}
+              >
+                {creating ? 'Creando…' : 'Crear producto'}
+              </button>
+              <button
+                className="cms-btn ghost"
+                onClick={() => { setShowCreate(false); setNewDraft({ name: '', category: '', brand: '', image_url: '', price: 0, oferta: false }); }}
+                disabled={creating}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="table-wrap">
           <table className="bw-table" aria-label="Listado de productos">

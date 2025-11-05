@@ -10,8 +10,23 @@ export type CmsProduct = {
   brand: string;
   image?: string | null;
   image_url?: string | null;
-  price: number | null;   // ← nos aseguramos de usar number | null
+  price: number | null;
   oferta: boolean;
+
+  // Campos extra que añadimos
+  model_code?: string | null;
+  oem_code?: string | null;
+  description?: string | null;
+  voltage?: string | null;
+  amp_rating?: number | null;
+  watt_rating?: number | null;
+  led_count?: number | null;
+  kelvin?: number | null;
+  color?: string | null;
+  beam_pattern?: string | null;
+  series?: string | null;
+  lens_color?: string | null;
+  attributes?: any | null;
 };
 
 export type ListProductsResponse = {
@@ -38,13 +53,11 @@ export class CmsProductsRepository {
 
     const data = await res.json();
 
-    // Acepta varias formas: {items: [...]}, {results: [...]}, o [...]
     let rawItems: any[] = [];
     if (Array.isArray(data)) rawItems = data;
     else if (Array.isArray(data.items)) rawItems = data.items;
     else if (Array.isArray(data.results)) rawItems = data.results;
 
-    // Normaliza campos y price → number|null
     const items: CmsProduct[] = rawItems.map((p: any) => ({
       id: Number(p.id),
       name: String(p.name ?? ''),
@@ -54,6 +67,20 @@ export class CmsProductsRepository {
       image_url: (p.image_url ?? p.image) ?? null,
       price: p.price == null ? null : Number(p.price),
       oferta: Boolean(p.oferta),
+
+      model_code: p.model_code ?? null,
+      oem_code: p.oem_code ?? null,
+      description: p.description ?? null,
+      voltage: p.voltage ?? null,
+      amp_rating: p.amp_rating == null ? null : Number(p.amp_rating),
+      watt_rating: p.watt_rating == null ? null : Number(p.watt_rating),
+      led_count: p.led_count == null ? null : Number(p.led_count),
+      kelvin: p.kelvin == null ? null : Number(p.kelvin),
+      color: p.color ?? null,
+      beam_pattern: p.beam_pattern ?? null,
+      series: p.series ?? null,
+      lens_color: p.lens_color ?? null,
+      attributes: p.attributes ?? null,
     }));
 
     const total =
@@ -67,7 +94,7 @@ export class CmsProductsRepository {
     return { total, items, page, limit };
   }
 
-  async update(id: number, patch: Partial<Pick<CmsProduct, 'name'|'category'|'brand'|'image_url'|'price'|'oferta'|'image'>>): Promise<CmsProduct> {
+  async update(id: number, patch: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
     const token = cmsAuth.getAccess();
     const res = await fetch(`${API_BASE}/cms/products/${id}`, {
       method: 'PATCH',
@@ -75,7 +102,10 @@ export class CmsProductsRepository {
       body: JSON.stringify(patch),
     });
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
-    if (!res.ok) throw new Error('No se pudo actualizar el producto.');
+    if (!res.ok) {
+      const txt = await res.text().catch(() => null);
+      throw new Error(txt || 'No se pudo actualizar el producto.');
+    }
     const p = await res.json();
     return {
       id: Number(p.id),
@@ -86,6 +116,59 @@ export class CmsProductsRepository {
       image_url: (p.image_url ?? p.image) ?? null,
       price: p.price == null ? null : Number(p.price),
       oferta: Boolean(p.oferta),
+
+      model_code: p.model_code ?? null,
+      oem_code: p.oem_code ?? null,
+      description: p.description ?? null,
+      voltage: p.voltage ?? null,
+      amp_rating: p.amp_rating == null ? null : Number(p.amp_rating),
+      watt_rating: p.watt_rating == null ? null : Number(p.watt_rating),
+      led_count: p.led_count == null ? null : Number(p.led_count),
+      kelvin: p.kelvin == null ? null : Number(p.kelvin),
+      color: p.color ?? null,
+      beam_pattern: p.beam_pattern ?? null,
+      series: p.series ?? null,
+      lens_color: p.lens_color ?? null,
+      attributes: p.attributes ?? null,
+    };
+  }
+
+  async create(payload: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
+    const token = cmsAuth.getAccess();
+    const res = await fetch(`${API_BASE}/cms/products`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload),
+    });
+    if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
+    if (!res.ok) {
+      const txt = await res.text().catch(() => null);
+      throw new Error(txt || 'No se pudo crear el producto.');
+    }
+    const p = await res.json();
+    return {
+      id: Number(p.id),
+      name: String(p.name ?? ''),
+      category: String(p.category ?? ''),
+      brand: String(p.brand ?? ''),
+      image: p.image ?? null,
+      image_url: (p.image_url ?? p.image) ?? null,
+      price: p.price == null ? null : Number(p.price),
+      oferta: Boolean(p.oferta),
+
+      model_code: p.model_code ?? null,
+      oem_code: p.oem_code ?? null,
+      description: p.description ?? null,
+      voltage: p.voltage ?? null,
+      amp_rating: p.amp_rating == null ? null : Number(p.amp_rating),
+      watt_rating: p.watt_rating == null ? null : Number(p.watt_rating),
+      led_count: p.led_count == null ? null : Number(p.led_count),
+      kelvin: p.kelvin == null ? null : Number(p.kelvin),
+      color: p.color ?? null,
+      beam_pattern: p.beam_pattern ?? null,
+      series: p.series ?? null,
+      lens_color: p.lens_color ?? null,
+      attributes: p.attributes ?? null,
     };
   }
 }

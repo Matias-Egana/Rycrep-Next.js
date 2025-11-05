@@ -12,8 +12,6 @@
   --danger: #ef4444;
   --warn: #f59e0b;
   --row-alt: #fbfdff;
-
-  /* ancho único para la columna Acciones (header+body+colgroup) */
   --actions-col-w: 190px;
 }
 
@@ -144,7 +142,6 @@
   border-radius: 12px;
   background: var(--surface);
   box-shadow: 0 1px 0 rgba(16,24,40,.04), 0 1px 2px rgba(16,24,40,.06);
-  /* evita “saltos” con la barra de scroll */
   scrollbar-gutter: stable both-edges;
 }
 
@@ -179,29 +176,25 @@ tbody tr:nth-child(odd) { background: var(--row-alt); }
 /* Columna derecha sticky (header + body) alineada y con zebra correcto */
 .bw-table .sticky-right {
   position: sticky;
-  inset-inline-end: 0;                 /* right: 0 lógico */
+  inset-inline-end: 0;
   width: var(--actions-col-w);
   min-width: var(--actions-col-w);
   max-width: var(--actions-col-w);
   z-index: 2;
   box-sizing: border-box;
-  /* no fijamos background aquí para que cada tipo (th/td) lo defina */
 }
 
-/* El header debe ser sólido */
 .sticky-header th.sticky-right {
   background: var(--surface);
   box-shadow: -1px 0 0 var(--border);
   z-index: 4;
 }
 
-/* Las celdas del body heredan el fondo de su fila para evitar el desfase visual */
 .bw-table td.sticky-right {
-  background: inherit;                  /* mantiene el zebra */
-  box-shadow: -1px 0 0 var(--border);   /* divisor vertical consistente */
+  background: inherit;
+  box-shadow: -1px 0 0 var(--border);
 }
 
-/* Padding de la columna Acciones para que los botones no queden pegados al borde */
 .bw-table td.sticky-right,
 .bw-table th.sticky-right {
   padding-left: 8px;
@@ -236,6 +229,7 @@ tbody tr:nth-child(odd) { background: var(--row-alt); }
   text-decoration: none;
 }
 
+/* imagen edit pequeños */
 .img-edit {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -334,7 +328,7 @@ tbody tr:nth-child(odd) { background: var(--row-alt); }
   display: flex;
   gap: 8px;
   align-items: center;
-  justify-content: flex-start; /* antes: flex-end; así no queda tan a la derecha */
+  justify-content: flex-start;
 }
 
 /* Botones */
@@ -372,7 +366,9 @@ tbody tr:nth-child(odd) { background: var(--row-alt); }
 
 /* Estados */
 .muted { color: var(--ink-muted); }
+.small { font-size: 12px; color: var(--ink-muted); }
 
+/* Empty */
 .empty-state { text-align: center; }
 .empty-card {
   padding: 26px 12px;
@@ -387,8 +383,57 @@ button:focus-visible, a:focus-visible, .open-link:focus-visible, .cms-btn:focus-
   border-radius: 10px;
 }
 
-/* Responsive pequeñas mejoras */
-@media (max-width: 880px) {
-  .search-wrap { min-width: 220px; }
-  .sort-pill { display: none; }
+/* CREATION CARD */
+.create-card {
+  margin-bottom: 16px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+}
+.create-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.advanced-grid {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.advanced-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* EDITOR EXPAND */
+.editor-row td {
+  padding: 12px 18px;
+  background: #fff; /* un poco más claro cuando expandido */
+}
+.editor-expand {
+  padding: 12px;
+  border-radius: 8px;
+  background: #fafafa;
+  border: 1px dashed var(--border);
+}
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+/* responsive: hacer grids más verticales */
+@media (max-width: 1100px) {
+  .create-grid { grid-template-columns: repeat(2, 1fr); }
+  .advanced-grid { grid-template-columns: repeat(2, 1fr); }
+  .editor-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .search-wrap { min-width: 160px; }
+  .create-grid, .advanced-grid, .editor-grid { grid-template-columns: 1fr; }
+  .row-actions { flex-wrap: wrap; gap: 6px; }
+  .cms-container { padding: 12px; }
 }

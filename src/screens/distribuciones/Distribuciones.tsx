@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import "./Distribuciones.css";
 
@@ -50,7 +49,7 @@ const BRANDS: Brand[] = [
     name: "Delco Remy",
     logo: delcoremy,
     alt: "Logo Delco Remy",
-    desc: "Sistemas de arranque y carga para vehículos comerciales e industriales.",
+    desc: "Motores de arranque y alternadores para vehiculos comerciales e industriales.",
     highlights: ["Flotas", "Alta durabilidad", "Soporte global"],
     filterValue: "Delco Remy",
   },
@@ -78,7 +77,7 @@ const BRANDS: Brand[] = [
   name: "TDI",
   logo: tdi,
   alt: "Logo TDI",
-  desc: "Arranque neumático por turbina para grandes motores diésel. Seguro y libre de chispa.",
+  desc: "Arrancador de aire de turbina para motores de tamaño mediano para una amplia variedad de aplicaciones desafiantes como entornos de camiones de transporte de minas, barcos.",
   highlights: ["Air starters", "Seguridad", "Motores grandes"],
   filterValue: "TDI",
   },
@@ -87,7 +86,7 @@ const BRANDS: Brand[] = [
     name: "BOSCH",
     logo: bosch,
     alt: "Logo Bosch",
-    desc: "Líder global en sistemas de arranque y carga. Robustez y repuestos disponibles.",
+    desc: "Líder global en sistemas de motores de arranque y alternadores usados en equipos de transporte terrestre y minero.",
     highlights: ["Líder global", "Robustez", "Cobertura"],
     filterValue: "Bosch",
   },
@@ -96,7 +95,7 @@ const BRANDS: Brand[] = [
     name: "Leece-Neville",
     logo: leece,
     alt: "Logo Leece-Neville",
-    desc: "Alternadores de alto amperaje para buses, camiones y servicio severo.",
+    desc: "Alternadores de alto amperaje y motores de arranque para transporte terrestre, marino y minero.",
     highlights: ["Alto amperaje", "Heavy-duty", "Flotas"],
     filterValue: "Leece-Neville",
   },
@@ -114,7 +113,7 @@ const BRANDS: Brand[] = [
     name: "PRELUB",
     logo: prelub,
     alt: "Logo Prelub",
-    desc: "Prelubricación que protege el motor diésel al arranque reduciendo desgaste.",
+    desc: "Una bomba de prelubricación coloca el aceite donde se necesita antes de que el motor comience a moverse, reduciendo así este alto período de desgaste. Utilizado en equipos heavy duty en maquinaria pesada, palas y camiones de extracción mineros.",
     highlights: ["Protección motor", "Prelubricación", "Diésel"],
     filterValue: "Prelub",
   },

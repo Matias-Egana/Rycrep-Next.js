@@ -10,7 +10,6 @@ import seals from'../../assets/Certificaciones/certificaciones.png'
  */
 
 // Placeholder SVG de 4 sellos tipo “IRAM”
-const SealsPlaceholder: React.FC = () => (
   <svg
     className="rc-seals-img"
     viewBox="0 0 240 54"
@@ -50,7 +49,6 @@ const SealsPlaceholder: React.FC = () => (
       <text x="26" y="28" textAnchor="middle" fontFamily="Montserrat,Arial" fontSize="10" fill="#fff" fontWeight="700">IRAM</text>
     </g>
   </svg>
-);
 
 const Footer: React.FC = () => {
   return (

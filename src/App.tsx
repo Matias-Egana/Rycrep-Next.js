@@ -64,7 +64,7 @@ function App() {
       {showWidget && (
         <WhatsAppWidget
           title="¿Con quién quieres hablar?"
-          subtitle="Elegí el canal adecuado para ayudarte mejor"
+          subtitle="Elige el canal adecuado para ayudarte mejor"
           contacts={contactos}
           position="bottom-right"
           autoOpenDelay={0}

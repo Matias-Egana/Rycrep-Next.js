@@ -64,10 +64,12 @@ const Nosotros: React.FC = () => {
       <div className="ns-grid">
         <article className="ns-card">
           <h3>Representaciones y suministro</h3>
-          <p>
-            Integramos marcas de prestigio en alternadores, motores de partida, implementos de seguridad para maquinaria y equipos, y soluciones eléctricas,
-            acercándolas a la operación con ventas a nivel nacional e internacional con disponibilidad y soporte técnico. Destacamos C.E. Niehoff &amp; Co.
-            como principal producto de nuestra empresa.
+          <p>Integramos marcas de prestigio en alternadores, motores de arranque, 
+            implementos de seguridad para maquinaria y equipos, así como soluciones eléctricas. 
+            Acercamos estos productos a las operaciones de nuestros clientes mediante ventas a
+            nivel nacional e internacional, garantizando disponibilidad y soporte técnico 
+            especializado. Destacamos a C.E. Niehoff & Co., junto con Delco Remy y Eaton Bussmann, 
+            como nuestras principales marcas representadas.
           </p>
         </article>
         <article className="ns-card">
@@ -171,6 +173,19 @@ const Nosotros: React.FC = () => {
                 <p>Overhaul y mantenimiento de generadores, torres de iluminación, soldadoras, motores de partida y alternadores (12/24V).</p>
               </div>
             </article>
+            {/* 2005 */}
+            <article className="ns-tl-item">
+              <span className="ns-tl-dot" aria-hidden />
+              <div className="ns-tl-year">2005</div>
+              <div className="ns-tl-card">
+                <h3>Certificaciones y alianzas</h3>
+                <p>
+                  La empresa cuenta con certificaciones <strong>ISO 9001</strong>, <strong>ISO 14001</strong> e <strong>ISO 18000</strong>, lo que refleja altos
+                  estándares en gestión de calidad y medioambiente. Además, es un <strong>Centro Autorizado de Servicio (CAS)</strong>,
+                  y mantiene alianzas con marcas tecnológicas de clase mundial.
+                </p>
+              </div>
+            </article>
 
             {/* 2008 */}
             <article className="ns-tl-item">
@@ -208,20 +223,6 @@ const Nosotros: React.FC = () => {
               <div className="ns-tl-card">
                 <h3>Laboratorio de inyección diésel</h3>
                 <p>Se consolida el laboratorio de inyección diésel con soporte técnico especializado para pruebas y calibración.</p>
-              </div>
-            </article>
-
-            {/* 2025 */}
-            <article className="ns-tl-item">
-              <span className="ns-tl-dot" aria-hidden />
-              <div className="ns-tl-year">2025</div>
-              <div className="ns-tl-card">
-                <h3>Certificaciones y alianzas</h3>
-                <p>
-                  La empresa cuenta con certificaciones <strong>ISO 9001</strong>, <strong>ISO 14001</strong> e <strong>ISO 18000</strong>, lo que refleja altos
-                  estándares en gestión de calidad y medioambiente. Además, es un <strong>Centro Autorizado de Servicio (CAS)</strong>,
-                  y mantiene alianzas con marcas tecnológicas de clase mundial.
-                </p>
               </div>
             </article>
           </section>

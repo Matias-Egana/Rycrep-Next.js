@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 type Props = {
   /** URL de YouTube: watch?v=..., youtu.be/..., shorts/..., embed/... */

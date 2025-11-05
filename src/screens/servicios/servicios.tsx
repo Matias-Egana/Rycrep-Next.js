@@ -58,16 +58,6 @@ const Servicios: React.FC = () => {
     "(Palas, Perforadoras, Camiones, Equipos de apoyo en general)"
   ];
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000
-  };
-
   return (
     <div className="page">
       <h1 className="main-title">Mantenimientos Preventivos - Predictivos - Correctivos</h1>

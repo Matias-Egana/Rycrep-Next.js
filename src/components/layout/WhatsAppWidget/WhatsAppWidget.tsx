@@ -68,7 +68,6 @@ export default function WhatsAppWidget({
   defaultMessage = "¡Hola! Vengo desde tu sitio y tengo una consulta.",
   position = "bottom-right",
   autoOpenDelay = 0,
-  ctaLabel = "Chatear por WhatsApp",
   title = "¿Hablamos por WhatsApp?",
   subtitle = "Respondemos rápido",
   accentColor = "#25D366",
