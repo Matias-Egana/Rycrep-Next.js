@@ -10,6 +10,7 @@ export class CmsLoginRepository implements ICmsLoginRepository {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
+      credentials: 'include', 
     });
 
     if (!res.ok) {
@@ -18,12 +19,11 @@ export class CmsLoginRepository implements ICmsLoginRepository {
       throw new Error(msg);
     }
 
-    // Tu backend retorna { token, user: { id, username, first_name, last_name, is_staff } }
     const data = await res.json();
 
     const payload: CmsAuthPayload = {
-      access: data.token as string,
-      refresh: '', // no usamos refresh en este backend
+      access: '', 
+      refresh: '', 
       user: {
         id: data.user.id,
         username: data.user.username,

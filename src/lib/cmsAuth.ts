@@ -13,32 +13,38 @@ export type CmsAuthPayload = {
   user: CmsUser;
 };
 
-const ACCESS_KEY = 'cms_access';
-const REFRESH_KEY = 'cms_refresh';
-const USER_KEY = 'cms_user';
+const USER_KEY = "cms_user";
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
 export const cmsAuth = {
   save(payload: CmsAuthPayload) {
-    localStorage.setItem(ACCESS_KEY, payload.access);
-    localStorage.setItem(REFRESH_KEY, payload.refresh || '');
     localStorage.setItem(USER_KEY, JSON.stringify(payload.user));
   },
-  getAccess() {
-    return localStorage.getItem(ACCESS_KEY) || '';
+
+  getAccess(): string | null {
+    return null;
   },
-  getRefresh() {
-    return localStorage.getItem(REFRESH_KEY) || '';
+
+  getRefresh(): string | null {
+    return null;
   },
+
   getUser(): CmsUser | null {
     const raw = localStorage.getItem(USER_KEY);
     return raw ? (JSON.parse(raw) as CmsUser) : null;
   },
+
   clear() {
-    localStorage.removeItem(ACCESS_KEY);
-    localStorage.removeItem(REFRESH_KEY);
     localStorage.removeItem(USER_KEY);
+
+    fetch(`${API_BASE}/cms/auth/logout/`, {
+      method: "POST",
+      credentials: "include",
+    }).catch(() => {
+    });
   },
+
   isLoggedIn() {
-    return !!localStorage.getItem(ACCESS_KEY);
+    return !!this.getUser();
   },
 };

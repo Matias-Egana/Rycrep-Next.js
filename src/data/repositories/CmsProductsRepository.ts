@@ -1,4 +1,3 @@
-// src/data/repositories/CmsProductsRepository.ts
 import { cmsAuth } from '../../lib/cmsAuth';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
@@ -37,17 +36,39 @@ export type ListProductsResponse = {
 };
 
 export class CmsProductsRepository {
-  async list(params: { search?: string; sortBy?: string; order?: 'asc'|'desc'; page?: number; limit?: number } = {}): Promise<ListProductsResponse> {
-    const token = cmsAuth.getAccess();
+  async list(params: {
+    search?: string;
+    sortBy?: string;
+    order?: 'asc' | 'desc';
+    page?: number;
+    limit?: number;
+  } = {}): Promise<ListProductsResponse> {
     const qs = new URLSearchParams();
-    if (params.search) qs.set('search', params.search);
+
+    // 🔹 lo que la UI llama "search" lo mandamos como q (lo que espera el backend)
+    if (params.search && params.search.trim()) {
+      qs.set('q', params.search.trim());
+    }
+
+    if (params.page && params.page > 1) {
+      qs.set('page', String(params.page));
+    }
+
+    // limit -> pageSize para el backend
+    if (params.limit && params.limit > 0) {
+      qs.set('pageSize', String(params.limit));
+    }
+
+    // Si el schema soporta sortBy/order, se mandan, si no, los puedes comentar
     if (params.sortBy) qs.set('sortBy', params.sortBy);
     if (params.order) qs.set('order', params.order);
-    if (params.page) qs.set('page', String(params.page));
-    if (params.limit) qs.set('limit', String(params.limit));
 
-    const url = `${API_BASE}/cms/products${qs.toString() ? `?${qs}` : ''}`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` }});
+    const queryString = qs.toString();
+    const url = `${API_BASE}/cms/products${queryString ? `?${queryString}` : ''}`;
+
+    const res = await fetch(url, {
+      credentials: 'include', // usas cookie auth
+    });
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
     if (!res.ok) throw new Error('Error al cargar productos.');
 
@@ -84,22 +105,31 @@ export class CmsProductsRepository {
     }));
 
     const total =
-      typeof data?.total === 'number' ? data.total :
-      typeof data?.count === 'number' ? data.count :
-      items.length;
+      typeof data?.total === 'number'
+        ? data.total
+        : typeof data?.count === 'number'
+        ? data.count
+        : items.length;
 
-    const page = typeof data?.page === 'number' ? data.page : 1;
-    const limit = typeof data?.limit === 'number' ? data.limit : items.length || (params.limit ?? 100);
+    const page =
+      typeof data?.page === 'number'
+        ? data.page
+        : params.page ?? 1;
+
+    const limit =
+      typeof data?.limit === 'number'
+        ? data.limit
+        : params.limit ?? (items.length || 100);
 
     return { total, items, page, limit };
   }
 
   async update(id: number, patch: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
-    const token = cmsAuth.getAccess();
     const res = await fetch(`${API_BASE}/cms/products/${id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(patch),
+      credentials: 'include',
     });
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
     if (!res.ok) {
@@ -134,11 +164,11 @@ export class CmsProductsRepository {
   }
 
   async create(payload: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
-    const token = cmsAuth.getAccess();
     const res = await fetch(`${API_BASE}/cms/products`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+      credentials: 'include',
     });
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
     if (!res.ok) {
