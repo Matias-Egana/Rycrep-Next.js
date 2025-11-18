@@ -12,6 +12,7 @@ import Contacto from './screens/contacto/Contacto';
 import Distribuciones from './screens/distribuciones/Distribuciones';
 import Cotizado from './screens/cotizado/Cotizado';
 import NotFound from './screens/NotFound';
+import MfaSetup from "./screens/CMS/mfa/MfaSetup";
 
 import WhatsAppWidget, { type WhatsAppContact } from './components/layout/WhatsAppWidget/WhatsAppWidget';
 
@@ -59,6 +60,7 @@ function App() {
         {/* CMS */}
         <Route path="/cms/login" element={<CmsLogin />} />
         <Route path="/cms/productos" element={<CmsProductos />} />
+        <Route path="/cms/mfa" element={<MfaSetup />} />
       </Routes>
 
       {showWidget && (
