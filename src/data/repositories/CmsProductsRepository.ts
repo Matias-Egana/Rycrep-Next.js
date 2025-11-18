@@ -1,5 +1,3 @@
-import { cmsAuth } from '../../lib/cmsAuth';
-
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
 export type CmsProduct = {
@@ -12,7 +10,6 @@ export type CmsProduct = {
   price: number | null;
   oferta: boolean;
 
-  // Campos extra que añadimos
   model_code?: string | null;
   oem_code?: string | null;
   description?: string | null;
@@ -45,21 +42,21 @@ export class CmsProductsRepository {
   } = {}): Promise<ListProductsResponse> {
     const qs = new URLSearchParams();
 
-    // 🔹 lo que la UI llama "search" lo mandamos como q (lo que espera el backend)
-    if (params.search && params.search.trim()) {
-      qs.set('q', params.search.trim());
+    const term = (params.search ?? '').trim();
+    if (term) {
+      qs.set('search', term);
+      qs.set('q', term); // compat opcional
     }
 
     if (params.page && params.page > 1) {
       qs.set('page', String(params.page));
     }
 
-    // limit -> pageSize para el backend
     if (params.limit && params.limit > 0) {
-      qs.set('pageSize', String(params.limit));
+      qs.set('limit', String(params.limit));
+      qs.set('pageSize', String(params.limit)); // compat opcional
     }
 
-    // Si el schema soporta sortBy/order, se mandan, si no, los puedes comentar
     if (params.sortBy) qs.set('sortBy', params.sortBy);
     if (params.order) qs.set('order', params.order);
 
@@ -67,7 +64,7 @@ export class CmsProductsRepository {
     const url = `${API_BASE}/cms/products${queryString ? `?${queryString}` : ''}`;
 
     const res = await fetch(url, {
-      credentials: 'include', // usas cookie auth
+      credentials: 'include',
     });
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
     if (!res.ok) throw new Error('Error al cargar productos.');
