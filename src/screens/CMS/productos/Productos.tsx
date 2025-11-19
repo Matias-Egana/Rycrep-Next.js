@@ -71,12 +71,21 @@ export default function Productos() {
   const nameInputRef = useRef<HTMLInputElement | null>(null);
   const urlInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Carga con pequeño debounce
+  // 🔒 Guard de ruta: exige login + MFA antes de mostrar productos
   useEffect(() => {
+    // sin sesión → login
     if (!cmsAuth.isLoggedIn()) {
       nav('/cms/login', { replace: true });
       return;
     }
+    // con sesión pero sin MFA → pantalla de setup MFA
+    if (!cmsAuth.isMfaEnabled()) {
+      nav('/cms/mfa', { replace: true });
+    }
+  }, [nav]);
+
+  // Carga con pequeño debounce (ya no revisa login aquí)
+  useEffect(() => {
     const h = setTimeout(() => {
       (async () => {
         setLoading(true);
@@ -86,6 +95,7 @@ export default function Productos() {
           setItems(res.items || []);
         } catch (e: any) {
           if (e?.message === 'UNAUTHORIZED') {
+            // si el backend dice UNAUTHORIZED, limpiamos y mandamos al login
             cmsAuth.clear();
             nav('/cms/login', { replace: true });
             return;
@@ -286,7 +296,7 @@ export default function Productos() {
 
         {err && <div className="cms-alert error" role="alert">{err}</div>}
 
-        {/* Formulario de creación (colapsable) — mantuve la UI original y añadí "Campos avanzados" */}
+        {/* Formulario de creación (colapsable) */}
         {showCreate && (
           <div className="create-card">
             <div className="create-grid">
@@ -364,15 +374,14 @@ export default function Productos() {
 
         <div className="table-wrap">
           <table className="bw-table" aria-label="Listado de productos">
-            {/* columnas fijas para que no se desarme en edición */}
             <colgroup>
-              <col style={{ width: 140 }} />                 {/* Imagen */}
-              <col style={{ width: '30%' }} />               {/* Nombre */}
-              <col style={{ width: '18%' }} />               {/* Categoría */}
-              <col style={{ width: '18%' }} />               {/* Marca */}
-              <col style={{ width: 120 }} />                 {/* Precio */}
-              <col style={{ width: 100 }} />                 {/* Oferta */}
-              <col style={{ width: 'var(--actions-col-w)' }} /> {/* Acciones (alineada) */}
+              <col style={{ width: 140 }} />
+              <col style={{ width: '30%' }} />
+              <col style={{ width: '18%' }} />
+              <col style={{ width: '18%' }} />
+              <col style={{ width: 120 }} />
+              <col style={{ width: 100 }} />
+              <col style={{ width: 'var(--actions-col-w)' }} />
             </colgroup>
 
             <thead className="sticky-header">

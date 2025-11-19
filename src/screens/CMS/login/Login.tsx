@@ -17,18 +17,36 @@ export default function CmsLogin() {
     submitMfa,
   } = useCmsLoginVM();
 
-  // Si ya hay sesión CMS, manda directo al panel
+  // Si ya hay sesión CMS:
+  // - con MFA → panel
+  // - sin MFA → se queda en login (no mandamos al QR automáticamente)
   useEffect(() => {
-    if (cmsAuth.isLoggedIn()) nav('/cms/productos', { replace: true });
+    if (!cmsAuth.isLoggedIn()) return;
+
+    if (cmsAuth.isMfaEnabled()) {
+      nav('/cms/productos', { replace: true });
+    }
   }, [nav]);
 
   function handleSubmit() {
     if (state.mfaRequired) {
-      //  Cuando ya tiene MFA activado: código de 6 dígitos y al CMS
-      submitMfa(() => nav('/cms/productos', { replace: true }));
+      // Usuario que ya tiene MFA configurado → pedimos código
+      submitMfa(() => {
+        cmsAuth.setLoggedIn(true);
+        cmsAuth.setMfaEnabled(true);
+        nav('/cms/productos', { replace: true });
+      });
     } else {
-      //  Login sin MFA activado todavía: ir directo a la pantalla de QR
-      submitLogin(() => nav('/cms/mfa', { replace: true }));
+      // Login inicial de usuario sin MFA
+      submitLogin(() => {
+        cmsAuth.setLoggedIn(true);
+        cmsAuth.setMfaEnabled(false); // MFA pendiente
+        // 👇 Solo permitimos entrar a /cms/mfa cuando venimos del login
+        nav('/cms/mfa', {
+          replace: true,
+          state: { fromLogin: true },
+        });
+      });
     }
   }
 
@@ -40,7 +58,7 @@ export default function CmsLogin() {
           Autenticado contra usuarios <code>auth_user</code> con permiso <code>is_staff</code>.
         </p>
 
-        {/* Paso 1: usuario + contraseña (cuando aún no se ha pedido MFA) */}
+        {/* Paso 1: usuario + contraseña */}
         {!state.mfaRequired && (
           <>
             <label className="label" htmlFor="username">
@@ -78,7 +96,7 @@ export default function CmsLogin() {
           </>
         )}
 
-        {/* Paso 2: código MFA (cuando backend responde mfa_required) */}
+        {/* Paso 2: código MFA cuando backend responde mfa_required */}
         {state.mfaRequired && (
           <>
             <p className="description">
@@ -96,6 +114,7 @@ export default function CmsLogin() {
               onChange={(e) => setMfaCode(e.target.value)}
               autoComplete="one-time-code"
               inputMode="numeric"
+              maxLength={6}
             />
           </>
         )}
