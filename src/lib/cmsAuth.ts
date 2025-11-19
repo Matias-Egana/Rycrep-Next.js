@@ -1,4 +1,5 @@
 // src/lib/cmsAuth.ts
+import { getCsrfToken, clearCsrfToken } from './csrf';
 export type CmsUser = {
   id: number;
   username: string;
@@ -34,15 +35,23 @@ export const cmsAuth = {
     return raw ? (JSON.parse(raw) as CmsUser) : null;
   },
 
-  clear() {
-    localStorage.removeItem(USER_KEY);
+ clear() {
+  localStorage.removeItem(USER_KEY);
+  clearCsrfToken();
 
-    fetch(`${API_BASE}/cms/auth/logout/`, {
-      method: "POST",
-      credentials: "include",
-    }).catch(() => {
+  getCsrfToken()
+    .then((token) =>
+      fetch(`${API_BASE}/cms/auth/logout/`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "X-CSRF-Token": token,
+        },
+      })
+    )
+    .catch(() => {
     });
-  },
+ },
 
   isLoggedIn() {
     return !!this.getUser();

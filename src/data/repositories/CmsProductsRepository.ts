@@ -1,3 +1,5 @@
+import { getCsrfToken } from '../../lib/csrf';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
 export type CmsProduct = {
@@ -121,13 +123,18 @@ export class CmsProductsRepository {
     return { total, items, page, limit };
   }
 
-  async update(id: number, patch: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
-    const res = await fetch(`${API_BASE}/cms/products/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patch),
-      credentials: 'include',
-    });
+    async update(id: number, patch: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
+      const csrfToken = await getCsrfToken();
+
+      const res = await fetch(`${API_BASE}/cms/products/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify(patch),
+        credentials: 'include',
+      });
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
     if (!res.ok) {
       const txt = await res.text().catch(() => null);
@@ -160,13 +167,18 @@ export class CmsProductsRepository {
     };
   }
 
-  async create(payload: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
-    const res = await fetch(`${API_BASE}/cms/products`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      credentials: 'include',
-    });
+ async create(payload: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
+  const csrfToken = await getCsrfToken();
+
+  const res = await fetch(`${API_BASE}/cms/products`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken,
+    },
+    body: JSON.stringify(payload),
+    credentials: 'include',
+  });
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
     if (!res.ok) {
       const txt = await res.text().catch(() => null);

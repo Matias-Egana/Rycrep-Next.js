@@ -4,6 +4,7 @@ import type {
   CmsLoginRepoResult,
 } from '../../domain/repositories/CmsLoginRepository';
 import type { CmsAuthPayload, CmsUser } from '../../lib/cmsAuth';
+import { getCsrfToken } from '../../lib/csrf';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
@@ -30,20 +31,18 @@ function buildAuthPayload(data: any): CmsAuthPayload {
 }
 
 export class CmsLoginRepository implements ICmsLoginRepository {
-  async login({
-    username,
-    password,
-  }: {
-    username: string;
-    password: string;
-  }): Promise<CmsLoginRepoResult> {
-    const res = await fetch(`${API_BASE}/cms/auth/login/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-      credentials: 'include', // para recibir/enviar la cookie cms_token
-    });
+async login({ username, password }: { username: string; password: string; }): Promise<CmsLoginRepoResult> {
+  const csrfToken = await getCsrfToken();
 
+  const res = await fetch(`${API_BASE}/cms/auth/login/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken,
+    },
+    body: JSON.stringify({ username, password }),
+    credentials: 'include', 
+  });
     const data = await res.json().catch(() => ({} as any));
 
     if (!res.ok) {
@@ -74,22 +73,21 @@ export class CmsLoginRepository implements ICmsLoginRepository {
     };
   }
 
-  async verifyMfa({
-    challengeToken,
-    code,
-  }: {
-    challengeToken: string;
-    code: string;
-  }): Promise<CmsAuthPayload> {
-    const res = await fetch(`${API_BASE}/cms/auth/mfa/verify`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        challenge_token: challengeToken,
-        code,
-      }),
-      credentials: 'include',
-    });
+async verifyMfa({ challengeToken, code }: { challengeToken: string; code: string; }): Promise<CmsAuthPayload> {
+  const csrfToken = await getCsrfToken();
+
+  const res = await fetch(`${API_BASE}/cms/auth/mfa/verify`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken,
+    },
+    body: JSON.stringify({
+      challenge_token: challengeToken,
+      code,
+    }),
+    credentials: 'include',
+  });
 
     const data = await res.json().catch(() => ({} as any));
 

@@ -1,5 +1,5 @@
 // src/components/cms/CmsNavbar.tsx
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { cmsAuth } from "../../lib/cmsAuth";
 import "./CmsNavbar.css";
 
@@ -16,9 +16,6 @@ export default function CmsNavbar() {
     <nav className="cms-nav">
       <div className="cms-nav__left">
         <span className="cms-brand">RYCREP — CMS</span>
-        <Link to="/cms/productos" className="cms-link">
-          Productos
-        </Link>
       </div>
       <div className="cms-nav__right">
         {user && <span className="cms-user">@{user.username}</span>}

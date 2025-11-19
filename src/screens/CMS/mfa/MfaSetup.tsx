@@ -5,6 +5,7 @@ import QRCode from "react-qr-code";
 import CmsNavbar from "../../../components/cms/CmsNavbar";
 import { cmsAuth } from "../../../lib/cmsAuth";
 import "../login/Login.css"; // reutilizamos estilos (card, btn, etc.)
+import { getCsrfToken } from "../../../lib/csrf";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
@@ -39,11 +40,16 @@ export default function MfaSetup() {
     setSecret(null);
     setCode("");
 
-    try {
-      const res = await fetch(`${API_BASE}/cms/auth/mfa/setup`, {
-        method: "POST",
-        credentials: "include", // usa cookie cms_token
-      });
+   try {
+    const csrfToken = await getCsrfToken();
+
+    const res = await fetch(`${API_BASE}/cms/auth/mfa/setup`, {
+      method: "POST",
+      credentials: "include", 
+      headers: {
+        "X-CSRF-Token": csrfToken,
+      },
+    });
 
       const data = await res.json().catch(() => ({} as any));
 
@@ -74,48 +80,51 @@ export default function MfaSetup() {
     }
   }
 
-  async function confirmMfa() {
-    const c = code.trim();
+async function confirmMfa() {
+  const c = code.trim();
 
-    if (!c) {
-      setError("Debes ingresar el código MFA de 6 dígitos.");
-      return;
-    }
-
-    if (!/^\d{6}$/.test(c)) {
-      setError("El código MFA debe tener exactamente 6 dígitos.");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch(`${API_BASE}/cms/auth/mfa/enable`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: c }),
-        credentials: "include",
-      });
-
-      const data = await res.json().catch(() => ({} as any));
-
-      if (!res.ok || !data.enabled) {
-        throw new Error(
-          data?.detail || data?.message || "Código MFA inválido."
-        );
-      }
-
-      setEnabled(true);
-
-      // ✅ Una vez activado el MFA, vamos directo al panel CMS
-      nav("/cms/productos", { replace: true });
-    } catch (err: any) {
-      setError(err?.message || "Error al activar MFA.");
-    } finally {
-      setLoading(false);
-    }
+  if (!c) {
+    setError("Debes ingresar el código MFA de 6 dígitos.");
+    return;
   }
+
+  if (!/^\d{6}$/.test(c)) {
+    setError("El código MFA debe tener exactamente 6 dígitos.");
+    return;
+  }
+
+  setLoading(true);
+  setError(null);
+
+  try {
+    const csrfToken = await getCsrfToken();
+
+    const res = await fetch(`${API_BASE}/cms/auth/mfa/enable`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+      body: JSON.stringify({ code: c }),
+      credentials: "include",
+    });
+
+    const data = await res.json().catch(() => ({} as any));
+
+    if (!res.ok || !data.enabled) {
+      throw new Error(
+        data?.detail || data?.message || "Código MFA inválido."
+      );
+    }
+
+    setEnabled(true);
+    nav("/cms/productos", { replace: true });
+  } catch (err: any) {
+    setError(err?.message || "Error al activar MFA.");
+  } finally {
+    setLoading(false);
+  }
+}
 
   return (
     <div className="cms-page nice-surface">

@@ -89,7 +89,7 @@
 /* === LINK ACTIVO === */
 .rc-link.is-active{
   background: #ffffff;
-  color: var(--accent);
+  color: #e31b23;
   padding: 8px 12px;
   font-weight: 600;
   border-radius: 12px;
@@ -233,7 +233,7 @@
   .rc-link.is-active{
     padding: 10px 12px;
     background: #ffffff;
-    color: var(--accent);
+    color: #e31b23;
   }
 
   /* ===== Submenú móvil ===== */

@@ -17,7 +17,7 @@ import MfaSetup from "./screens/CMS/mfa/MfaSetup";
 import WhatsAppWidget, { type WhatsAppContact } from './components/layout/WhatsAppWidget/WhatsAppWidget';
 
 import CmsLogin from './screens/CMS/login/Login';
-import CmsProductos from './screens/CMS/productos/Productos'; // ← NUEVO
+import CmsProductos from './screens/CMS/productos/Productos'; 
 import { useEffect } from 'react';
 
 const contactos: WhatsAppContact[] = [
