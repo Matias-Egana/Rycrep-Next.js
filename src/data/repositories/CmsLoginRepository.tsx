@@ -14,7 +14,8 @@ function mapUser(raw: any): CmsUser {
     username: String(raw.username ?? ''),
     email: null,
     is_staff: !!raw.is_staff,
-    is_superuser: false,
+    is_superuser: !!raw.is_superuser,
+    can_manage_mfa: !!raw.can_manage_mfa,
   };
 }
 

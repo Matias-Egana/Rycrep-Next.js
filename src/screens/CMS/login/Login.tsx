@@ -116,6 +116,12 @@ export default function CmsLogin() {
               inputMode="numeric"
               maxLength={6}
             />
+          {/* 🔒 Importante: esto NO llama al endpoint de reset */}
+          <p className="help-text" style={{ marginTop: '0.75rem', fontSize: '0.85rem' }}>
+            ¿No puedes acceder a tu app de autenticación? 
+            <br />
+            Ponte en contacto con un administrador para que resetee tu MFA desde el panel de control.
+          </p>
           </>
         )}
 

@@ -13,6 +13,7 @@ import Distribuciones from './screens/distribuciones/Distribuciones';
 import Cotizado from './screens/cotizado/Cotizado';
 import NotFound from './screens/NotFound';
 import MfaSetup from "./screens/CMS/mfa/MfaSetup";
+import MfaAdmin from "./screens/CMS/mfa/MfaAdmin";
 
 import WhatsAppWidget, { type WhatsAppContact } from './components/layout/WhatsAppWidget/WhatsAppWidget';
 
@@ -61,6 +62,7 @@ function App() {
         <Route path="/cms/login" element={<CmsLogin />} />
         <Route path="/cms/productos" element={<CmsProductos />} />
         <Route path="/cms/mfa" element={<MfaSetup />} />
+        <Route path="/cms/mfa-admin" element={<MfaAdmin />} />
       </Routes>
 
       {showWidget && (

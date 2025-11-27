@@ -1,5 +1,5 @@
 // src/lib/cmsAuth.ts
-import { getCsrfToken, clearCsrfToken } from './csrf';
+import { getCsrfToken, clearCsrfToken } from "./csrf";
 
 export type CmsUser = {
   id: number;
@@ -7,6 +7,7 @@ export type CmsUser = {
   email: string | null;
   is_staff: boolean;
   is_superuser: boolean; // si tu backend no lo manda, lo fijamos en false
+  can_manage_mfa?: boolean; // NUEVO: permiso para gestionar MFA de otros usuarios
 };
 
 export type CmsAuthPayload = {
@@ -93,6 +94,12 @@ export const cmsAuth = {
       this.clear();
     }
     // Si es true asumimos que el ViewModel llamó a save() con el usuario.
+  },
+
+  // NUEVO: helper para saber si el usuario puede gestionar MFA de otros
+  canManageMfa(): boolean {
+    const user = this.getUser();
+    return !!user?.can_manage_mfa;
   },
 
   // ======== MFA ========
