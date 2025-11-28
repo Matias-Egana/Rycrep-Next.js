@@ -1,6 +1,9 @@
 // src/screens/CMS/login/ViewModel.tsx
 import { useState } from 'react';
-import { CmsLoginUseCase, type CmsLoginResult } from '../../../domain/usecases/CmsLogin';
+import {
+  CmsLoginUseCase,
+  type CmsLoginResult,
+} from '../../../domain/usecases/CmsLogin';
 import { CmsLoginRepository } from '../../../data/repositories/CmsLoginRepository';
 import { cmsAuth } from '../../../lib/cmsAuth';
 
@@ -24,7 +27,7 @@ export function useCmsLoginVM() {
     setMfaCode('');
   }
 
-  function validateCredentials() {
+  function validateCredentials(): string | null {
     const u = username.trim();
     const p = password.trim();
 
@@ -32,7 +35,7 @@ export function useCmsLoginVM() {
     return null;
   }
 
-  // 🚀 Paso 1: login con user + password
+  // Paso 1: login con user + password
   async function submitLogin(onSuccess: () => void) {
     const validationError = validateCredentials();
     if (validationError) {
@@ -50,6 +53,20 @@ export function useCmsLoginVM() {
       );
 
       if (result.status === 'success') {
+        const payload = result.payload;
+
+        if (payload.password_rotation_warning) {
+          const days = payload.password_age_days ?? null;
+          const extra =
+            days !== null
+              ? ` (actual: ${days} días desde el último cambio)`
+              : '';
+          window.alert(
+            `Tu contraseña tiene más de 180 días.${extra}\n\n` +
+              'Por favor, cámbiala desde la opción "Cambiar contraseña" en el CMS.',
+          );
+        }
+
         resetMfaState();
         onSuccess();
       } else {
@@ -67,17 +84,12 @@ export function useCmsLoginVM() {
     }
   }
 
-  // 🚀 Paso 2: enviar código MFA
+  // Paso 2: enviar código MFA
   async function submitMfa(onSuccess: () => void) {
     const code = mfaCode.trim();
 
     if (!code) {
       setError('Debes ingresar el código MFA.');
-      return;
-    }
-
-    if (!/^\d{6}$/.test(code)) {
-      setError('El código MFA debe tener 6 dígitos.');
       return;
     }
 
@@ -91,7 +103,20 @@ export function useCmsLoginVM() {
     setError(null);
 
     try {
-      await useCase.verifyMfa(challengeToken, code);
+      const payload = await useCase.verifyMfa(challengeToken, code);
+
+      if (payload.password_rotation_warning) {
+        const days = payload.password_age_days ?? null;
+        const extra =
+          days !== null
+            ? ` (actual: ${days} días desde el último cambio)`
+            : '';
+        window.alert(
+          `Tu contraseña tiene más de 180 días.${extra}\n\n` +
+            'Por favor, cámbiala desde la opción "Cambiar contraseña" en el CMS.',
+        );
+      }
+
       resetMfaState();
       onSuccess();
     } catch (err: any) {
@@ -115,7 +140,7 @@ export function useCmsLoginVM() {
     setPassword,
     setShowPwd,
     setMfaCode,
-    submitLogin,  
-    submitMfa,     
+    submitLogin,
+    submitMfa,
   };
 }

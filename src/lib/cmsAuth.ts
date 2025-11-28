@@ -6,14 +6,16 @@ export type CmsUser = {
   username: string;
   email: string | null;
   is_staff: boolean;
-  is_superuser: boolean; // si tu backend no lo manda, lo fijamos en false
-  can_manage_mfa?: boolean; // NUEVO: permiso para gestionar MFA de otros usuarios
+  is_superuser: boolean; // Si el backend no lo manda, lo fijamos en false
+  can_manage_mfa?: boolean; // Permiso para gestionar MFA de otros usuarios
 };
 
 export type CmsAuthPayload = {
   access: string;
   refresh: string;
   user: CmsUser;
+  password_rotation_warning?: boolean; 
+  password_age_days?: number | null;
 };
 
 const USER_KEY = "cms_user";

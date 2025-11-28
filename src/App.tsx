@@ -14,6 +14,7 @@ import Cotizado from './screens/cotizado/Cotizado';
 import NotFound from './screens/NotFound';
 import MfaSetup from "./screens/CMS/mfa/MfaSetup";
 import MfaAdmin from "./screens/CMS/mfa/MfaAdmin";
+import ChangePassword from "./screens/CMS/account/ChangePassword";
 
 import WhatsAppWidget, { type WhatsAppContact } from './components/layout/WhatsAppWidget/WhatsAppWidget';
 
@@ -63,6 +64,7 @@ function App() {
         <Route path="/cms/productos" element={<CmsProductos />} />
         <Route path="/cms/mfa" element={<MfaSetup />} />
         <Route path="/cms/mfa-admin" element={<MfaAdmin />} />
+        <Route path="/cms/change-password" element={<ChangePassword />} />
       </Routes>
 
       {showWidget && (
