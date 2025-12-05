@@ -15,6 +15,7 @@ import NotFound from './screens/NotFound';
 import MfaSetup from "./screens/CMS/mfa/MfaSetup";
 import MfaAdmin from "./screens/CMS/mfa/MfaAdmin";
 import ChangePassword from "./screens/CMS/account/ChangePassword";
+import SetupAdmin from './screens/CMS/setup/SetupAdmin';
 
 import WhatsAppWidget, { type WhatsAppContact } from './components/layout/WhatsAppWidget/WhatsAppWidget';
 
@@ -60,6 +61,7 @@ function App() {
         </Route>
 
         {/* CMS */}
+        <Route path="/setup/:token" element={<SetupAdmin />} />
         <Route path="/cms/login" element={<CmsLogin />} />
         <Route path="/cms/productos" element={<CmsProductos />} />
         <Route path="/cms/mfa" element={<MfaSetup />} />
