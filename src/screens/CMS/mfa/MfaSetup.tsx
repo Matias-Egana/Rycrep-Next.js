@@ -24,7 +24,7 @@ export default function MfaSetup() {
   const [error, setError] = useState<string | null>(null);
   const [canSetup, setCanSetup] = useState(false); // sólo true cuando pasa todas las validaciones
 
-  // 🔒 Guardar ruta: sólo permitimos ver /cms/mfa si:
+  //  Guardar ruta: sólo permitimos ver /cms/mfa si:
   // - hay sesión
   // - NO tiene MFA activado todavía
   // - vienes desde el login (state.fromLogin === true)
