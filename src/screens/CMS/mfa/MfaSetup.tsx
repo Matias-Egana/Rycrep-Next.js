@@ -168,7 +168,7 @@ export default function MfaSetup() {
   return (
     <div className="cms-login">
       <div className="card">
-        <h1 className="title">Configura tu segundo factor (MFA).</h1>
+        <h1 className="title">Configura tu segundo factor (MFA)</h1>
         <p className="description">
           Para proteger el acceso al panel, debes habilitar un segundo factor de
           autenticación usando una app como Google Authenticator o Authy.
@@ -240,8 +240,7 @@ export default function MfaSetup() {
         {error && <p className="error">{error}</p>}
 
         <p className="footer-note" style={{ marginTop: "1rem" }}>
-          Autenticación reforzada para usuarios <code>auth_user</code> (
-          <code>is_staff</code>).
+          Acceso protegido con autenticación en dos pasos.
         </p>
       </div>
     </div>

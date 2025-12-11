@@ -53,9 +53,9 @@ export default function CmsLogin() {
   return (
     <div className="cms-login">
       <div className="card">
-        <h1 className="title">Acceso al panel de administración.</h1>
+        <h1 className="title">Acceso al panel de administración</h1>
         <p className="description">
-          Autenticado contra usuarios <code>auth_user</code> con permiso <code>is_staff</code>.
+          Ingresa tu usuario y contraseña para acceder al panel de administración.
         </p>
 
         {/* Paso 1: usuario + contraseña */}
@@ -116,12 +116,15 @@ export default function CmsLogin() {
               inputMode="numeric"
               maxLength={6}
             />
-          {/* 🔒 Importante: esto NO llama al endpoint de reset */}
-          <p className="help-text" style={{ marginTop: '0.75rem', fontSize: '0.85rem' }}>
-            ¿No puedes acceder a tu app de autenticación? 
-            <br />
-            Ponte en contacto con un administrador para que resetee tu MFA desde el panel de control.
-          </p>
+            {/* 🔒 Importante: esto NO llama al endpoint de reset */}
+            <p
+              className="help-text"
+              style={{ marginTop: '0.75rem', fontSize: '0.85rem' }}
+            >
+              ¿No puedes acceder a tu app de autenticación?
+              <br />
+              Ponte en contacto con un administrador para que resetee tu MFA desde el panel de control.
+            </p>
           </>
         )}
 
@@ -141,8 +144,9 @@ export default function CmsLogin() {
             : 'Ingresar'}
         </button>
 
+        {/* Nota de pie neutra, sin detalles internos */}
         <p className="footer-note">
-          Autenticado contra usuarios <code>auth_user</code> (is_staff).
+          Acceso reservado a personal autorizado.
         </p>
       </div>
     </div>

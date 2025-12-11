@@ -64,7 +64,7 @@ export default function MfaAdmin() {
       }
 
       setMessage(
-        `MFA reseteado para el usuario ${
+        `La autenticación en dos pasos se ha reseteado para el usuario ${
           data.username || trimmed
         } (ID ${data.userId}).`
       );
@@ -86,15 +86,14 @@ export default function MfaAdmin() {
   return (
     <div className="cms-login">
       <div className="card">
-        <h1 className="title">Gestión de MFA</h1>
+        <h1 className="title">Gestión de autenticación en dos pasos (MFA)</h1>
         <p className="description">
           Desde aquí puedes resetear la autenticación en dos pasos de otros
-          usuarios <code>staff</code> cuando pierden acceso a su app de
-          autenticación.
+          usuarios cuando pierden acceso a su aplicación de autenticación.
         </p>
 
         <label className="label" htmlFor="username">
-          Nombre de usuario (auth_user.username)
+          Nombre de usuario
         </label>
         <input
           id="username"
@@ -131,8 +130,16 @@ export default function MfaAdmin() {
           </button>
         </div>
 
-        {message && <p className="success" style={{ marginTop: "1rem" }}>{message}</p>}
-        {error && <p className="error" style={{ marginTop: "0.5rem" }}>{error}</p>}
+        {message && (
+          <p className="success" style={{ marginTop: "1rem" }}>
+            {message}
+          </p>
+        )}
+        {error && (
+          <p className="error" style={{ marginTop: "0.5rem" }}>
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );
