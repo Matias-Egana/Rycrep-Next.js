@@ -57,7 +57,7 @@ const Cotizado: React.FC = () => {
         throw new Error(errorData.detail || 'Error desconocido del servidor');
       }
 
-      setStatus('✅ Cotización enviada correctamente.');
+      setStatus('✅ Solicitud enviada correctamente.');
       setFormData({
         nombre: '',
         apellidos: '',
@@ -116,7 +116,7 @@ const Cotizado: React.FC = () => {
             <option value="Magallanes">Magallanes</option>
           </select>
           <textarea name="mensaje" placeholder="Mensaje" className="fullWidth" value={formData.mensaje} onChange={handleChange} required />
-          <button type="submit" className="button" disabled={loading}>{loading ? 'Enviando...' : 'Enviar Cotización'}</button>
+          <button type="submit" className="button" disabled={loading}>{loading ? 'Enviando...' : 'Solicitar Cotización'}</button>
         </form>
 
         {status && <p style={{ marginTop: '1rem' }}>{status}</p>}
