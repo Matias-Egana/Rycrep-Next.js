@@ -3,11 +3,11 @@ import styles from './CategoryGrid.module.css';
 import { Link } from 'react-router-dom';
 
 import motoresImg from '../../assets/CategoryGrid/motores.webp';
-import alternadorImg from '../../assets/CategoryGrid/alternadores.jpeg';
-import bateriasImg from '../../assets/CategoryGrid/baterias.png';
-import lucesImg from '../../assets/CategoryGrid/luces.png';
-import fusiblesImg from '../../assets/CategoryGrid/fusibles.png';
-import seguridadImg from '../../assets/CategoryGrid/seguridad.png';
+import alternadorImg from '../../assets/CategoryGrid/alternadores.webp';
+import bateriasImg from '../../assets/CategoryGrid/baterias.webp';
+import lucesImg from '../../assets/CategoryGrid/luces.webp';
+import fusiblesImg from '../../assets/CategoryGrid/fusibles.webp';
+import seguridadImg from '../../assets/CategoryGrid/seguridad.webp';
 
 const normalizeCategory = (cat: string) => {
   return cat

@@ -6,19 +6,19 @@ import Servicios from './servicios';
 /* =========================
    ASSETS
 ========================= */
-import komatsuLogo from '../../assets/logos/komatsu.png';
-import sqmLogo from '../../assets/logos/sqm.png';
-import codelcoLogo from '../../assets/logos/codelco.png';
-import bhpLogo from '../../assets/logos/bhp.png';
-import amLogo from '../../assets/logos/antofagasta-minerals.png';
-import collahuasiLogo from '../../assets/logos/collahuasi.jpg';
-import cumminsLogo from '../../assets/logos/cummins.png';
-import aesgener from '../../assets/logos/aesgener.png';
+import komatsuLogo from '../../assets/logos/komatsu.webp';
+import sqmLogo from '../../assets/logos/sqm.webp';
+import codelcoLogo from '../../assets/logos/codelco.webp';
+import bhpLogo from '../../assets/logos/bhp.webp';
+import amLogo from '../../assets/logos/antofagasta-minerals.webp';
+import collahuasiLogo from '../../assets/logos/collahuasi.webp';
+import cumminsLogo from '../../assets/logos/cummins.webp';
+import aesgener from '../../assets/logos/aesgener.webp';
 
-import slide1 from '../../assets/hero/Niehoff & Co.png';
-import slide2 from '../../assets/hero/slide1.png';
-import slide3 from '../../assets/hero/slide2.png';
-import slide4 from '../../assets/hero/slide3.png';
+import slide1 from '../../assets/hero/Niehoff & Co.webp';
+import slide2 from '../../assets/hero/slide1.webp';
+import slide3 from '../../assets/hero/slide2.webp';
+import slide4 from '../../assets/hero/slide3.webp';
 
 /* =========================
    DATA

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './footer.css';
-import seals from'../../assets/Certificaciones/certificaciones.png'
+import seals from'../../assets/Certificaciones/certificaciones.webp'
 /**
  * TODO: Si tienes tu imagen de sellos, descomenta e importa:
  * import seals from '../../assets/sellos-certificaciones.png';

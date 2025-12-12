@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "./representaciones.css";
 
 // Importa tus imágenes
-import logo from "../../assets/representacion/logo_ce.png";
-import buildingBg from "../../assets/representacion/niehoff.jpg";
-import alt1 from "../../assets/representacion/alternadores/alternador1.png";
-import alt2 from "../../assets/representacion/alternadores/alternador2.png";
-import alt3 from "../../assets/representacion/alternadores/alternador3.png";
+import logo from "../../assets/representacion/logo_ce.webp";
+import buildingBg from "../../assets/representacion/niehoff.webp";
+import alt1 from "../../assets/representacion/alternadores/alternador1.webp";
+import alt2 from "../../assets/representacion/alternadores/alternador2.webp";
+import alt3 from "../../assets/representacion/alternadores/alternador3.webp";
 
 // Nuevo componente: botón "Ver video" que abre YouTube
 import YouTubeAutoplayVideo from "../../components/representaciones/YoutubeAutoplayVideo";

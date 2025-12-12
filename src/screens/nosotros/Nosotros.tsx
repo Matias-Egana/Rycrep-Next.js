@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import './nosotros.css';
 
-import teamPhoto from '../../assets/nosotros/portada.jpeg';   // NO se mueve
-import teamPhoto2 from '../../assets/nosotros/ceo2.jpg';
+import teamPhoto from '../../assets/nosotros/portada.webp';   // NO se mueve
+import teamPhoto2 from '../../assets/nosotros/ceo2.webp';
 
 const Nosotros: React.FC = () => {
   // Animación: marca como visible cada item al entrar en viewport

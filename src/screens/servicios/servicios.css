@@ -56,25 +56,25 @@
 
 /* Fondos */
 .electronica {
-  background-image: url('../../assets/servicios/electronico1.png');
+  background-image: url('../../assets/servicios/electronico1.webp');
   align-items: flex-start;   
   text-align: left;
 }
 
 .electrico {
-  background-image: url('../../assets/servicios/electronico2.png');
+  background-image: url('../../assets/servicios/electronico2.webp');
   align-items: flex-end;     
   text-align: right;
 }
 
 .electromecanica {
-  background-image: url('../../assets/servicios/electromecanica.jpeg');
+  background-image: url('../../assets/servicios/electromecanica.webp');
   align-items: flex-start;   
   text-align: left;
 }
 
 .otrosServicios {
-  background-image: url('../../assets/servicios/otrosservicios.jpg');
+  background-image: url('../../assets/servicios/otrosservicios.webp');
   align-items: flex-end;     
   text-align: right;
 }

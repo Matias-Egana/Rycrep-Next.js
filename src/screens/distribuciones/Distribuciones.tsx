@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 import "./Distribuciones.css";
 
 // Logos
-import bosch from "../../assets/distribuciones/bosch.jpg";
-import delcoremy from "../../assets/distribuciones/delcoremy.jpg";
-import denso from "../../assets/distribuciones/denso.jpg";
-import leece from "../../assets/distribuciones/leece.png";
-import niehoff from "../../assets/distribuciones/niehoff.png";
-import nikko from "../../assets/distribuciones/nikko.jpg";
-import prelub from "../../assets/distribuciones/prelub.png";
-import sawafuji from "../../assets/distribuciones/sawafuji.jpg";
-import tdi from "../../assets/distribuciones/tdi.jpg";
-import bussman from "../../assets/distribuciones/bussman.png";
+import bosch from "../../assets/distribuciones/bosch.webp";
+import delcoremy from "../../assets/distribuciones/delcoremy.webp";
+import denso from "../../assets/distribuciones/denso.webp";
+import leece from "../../assets/distribuciones/leece.webp";
+import niehoff from "../../assets/distribuciones/niehoff.webp";
+import nikko from "../../assets/distribuciones/nikko.webp";
+import prelub from "../../assets/distribuciones/prelub.webp";
+import sawafuji from "../../assets/distribuciones/sawafuji.webp";
+import tdi from "../../assets/distribuciones/tdi.webp";
+import bussman from "../../assets/distribuciones/bussman.webp";
 
 type Brand = {
   key: string;
