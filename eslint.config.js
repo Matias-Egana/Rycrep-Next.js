@@ -11,8 +11,11 @@ export default tseslint.config([
     files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
+      
+      ...tseslint.configs.recommended,
+
+      reactHooks.configs.flat.recommended,
+
       reactRefresh.configs.vite,
     ],
     languageOptions: {

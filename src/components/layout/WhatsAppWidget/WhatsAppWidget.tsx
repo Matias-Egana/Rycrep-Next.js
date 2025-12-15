@@ -103,7 +103,7 @@ export default function WhatsAppWidget({
     }
     // Sin datos: no renderizamos nada y avisamos en consola
     if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
+       
       console.warn(
         "[WhatsAppWidget] Debes pasar `phone` o `contacts` con al menos un contacto."
       );
