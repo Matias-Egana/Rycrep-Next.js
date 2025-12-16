@@ -1,5 +1,5 @@
 // src/screens/CMS/setup/SetupAdmin.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import "../login/Login.css";
@@ -23,7 +23,12 @@ type ApiResponse = {
   success?: boolean;
   message?: string;
   error?: string;
+  redirectTo?: string;
 };
+
+type ValidateResponse =
+  | { valid: true; expiresAt?: string }
+  | { valid: false; reason?: string; redirectTo?: string };
 
 export default function SetupAdmin() {
   const { token } = useParams<{ token: string }>();
@@ -34,18 +39,66 @@ export default function SetupAdmin() {
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [validating, setValidating] = useState(true);
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // 👇 nuevo: token del captcha
+  // token del captcha
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
-  if (!token) {
+  // ✅ NUEVO: validar token apenas entra a /setup/:token
+  useEffect(() => {
+    if (!token) {
+      // No mostramos nada: ruta inválida -> INICIO
+      nav("/", { replace: true });
+      return;
+    }
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch(`${BACKEND_BASE}/api/setup/validate/${token}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data: ValidateResponse = await res.json().catch(() => ({
+          valid: false,
+        }));
+
+        if (cancelled) return;
+
+        if (!res.ok || !data.valid) {
+          // Token inválido / admin ya existe -> INICIO
+          const redirectTo =
+            (!data.valid && data.redirectTo) ? data.redirectTo : "/";
+
+          // usamos location para asegurarnos de salir sí o sí de /setup/:token
+          window.location.replace(redirectTo);
+          return;
+        }
+
+        setValidating(false);
+      } catch (e) {
+        // Si no podemos confirmar validez, por seguridad tratamos como inválido -> INICIO
+        window.location.replace("/");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token, nav]);
+
+  // Mientras validamos, no mostramos el formulario
+  if (validating) {
     return (
       <div className="cms-login">
         <div className="cms-card">
           <h1 className="title">Configuración inicial</h1>
-          <p className="subtitle">Token inválido en la URL.</p>
+          <p className="subtitle">Validando enlace de configuración...</p>
         </div>
       </div>
     );
@@ -56,12 +109,16 @@ export default function SetupAdmin() {
     setError(null);
     setSuccess(null);
 
+    if (!token) {
+      window.location.replace("/");
+      return;
+    }
+
     if (!username || !email || !password) {
       setError("Debes completar todos los campos.");
       return;
     }
 
-    // 👇 validación de captcha en el frontend
     if (!captchaToken) {
       setError("Debes completar el captcha.");
       return;
@@ -75,26 +132,33 @@ export default function SetupAdmin() {
         headers: {
           "Content-Type": "application/json",
         },
-        // 👇 enviamos captchaToken al backend
         body: JSON.stringify({ username, email, password, captchaToken }),
       });
 
       const data: ApiResponse = await res.json().catch(() => ({} as any));
 
       if (!res.ok) {
-        // Mensajes más claros según status
+        // ✅ NUEVO: si backend trae redirectTo, mandamos al INICIO automáticamente
+        if (data.redirectTo) {
+          window.location.replace(data.redirectTo);
+          return;
+        }
+
         if (res.status === 410) {
           setError(
-            data.error ??
-              "Este enlace de configuración ya fue usado o expiró."
+            data.error ?? "Este enlace de configuración ya fue usado o expiró."
           );
+          // Por requerimiento, en caso inválido no debe quedarse aquí:
+          setTimeout(() => nav("/", { replace: true }), 800);
         } else if (res.status === 404) {
           setError(data.error ?? "Token inválido.");
+          setTimeout(() => nav("/", { replace: true }), 800);
         } else if (res.status === 429) {
           setError(
             data.error ??
               "Demasiados intentos. El token ha sido bloqueado por seguridad."
           );
+          setTimeout(() => nav("/", { replace: true }), 800);
         } else {
           setError(
             data.error ??
@@ -106,13 +170,13 @@ export default function SetupAdmin() {
       }
 
       setSuccess(data.message ?? "Administrador creado correctamente.");
-      // Opcional: redirigir al login del CMS
       setTimeout(() => {
-        nav("/cms/login");
-      }, 2000);
+        nav("/cms/login", { replace: true });
+      }, 1200);
     } catch (err) {
       console.error(err);
-      setError("Error de conexión con el servidor.");
+      // Por seguridad: si no hay conexión, no permitimos seguir en setup
+      window.location.replace("/");
     } finally {
       setLoading(false);
     }
@@ -162,11 +226,10 @@ export default function SetupAdmin() {
             autoComplete="new-password"
           />
 
-          {/*  Captcha obligatorio antes de enviar */}
           <div style={{ marginTop: "16px", marginBottom: "8px" }}>
             <ReCAPTCHA
               sitekey={RECAPTCHA_SITE_KEY ?? ""}
-              onChange={(token) => setCaptchaToken(token)}
+              onChange={(t) => setCaptchaToken(t)}
               onExpired={() => setCaptchaToken(null)}
             />
           </div>
