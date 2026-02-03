@@ -3,12 +3,15 @@ import { makeGetProductsUseCase } from "../domain/usecases/GetProductsUseCase";
 import { makeGetProductByCodeUseCase } from "../domain/usecases/GetProductByCodeUseCase";
 import type { Product } from "../domain/entities/Product";
 import type { RycrepProduct } from "../domain/entities/RycrepProduct";
+import { resolveProductImageUrl } from "../lib/resolveProductImageUrl";
 
 const repo = new ProductRepository();
 const listUC = makeGetProductsUseCase(repo);
 const detailUC = makeGetProductByCodeUseCase(repo);
 
 function toUi(p: RycrepProduct): Product {
+  const img = resolveProductImageUrl(p.image_url);
+
   return {
     activated: true,
     product_code: p.model_code || String(p.id),
@@ -18,7 +21,7 @@ function toUi(p: RycrepProduct): Product {
     price: p.price ?? null,
     stock: 99,
     description: p.description ?? "",
-    images: p.image_url ? [p.image_url] : [],
+    images: img ? [img] : [],
     discountPrice: p.oferta && p.price != null ? p.price : undefined,
     discountPercentage: undefined,
     oferta: p.oferta,
@@ -55,4 +58,4 @@ export async function fetchProductByCode(code: string): Promise<Product | null> 
   return p ? toUi(p) : null;
 }
 
-export default fetchProducts; // (sigue export default para compatibilidad si la usas en otros lados)
+export default fetchProducts; // compatibilidad

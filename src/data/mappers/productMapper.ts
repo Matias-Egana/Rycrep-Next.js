@@ -1,5 +1,6 @@
 import type { ProductDTO } from "../dto/ProductDTO";
 import type { RycrepProduct } from "../../domain/entities/RycrepProduct";
+import { resolveMediaUrl } from "../../lib/media";
 
 export function dtoToDomain(dto: ProductDTO): RycrepProduct {
   return {
@@ -12,7 +13,9 @@ export function dtoToDomain(dto: ProductDTO): RycrepProduct {
     oem_code: dto.oem_code || "",
     series: dto.series || "",
 
-    image_url: dto.image_url || (dto.image ?? "") || null,
+    // En BD puede venir relativa (ej: /data/products/1.jpg) o absoluta.
+    // La UI siempre debe recibir una URL absoluta lista para <img src>
+    image_url: resolveMediaUrl(dto.image_url || (dto.image ?? "") || null),
 
     oferta: Boolean(dto.oferta),
     price: dto.price,

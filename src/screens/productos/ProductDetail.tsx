@@ -173,14 +173,18 @@ const ProductDetail: React.FC = () => {
             </div>
           </>
         ) : (
-          <img
-            ref={imageRef}
-            src={(product.images && product.images[0]) || defaultImage}
-            alt={product.name}
-            className={styles.productImage}
-            onMouseMove={handleImageZoom}
-            onMouseLeave={resetImageZoom}
-          />
+        <img
+          ref={imageRef}
+          src={(product.images && product.images[0]) || defaultImage}
+          alt={product.name}
+          className={styles.productImage}
+          onMouseMove={handleImageZoom}
+          onMouseLeave={resetImageZoom}
+          crossOrigin="anonymous"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = defaultImage;
+          }}
+        />
         )}
       </div>
 

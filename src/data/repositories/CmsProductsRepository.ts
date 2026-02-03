@@ -1,4 +1,5 @@
 import { getCsrfToken } from '../../lib/csrf';
+import { resolveMediaUrl } from '../../lib/media';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
@@ -84,7 +85,8 @@ export class CmsProductsRepository {
       category: String(p.category ?? ''),
       brand: String(p.brand ?? ''),
       image: p.image ?? null,
-      image_url: (p.image_url ?? p.image) ?? null,
+      // Normaliza a URL absoluta para que el <img> funcione en prod
+      image_url: resolveMediaUrl((p.image_url ?? p.image) ?? null),
       price: p.price == null ? null : Number(p.price),
       oferta: Boolean(p.oferta),
 
@@ -123,23 +125,25 @@ export class CmsProductsRepository {
     return { total, items, page, limit };
   }
 
-    async update(id: number, patch: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
-      const csrfToken = await getCsrfToken();
+  async update(id: number, patch: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
+    const csrfToken = await getCsrfToken();
 
-      const res = await fetch(`${API_BASE}/cms/products/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken,
-        },
-        body: JSON.stringify(patch),
-        credentials: 'include',
-      });
+    const res = await fetch(`${API_BASE}/cms/products/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken,
+      },
+      body: JSON.stringify(patch),
+      credentials: 'include',
+    });
+
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
     if (!res.ok) {
       const txt = await res.text().catch(() => null);
       throw new Error(txt || 'No se pudo actualizar el producto.');
     }
+
     const p = await res.json();
     return {
       id: Number(p.id),
@@ -147,7 +151,7 @@ export class CmsProductsRepository {
       category: String(p.category ?? ''),
       brand: String(p.brand ?? ''),
       image: p.image ?? null,
-      image_url: (p.image_url ?? p.image) ?? null,
+      image_url: resolveMediaUrl((p.image_url ?? p.image) ?? null),
       price: p.price == null ? null : Number(p.price),
       oferta: Boolean(p.oferta),
 
@@ -167,23 +171,25 @@ export class CmsProductsRepository {
     };
   }
 
- async create(payload: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
-  const csrfToken = await getCsrfToken();
+  async create(payload: Partial<Pick<CmsProduct, any>>): Promise<CmsProduct> {
+    const csrfToken = await getCsrfToken();
 
-  const res = await fetch(`${API_BASE}/cms/products`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': csrfToken,
-    },
-    body: JSON.stringify(payload),
-    credentials: 'include',
-  });
+    const res = await fetch(`${API_BASE}/cms/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken,
+      },
+      body: JSON.stringify(payload),
+      credentials: 'include',
+    });
+
     if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
     if (!res.ok) {
       const txt = await res.text().catch(() => null);
       throw new Error(txt || 'No se pudo crear el producto.');
     }
+
     const p = await res.json();
     return {
       id: Number(p.id),
@@ -191,7 +197,7 @@ export class CmsProductsRepository {
       category: String(p.category ?? ''),
       brand: String(p.brand ?? ''),
       image: p.image ?? null,
-      image_url: (p.image_url ?? p.image) ?? null,
+      image_url: resolveMediaUrl((p.image_url ?? p.image) ?? null),
       price: p.price == null ? null : Number(p.price),
       oferta: Boolean(p.oferta),
 
@@ -210,4 +216,48 @@ export class CmsProductsRepository {
       attributes: p.attributes ?? null,
     };
   }
+
+  /**
+   * Sube una imagen al backend y retorna el path relativo (/data/products/...)
+   * listo para guardar en BD.
+   *
+   * Importante: usa JSON (data URL base64) para evitar depender de multipart en hosting.
+   */
+  async uploadProductImage(file: File): Promise<{ path: string; filename: string }> {
+    const csrfToken = await getCsrfToken();
+
+    const dataUrl: string = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ""));
+      reader.onerror = () => reject(reader.error || new Error('No se pudo leer el archivo.'));
+      reader.readAsDataURL(file);
+    });
+
+    const res = await fetch(`${API_BASE}/cms/media/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken,
+      },
+      body: JSON.stringify({
+        dataUrl,
+        filename: file.name,
+      }),
+      credentials: 'include',
+    });
+
+    if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
+
+    const data = await res.json().catch(() => null as any);
+    if (!res.ok) {
+      const msg = data?.detail || data?.message || 'No se pudo subir la imagen.';
+      throw new Error(String(msg));
+    }
+
+    return {
+      path: String(data.path || ''),
+      filename: String(data.filename || ''),
+    };
+  }
+
 }

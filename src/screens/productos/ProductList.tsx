@@ -338,12 +338,15 @@ const ProductListPage: React.FC = () => {
                   aria-label={`Ver ${product.name}`}
                 >
                   {onSale && <span className={styles.offerBadge}>OFERTA</span>}
-
                   <img
                     src={(product.images && product.images[0]) || defaultImage}
                     alt={product.name}
                     className={styles.productImage}
                     loading="lazy"
+                    crossOrigin="anonymous"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = defaultImage;
+                    }}
                   />
 
                   <h3 className={styles.productName}>{product.name}</h3>

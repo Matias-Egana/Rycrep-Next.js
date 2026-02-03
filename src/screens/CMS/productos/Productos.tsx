@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import CmsNavbar from '../../../components/cms/CmsNavbar';
 import { cmsAuth } from '../../../lib/cmsAuth';
 import { CmsProductsRepository, type CmsProduct } from '../../../data/repositories/CmsProductsRepository';
+import { resolveProductImageUrl, normalizeProductImageUrlForDb } from '../../../lib/resolveProductImageUrl';
 import './Productos.css';
 
 const repo = new CmsProductsRepository();
@@ -45,6 +46,8 @@ export default function Productos() {
   // NEW: creación (hemos añadido campos avanzados aquí)
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [uploadingCreateImage, setUploadingCreateImage] = useState(false);
+  const [uploadingEditFor, setUploadingEditFor] = useState<number | null>(null);
   const [newDraft, setNewDraft] = useState<Partial<CmsProduct>>({
     name: '',
     category: '',
@@ -144,7 +147,7 @@ export default function Productos() {
         name: draft.name,
         category: draft.category,
         brand: draft.brand,
-        image_url: (draft.image_url ?? '')?.toString().trim(),
+        image_url: normalizeProductImageUrlForDb((draft.image_url ?? '')?.toString().trim()),
         price: Number(draft.price ?? 0),
         oferta: !!draft.oferta,
       };
@@ -155,6 +158,46 @@ export default function Productos() {
       setErr(e?.message || 'No se pudo actualizar.');
     } finally {
       setSaving(false);
+    }
+  };
+
+
+
+  const uploadImageIntoNewDraft = async (file: File) => {
+    if (!file) return;
+    try {
+      setUploadingCreateImage(true);
+      setErr(null);
+      const { path } = await repo.uploadProductImage(file);
+      setNewDraft((d) => ({ ...d, image_url: path }));
+    } catch (e: any) {
+      if (e?.message === 'UNAUTHORIZED') {
+        cmsAuth.clear();
+        nav('/cms/login', { replace: true });
+        return;
+      }
+      setErr(e?.message || 'No se pudo subir la imagen.');
+    } finally {
+      setUploadingCreateImage(false);
+    }
+  };
+
+  const uploadImageIntoEditDraft = async (file: File) => {
+    if (!file || editingId == null) return;
+    try {
+      setUploadingEditFor(editingId);
+      setErr(null);
+      const { path } = await repo.uploadProductImage(file);
+      setDraft((d) => ({ ...d, image_url: path }));
+    } catch (e: any) {
+      if (e?.message === 'UNAUTHORIZED') {
+        cmsAuth.clear();
+        nav('/cms/login', { replace: true });
+        return;
+      }
+      setErr(e?.message || 'No se pudo subir la imagen.');
+    } finally {
+      setUploadingEditFor(null);
     }
   };
 
@@ -173,7 +216,7 @@ export default function Productos() {
         name: (newDraft.name ?? '').toString(),
         category: (newDraft.category ?? '').toString(),
         brand: (newDraft.brand ?? '').toString(),
-        image_url: (newDraft.image_url ?? '')?.toString() || undefined,
+        image_url: normalizeProductImageUrlForDb((newDraft.image_url ?? '')?.toString().trim()) || undefined,
         price: newDraft.price == null ? undefined : Number(newDraft.price),
         oferta: !!newDraft.oferta,
       };
@@ -324,11 +367,32 @@ export default function Productos() {
               />
               <input
                 className="cms-input"
-                placeholder="URL imagen"
+                placeholder="Imagen (nombre o /data/products/...)"
                 value={newDraft.image_url ?? ''}
                 onChange={(e) => setNewDraft(d => ({ ...d, image_url: e.target.value }))}
                 aria-label="URL de imagen"
               />
+
+              <div className="img-upload">
+                <label
+                  className={`cms-btn file-btn ${uploadingCreateImage || creating ? 'disabled' : ''}`}
+                  aria-disabled={uploadingCreateImage || creating}
+                  title="Subir imagen y guardar en /data/products"
+                >
+                  {uploadingCreateImage ? 'Subiendo…' : 'Subir imagen'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const f = e.currentTarget.files?.[0];
+                      e.currentTarget.value = '';
+                      if (f) uploadImageIntoNewDraft(f);
+                    }}
+                    disabled={uploadingCreateImage || creating}
+                  />
+                </label>
+                <div className="small">Se guardará en <code>/data/products</code></div>
+              </div>
               <input
                 className="cms-input"
                 type="number"
@@ -444,7 +508,8 @@ export default function Productos() {
 
               {!loading && (rows ?? []).map(p => {
                 const isEdit = editingId === p.id;
-                const img = (isEdit ? draft.image_url : (p.image_url || '')) || '';
+                const imgRaw = (isEdit ? draft.image_url : (p.image_url || '')) || '';
+                const img = resolveProductImageUrl(imgRaw) || '';
                 const oferta = isEdit ? !!draft.oferta : !!p.oferta;
 
                 return (
@@ -474,7 +539,7 @@ export default function Productos() {
                           <input
                             ref={urlInputRef}
                             className="cms-input url-input"
-                            placeholder="https://…"
+                            placeholder="Imagen (nombre o /data/products/...)"
                             value={draft.image_url ?? ''}
                             onChange={(e) => setDraft(d => ({ ...d, image_url: e.target.value }))}
                             onKeyDown={onEditorKeyDown}
@@ -483,7 +548,7 @@ export default function Productos() {
                           {draft.image_url && (
                             <a
                               className="open-link"
-                              href={draft.image_url as string}
+                              href={img}
                               target="_blank"
                               rel="noopener noreferrer"
                               title="Abrir URL de imagen"
@@ -491,6 +556,27 @@ export default function Productos() {
                               ↗
                             </a>
                           )}
+
+                          <div className="img-upload-row">
+                            <label
+                              className={`cms-btn file-btn ${uploadingEditFor === p.id || saving ? 'disabled' : ''}`}
+                              aria-disabled={uploadingEditFor === p.id || saving}
+                              title="Subir imagen y luego guardar cambios"
+                            >
+                              {uploadingEditFor === p.id ? 'Subiendo…' : 'Subir'}
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const f = e.currentTarget.files?.[0];
+                                  e.currentTarget.value = '';
+                                  if (f) uploadImageIntoEditDraft(f);
+                                }}
+                                disabled={uploadingEditFor === p.id || saving}
+                              />
+                            </label>
+                            <span className="small">Después presiona “Guardar”</span>
+                          </div>
                         </div>
                       )}
                     </td>

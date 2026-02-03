@@ -9,7 +9,8 @@ export interface ProductDTO {
   series: string;
 
   image: string | null;
-  image_url: string;
+  // Puede venir null o relativa (ej: /data/products/1.jpg)
+  image_url: string | null;
 
   oferta: boolean;
   price: number | null;
