@@ -50,6 +50,10 @@ function parseNumber(value: unknown) {
   return Number.isFinite(numberValue) ? numberValue : 0;
 }
 
+function formatPrice(value: number) {
+  return value.toLocaleString("es-CL");
+}
+
 export function QuoteRequestForm() {
   const { cart, clearCart, removeFromCart, updateQuantity } = useCart();
   const [formData, setFormData] = useState<QuoteFormState>(initialForm);
@@ -271,7 +275,7 @@ export function QuoteRequestForm() {
                           className="w-24 rounded-xl border border-white/10 bg-white px-4 py-2 text-[#111827] outline-none transition focus:border-[#d62839]"
                         />
                         <div className="text-sm text-white/60">
-                          {product.price > 0 ? `Referencia: $${product.price.toLocaleString()}` : "Precio a consultar"}
+                          {product.price > 0 ? `Referencia: $${formatPrice(product.price)}` : "Precio a consultar"}
                         </div>
                       </div>
                     </div>

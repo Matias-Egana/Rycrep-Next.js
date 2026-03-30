@@ -1,5 +1,7 @@
+import { findProductByCode, listProducts } from "@/lib/server/products";
+
 type BackendProduct = {
-  id: number | string;
+  id: number | string | bigint;
   model_code?: string | null;
   name: string;
   category: string;
@@ -72,28 +74,12 @@ function getBrandFilterKey(value: string) {
   return brandAliasToKey[normalized] ?? toLookupKey(value);
 }
 
-function getApiBaseUrl() {
-  const base = process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL;
-  if (!base) throw new Error("Falta configurar API_BASE_URL o NEXT_PUBLIC_API_BASE_URL.");
-  return base.replace(/\/+$/, "");
-}
-
-function getMediaBaseUrl() {
-  const media =
-    process.env.MEDIA_BASE_URL?.trim() ??
-    process.env.NEXT_PUBLIC_MEDIA_BASE_URL?.trim() ??
-    process.env.VITE_MEDIA_BASE_URL?.trim();
-  if (media) return media.replace(/\/+$/, "");
-  return new URL(getApiBaseUrl()).origin;
-}
-
 function resolveImageUrl(imageUrl?: string | null) {
   const raw = String(imageUrl ?? "").trim();
   if (!raw) return null;
   if (/^https?:\/\//i.test(raw) || raw.startsWith("data:") || raw.startsWith("blob:")) return raw;
-  const mediaBaseUrl = getMediaBaseUrl();
-  if (raw.startsWith("/")) return `${mediaBaseUrl}${raw}`;
-  return `${mediaBaseUrl}/data/products/${raw}`;
+  if (raw.startsWith("/")) return raw;
+  return `/data/products/${raw}`;
 }
 
 function toCatalogProduct(product: BackendProduct): CatalogProduct {
@@ -111,24 +97,6 @@ function toCatalogProduct(product: BackendProduct): CatalogProduct {
   };
 }
 
-async function fetchProductsChunk(url: URL) {
-  const response = await fetch(url.toString(), {
-    headers: { Accept: "application/json" },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    throw new Error(`No fue posible obtener productos: ${response.status}`);
-  }
-
-  return (await response.json()) as {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: BackendProduct[];
-  };
-}
-
 export async function fetchCatalogPage(params: {
   page?: number;
   pageSize?: number;
@@ -136,34 +104,42 @@ export async function fetchCatalogPage(params: {
   search?: string;
   brand?: string;
 }) {
-  const baseUrl = getApiBaseUrl();
   const page = params.page ?? 1;
   const pageSize = params.pageSize ?? 10;
   const offset = Math.max(0, (page - 1) * pageSize);
   const brandSelected = params.brand && params.brand !== "all";
-  const makeUrl = (limit: number, chunkOffset: number) => {
-    const url = new URL(`${baseUrl}/products/`);
-    url.searchParams.set("limit", String(limit));
-    url.searchParams.set("offset", String(chunkOffset));
-    if (params.category && params.category !== "all") url.searchParams.set("category", params.category);
-    if (params.search?.trim()) url.searchParams.set("search", params.search.trim());
-    return url;
-  };
 
-  const json = await fetchProductsChunk(makeUrl(pageSize, offset));
+  const json = await listProducts({
+    limit: pageSize,
+    offset,
+    category: params.category && params.category !== "all" ? params.category as never : undefined,
+    search: params.search?.trim() || undefined,
+  });
 
-  let results = json.results.map(toCatalogProduct);
+  let results = json.results.map((product: unknown) => toCatalogProduct(product as BackendProduct));
 
   if (brandSelected) {
     const normalizedBrand = getBrandFilterKey(params.brand ?? "");
     const chunkSize = 100;
-    const firstChunk = await fetchProductsChunk(makeUrl(chunkSize, 0));
-    let aggregated = firstChunk.results.map(toCatalogProduct);
+    const firstChunk = await listProducts({
+      limit: chunkSize,
+      offset: 0,
+      category: params.category && params.category !== "all" ? params.category as never : undefined,
+      search: params.search?.trim() || undefined,
+    });
+    let aggregated = firstChunk.results.map((product: unknown) => toCatalogProduct(product as BackendProduct));
     const totalChunks = Math.ceil(firstChunk.count / chunkSize);
 
     for (let chunkIndex = 1; chunkIndex < totalChunks; chunkIndex += 1) {
-      const chunk = await fetchProductsChunk(makeUrl(chunkSize, chunkIndex * chunkSize));
-      aggregated = aggregated.concat(chunk.results.map(toCatalogProduct));
+      const chunk = await listProducts({
+        limit: chunkSize,
+        offset: chunkIndex * chunkSize,
+        category: params.category && params.category !== "all" ? params.category as never : undefined,
+        search: params.search?.trim() || undefined,
+      });
+      aggregated = aggregated.concat(
+        chunk.results.map((product: unknown) => toCatalogProduct(product as BackendProduct)),
+      );
     }
 
     results = aggregated.filter((product) => getBrandFilterKey(product.brand) === normalizedBrand);
@@ -177,22 +153,14 @@ export async function fetchCatalogPage(params: {
 
   return {
     count: json.count,
-    next: json.next,
-    previous: json.previous,
+    next: null,
+    previous: null,
     results,
   } satisfies CatalogResponse;
 }
 
 export async function fetchCatalogProduct(code: string) {
-  const baseUrl = getApiBaseUrl();
-  const response = await fetch(`${baseUrl}/products/${encodeURIComponent(code)}/`, {
-    headers: { Accept: "application/json" },
-    cache: "no-store",
-  });
-
-  if (response.status === 404) return null;
-  if (!response.ok) throw new Error(`No fue posible obtener el producto ${code}.`);
-
-  const json = (await response.json()) as BackendProduct;
-  return toCatalogProduct(json);
+  const product = await findProductByCode(code);
+  if (!product) return null;
+  return toCatalogProduct(product as unknown as BackendProduct);
 }

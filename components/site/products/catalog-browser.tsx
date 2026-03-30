@@ -40,6 +40,10 @@ const brands = [
   { value: "R&C", label: "R&C" },
 ];
 
+function formatPrice(value: number) {
+  return value.toLocaleString("es-CL");
+}
+
 function buildHref({
   pathname,
   searchParams,
@@ -190,7 +194,7 @@ export function CatalogBrowser({
                       <p className="text-sm font-semibold text-[#111827]">{product.code}</p>
                     </div>
                     {product.price !== null ? (
-                      <p className="text-base font-extrabold text-[#d62839]">${product.price.toLocaleString()}</p>
+                      <p className="text-base font-extrabold text-[#d62839]">${formatPrice(product.price)}</p>
                     ) : (
                       <p className="text-sm font-semibold text-[#263160]">Cotizar</p>
                     )}

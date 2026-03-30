@@ -8,6 +8,10 @@ type ProductDetailPageProps = {
   params: Promise<{ product_code: string }>;
 };
 
+function formatPrice(value: number) {
+  return value.toLocaleString("es-CL");
+}
+
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { product_code } = await params;
   const product = await fetchCatalogProduct(product_code);
@@ -45,7 +49,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
           <div className="mt-6">
             {product.price !== null ? (
-              <p className="text-3xl font-extrabold text-[#d62839]">${product.price.toLocaleString()}</p>
+              <p className="text-3xl font-extrabold text-[#d62839]">${formatPrice(product.price)}</p>
             ) : (
               <p className="text-xl font-bold text-[#263160]">Precio a consultar</p>
             )}

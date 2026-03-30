@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model auth_user {
+  id                    Int       @id @default(autoincrement())
+  password              String    @db.VarChar(128)
+  password_last_changed DateTime? @db.DateTime(6)
+  last_login            DateTime? @db.DateTime(6)
+  is_superuser          Boolean
+  username              String    @unique(map: "username") @db.VarChar(150)
+  first_name            String    @db.VarChar(150)
+  last_name             String    @db.VarChar(150)
+  email                 String    @db.VarChar(254)
+  is_staff              Boolean
+  is_active             Boolean
+  date_joined           DateTime  @db.DateTime(6)
+  cms_mfa               cms_mfa?
+}
+
+model cms_mfa {
+  id           Int       @id @default(autoincrement())
+  user_id      Int       @unique
+  secret       String    @db.VarChar(128)
+  enabled      Boolean   @default(false)
+  confirmed_at DateTime? @db.DateTime(6)
+  auth_user    auth_user @relation(fields: [user_id], references: [id])
+
+  @@map("cms_mfa")
+}
+
+model ErrorLog {
+  id        Int      @id @default(autoincrement())
+  level     String
+  message   String
+  stack     String?
+  context   Json?
+  createdAt DateTime @default(now())
+
+  @@map("error_log")
+}
+
+model products_product {
+  id                 BigInt   @id @default(autoincrement())
+  category           String   @db.VarChar(32)
+  image              String?  @db.VarChar(100)
+  image_url          String   @db.VarChar(200)
+  name               String   @db.VarChar(150)
+  description        String   @db.LongText
+  model_code         String   @db.VarChar(120)
+  voltage            String   @db.VarChar(50)
+  oem_code           String   @db.VarChar(120)
+  mounting_config    String   @db.VarChar(120)
+  regulator_options  String   @db.LongText
+  regulator_config   String   @db.LongText
+  color              String   @db.VarChar(50)
+  color_codes        Json?
+  oferta             Boolean
+  price              Decimal? @db.Decimal(12, 2)
+  created_at         DateTime @db.DateTime(6)
+  updated_at         DateTime @db.DateTime(6)
+  brand              String   @db.VarChar(50)
+  amp_rating         Int?     @db.UnsignedInt
+  applications       String   @db.LongText
+  attributes         Json?
+  beam_pattern       String   @db.VarChar(60)
+  c20_ah             Int?     @db.UnsignedInt
+  capacity_l         Decimal? @db.Decimal(6, 2)
+  cca                Int?     @db.UnsignedInt
+  depth_mm           Int?     @db.UnsignedInt
+  diameter_mm        Int?     @db.UnsignedInt
+  height_mm          Int?     @db.UnsignedInt
+  kelvin             Int?     @db.UnsignedInt
+  key_included       Boolean
+  lado_borne         String   @db.VarChar(20)
+  led_count          Int?     @db.UnsignedInt
+  length_mm          Int?     @db.UnsignedInt
+  lens_color         String   @db.VarChar(30)
+  life_hours         Int?     @db.UnsignedInt
+  norma_bci          String   @db.VarChar(40)
+  rc_min             Int?     @db.UnsignedInt
+  series             String   @db.VarChar(50)
+  thread_type        String   @db.VarChar(30)
+  tipo_tapa          String   @db.VarChar(20)
+  voltage_max        Int?     @db.UnsignedInt
+  voltage_min        Int?     @db.UnsignedInt
+  watt_rating        Int?     @db.UnsignedInt
+  width_mm           Int?     @db.UnsignedInt
+  with_license_light Boolean
+  measure            String   @db.VarChar(120)
+  output_amp         Decimal? @db.Decimal(6, 2)
+  weight_kg          Decimal? @db.Decimal(6, 3)
+}
+
+model setup_tokens {
+  id         Int       @id @default(autoincrement())
+  token      String    @unique @db.VarChar(64)
+  expires_at DateTime  @db.DateTime(6)
+  created_at DateTime  @default(now()) @db.DateTime(6)
+  used_at    DateTime? @db.DateTime(6)
+  attempts   Int       @default(0)
+
+  @@map("setup_tokens")
+}

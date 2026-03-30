@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import {
+  contactBodySchema,
+  sanitizeContactData,
+  validateContactData,
+} from "@/lib/server/public-validation";
+import { sendContactEmails } from "@/lib/server/public-mail";
 
-const contactSchema = z.object({
-  nombre: z.string().trim().min(1),
-  apellidos: z.string().trim().min(1),
-  email: z.string().trim().email(),
-  telefono: z.string().trim().min(1),
-  empresa: z.string().trim().optional(),
-  ciudad: z.string().trim().optional(),
-  region: z.string().trim().optional(),
+const contactSchema = contactBodySchema.extend({
   mensaje: z.string().trim().min(1),
 });
 
@@ -16,45 +15,16 @@ export async function POST(request: Request) {
   try {
     const json = await request.json();
     const payload = contactSchema.parse(json);
-    const apiBaseUrl = process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL;
+    const validationErrors = validateContactData(payload);
 
-    if (!apiBaseUrl) {
+    if (validationErrors.length > 0) {
       return NextResponse.json(
-        { message: "Falta configurar API_BASE_URL o NEXT_PUBLIC_API_BASE_URL." },
-        { status: 500 },
+        { message: "Datos invalidos", errors: validationErrors },
+        { status: 400 },
       );
     }
 
-    const response = await fetch(`${apiBaseUrl}/send-contacto/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      let backendMessage = "El backend rechazo la solicitud de contacto.";
-
-      try {
-        const rawText = await response.text();
-        try {
-          const errorJson = JSON.parse(rawText) as { detail?: string; message?: string };
-          backendMessage = errorJson.detail || errorJson.message || backendMessage;
-        } catch {
-          if (rawText.trim()) backendMessage = rawText.trim();
-        }
-      } catch {
-        // Keep fallback message when backend response is not JSON.
-      }
-
-      if (response.status === 429) {
-        backendMessage = "Demasiados intentos seguidos. Espera un momento antes de volver a enviar el formulario.";
-      }
-
-      return NextResponse.json({ message: backendMessage }, { status: response.status });
-    }
+    await sendContactEmails(payload);
 
     return NextResponse.json({ ok: true });
   } catch (error) {
@@ -67,9 +37,13 @@ export async function POST(request: Request) {
       );
     }
 
+    console.error("Error al enviar correo de contacto.", error, {
+      endpoint: "/api/contact",
+    });
+
     return NextResponse.json(
-      { message: "No fue posible procesar el formulario de contacto." },
-      { status: 400 },
+      { message: "Error al enviar correo." },
+      { status: 500 },
     );
   }
 }
